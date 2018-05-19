@@ -8,7 +8,7 @@ public class User
 	private StackCard scHand;
 	private StackCard scTable;
 	private StackCard scWinnings;
-	private int bomba;
+	private int bomb;
 	
 	public User (int it, int iu, String un, int p)
 	{
@@ -49,6 +49,10 @@ public class User
 	{
 		return scWinnings;
 	}
+	public int getBomb() 
+	{
+		return bomb;
+	}
 
 	
 	
@@ -58,22 +62,14 @@ public class User
 		scTable.setCards();
 		scWinnings.setCards();
 	}
-
-	public int getBomba() 
+	public void setBomb(int bomb) 
 	{
-		return bomba;
-	}
-
-	public void setBomba(int bomba) 
-	{
-		this.bomba = bomba;
+		this.bomb = bomb;
 	}
 	
 	
-	@SuppressWarnings("unused")
 	public void display()
 	{
-		if(this != null) System.out.println("Stół: " + idTable + "\tidUser: " + idUser + "\tNazwa: " + userName);
-		else System.out.println("NULL");
+		System.out.println("Stół: " + idTable + "\tidUser: " + idUser + "\tNazwa: " + userName + "\tBomba: " + bomb);
 	}
 }

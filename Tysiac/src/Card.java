@@ -1,12 +1,12 @@
 
 public class Card  implements Comparable<Card>
 {
-	private String symbol; /* 9, 10, J, Q, K, A ... TY L -> Ty� karty*/
+	private String symbol; /* 9, 10, J, Q, K, A ... TY L -> Tył karty*/
 	private char color; /*  C -> Czerwo,
-	 						Z -> �o��dz
+	 						Z -> żołądź
 	 						D -> Dzwonek
 	 						W -> Wino
-	 						TY L - Ty� Karty*/
+	 						TY L - Tył Karty*/
 	private int value; /*do liczenia pkt*/ 
 	private String unicodeValue = new String();
 
