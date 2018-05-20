@@ -7,6 +7,8 @@ public class StackCard
 	private char what;
 	private int [] cards;
 	private int count;
+	
+	private SQL sql;
 
 	public StackCard(int it, int p, char w)
 	{
@@ -17,7 +19,7 @@ public class StackCard
 
 	public void setCards() throws SQLException 
 	{
-		this.cards = SQL.getStackCard(idTable, player,  what);
+		this.cards = sql.getStackCards(this.idTable, this.player,  this.what);
 	}
 
 	public int getIdTable() 

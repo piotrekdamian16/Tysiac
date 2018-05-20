@@ -13,13 +13,13 @@ public class GameData
 	protected static User player3;
 	protected static User player4; // user/ bot lub musek 
 
-	protected static int must; // kto ma musek (1-4)
-	protected static int movement; // kto wykonuje ruch
-	protected static int trio; // kto ma 3 karty (jeżeli stół na 3 osoby to gracz 4)
+	protected int must; // kto ma musek (1-4)
+	protected int movement; // kto wykonuje ruch
+	protected int trio; // kto ma 3 karty (jeżeli stół na 3 osoby to gracz 4)
 
-	protected static int auction; // wartość licytacji
-	protected static int auctionPlayer; // kto się licytuje i wygrywa (potem kto wygrał jak reszta spasuje)
-	protected static int auctionSurrender; //czy spasował licytację 
+	protected int auction; // wartość licytacji
+	protected int auctionPlayer; // kto się licytuje i wygrywa (potem kto wygrał jak reszta spasuje)
+	protected int auctionSurrender; //czy spasował licytację 
 	
 
 	protected static Card[] cards = new Card[25];
@@ -66,27 +66,27 @@ public class GameData
 	{
 		return player4;
 	}
-	protected static int getMust() 
+	protected int getMust() 
 	{
 		return must;
 	}
-	protected static int getMovement() 
+	protected int getMovement() 
 	{
 		return movement;
 	}
-	protected static int getTrio() 
+	protected int getTrio() 
 	{
 		return trio;
 	}
-	protected static int getAuction() 
+	protected int getAuction() 
 	{
 		return auction;
 	}
-	protected static int getAuctionPlayer() 
+	protected int getAuctionPlayer() 
 	{
 		return auctionPlayer;
 	}
-	protected static int getAuctionSurrender() 
+	protected int getAuctionSurrender() 
 	{
 		return auctionSurrender;
 	}
@@ -126,28 +126,28 @@ public class GameData
 	{
 		GameData.player4 = player4;
 	}
-	protected static void setMust(int must) 
+	protected void setMust(int must) 
 	{
-		GameData.must = must;
+		this.must = must;
 	}
-	protected static void setMovement(int movement) 
+	protected void setMovement(int movement) 
 	{
-		GameData.movement = movement;
+		this.movement = movement;
 	}
-	protected static void setTrio(int trio) 
+	protected void setTrio(int trio) 
 	{
-		GameData.trio = trio;
+		this.trio = trio;
 	}
-	protected static void setAuction(int auction) 
+	protected void setAuction(int auction) 
 	{
-		GameData.auction = auction;
+		this.auction = auction;
 	}
-	protected static void setAuctionPlayer(int auctionPlayer) 
+	protected void setAuctionPlayer(int auctionPlayer) 
 	{
-		GameData.auctionPlayer = auctionPlayer;
+		this.auctionPlayer = auctionPlayer;
 	}
-	protected static void setAuctionSurrender(int auctionSurrender) 
+	protected void setAuctionSurrender(int auctionSurrender) 
 	{
-		GameData.auctionSurrender = auctionSurrender;
+		this.auctionSurrender = auctionSurrender;
 	}
 }

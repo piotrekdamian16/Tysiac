@@ -10,6 +10,7 @@ public class SQL
 	private static Connection con;
 	private static Statement stmt;
 	private int idTable;
+	private int place;
 	private String accessCode; 
 	
 	public SQL() throws ClassNotFoundException, SQLException
@@ -65,9 +66,11 @@ public class SQL
 		this.setAccessCode(code.substring(0, 10));
 		
 		
-		stmt.executeUpdate("INSERT INTO `Stoly`(`kod_dostepu`, `typ_stolu`, `id_gracz_1`, `id_gracz_2`, `id_gracz_3`, `id_gracz_4`, `pkt_1`, `pkt_2`, `pkt_3`, `pkt_4`, `ruch`, `musek`, `trojka`, `bomba_gracz_1`, `bomba_gracz_2`, `bomba_gracz_3`, `bomba_gracz_4`, `licytacja_ile`, `licytacja_gracz`) "
+		stmt.executeUpdate("INSERT INTO `Stoly`(`kod_dostepu`, `typ_stolu`, `id_gracz_1`, `id_gracz_2`, `id_gracz_3`, `id_gracz_4`, `ruch`, `musek`, `trojka`, "
+					     + "`suma_pkt_1`, `suma_pkt_2`, `suma_pkt_3`, `suma_pkt_4`, `runda_pkt_1`, `runda_pkt_2`, `runda_pkt_3`, `runda_pkt_4`, `bomba_gracz_1`, `bomba_gracz_2`, `bomba_gracz_3`, `bomba_gracz_4`, `licytacja_ile`, `licytacja_gracz`, `kolor`) "
 						 + "VALUES "
-						 + "('"+this.getAccessCode()+"', "+typeTable+", "+idPlayer1+",NULL,NULL,NULL,0,0,0,0,"+movement+", "+must+", "+trio+", 0,0,0,0,0,0) ", Statement.RETURN_GENERATED_KEYS);
+						 + "('"+this.getAccessCode()+"', "+typeTable+", "+idPlayer1+",NULL,NULL,NULL,"+movement+", "+must+", "+trio+", "
+						 + "0,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL,'Tworzenie stolu') ", Statement.RETURN_GENERATED_KEYS);
 		
 		ResultSet rs = stmt.getGeneratedKeys();
 		
@@ -134,7 +137,20 @@ public class SQL
 				joined = stmt.executeUpdate("UPDATE Stoly "
 						 + "SET id_gracz_4 = "+ip +" "
 						 + "WHERE kod_dostepu = '"+ac+"' AND id_gracz_4 IS NULL AND typ_stolu = 4", Statement.RETURN_GENERATED_KEYS);
+				
+				if(joined == 1)
+				{
+					this.setPlace(2);
+				}
 			}
+			else
+			{
+				this.setPlace(3);
+			}
+		}
+		else
+		{
+			this.setPlace(2);
 		}
 		
 		if(joined == 1)
@@ -161,21 +177,45 @@ public class SQL
 	public int BOTjoinTable(String ac) throws SQLException
 	{
 		int joined = stmt.executeUpdate("UPDATE Stoly "
-						 + "SET id_gracz_2 = 1 "
+						 + "SET id_gracz_1 = 1 "
 						 + "WHERE kod_dostepu = '"+ac+"' AND id_gracz_2 IS NULL", Statement.RETURN_GENERATED_KEYS);
 		
 		if(joined==0)
 		{
 			joined = stmt.executeUpdate("UPDATE Stoly "
-					 + "SET id_gracz_3 = 2 "
+					 + "SET id_gracz_2 = 2 "
 					 + "WHERE kod_dostepu = '"+ac+"' AND id_gracz_3 IS NULL", Statement.RETURN_GENERATED_KEYS);
 
 			if(joined==0)
 			{
 				joined = stmt.executeUpdate("UPDATE Stoly "
-						 + "SET id_gracz_4 = 3 "
+						 + "SET id_gracz_3 = 3 "
 						 + "WHERE kod_dostepu = '"+ac+"' AND id_gracz_4 IS NULL AND typ_stolu = 4", Statement.RETURN_GENERATED_KEYS);
+
+				if(joined==0)
+				{
+					joined = stmt.executeUpdate("UPDATE Stoly "
+							 + "SET id_gracz_4 = 4 "
+							 + "WHERE kod_dostepu = '"+ac+"' AND id_gracz_4 IS NULL AND typ_stolu = 4", Statement.RETURN_GENERATED_KEYS);
+
+					if(joined == 1)
+					{
+						this.setPlace(2);
+					}
+				}
+				else
+				{
+					this.setPlace(3);
+				}
 			}
+			else
+			{
+				this.setPlace(2);
+			}
+		}
+		else
+		{
+			this.setPlace(1);
 		}
 		
 		if(joined == 1)
@@ -274,16 +314,32 @@ public class SQL
 		return cards;
 	}
 
-	public static int [] getStackCard(int it, int p, char w) throws SQLException
+	public int getCountStackCards(int idTable, int player, char where) throws SQLException
 	{
-		ResultSet rs=stmt.executeQuery("SELECT id_karty FROM Stoly_Karty WHERE id_stolu = "+ it +" && gracz = "+ p +" && gdzie = '"+ w +"' ");  
+		ResultSet rs=stmt.executeQuery("SELECT COUNT(id_karty) FROM Stoly_Karty " 
+									 + "WHERE id_stolu = "+ idTable +" "
+									 		+ "&& gracz = "+ player +" "
+									 		+ "&& gdzie = '"+ where +"' "); 
 
-		rs.last();
+		int sc = 0;
 		
-		int [] sc = new int[rs.getRow()];
+		if(rs.next())
+		{
+			sc = rs.getInt(1);
+		} 
+		
+		return sc;
+	}
+
+	public int [] getStackCards(int idTable, int player, char where) throws SQLException
+	{
+		ResultSet rs=stmt.executeQuery("SELECT id_karty FROM Stoly_Karty "
+									  + "WHERE id_stolu = "+ idTable +" "
+									  		+ "&& gracz = "+ player +" "
+									  		+ "&& gdzie = '"+ where +"' ");  
+
+		int [] sc = new int[this.getCountStackCards(idTable, player, where)];
 		int i=0;
-		
-		rs.beforeFirst();
 		
 		while(rs.next())
 		{
@@ -294,6 +350,67 @@ public class SQL
 		
 		return sc;
 	}
+	
+	public void setStackCard(int idTable, int idCard, int player, char where) throws SQLException
+	{
+		stmt.executeUpdate("UPDATE `Karty_Stol` "
+						 + "SET `gdzie`='"+ where +"', "
+						     + "`gracz`="+ player +"  "
+						 + "WHERE `id_stolu`="+idTable+",`id_karty`="+idCard, Statement.NO_GENERATED_KEYS);
+	}
+	
+	public void setStackCard(int idTable, int idCard, char where) throws SQLException
+	{
+		stmt.executeUpdate("UPDATE `Karty_Stol` "
+						 + "SET `gdzie`= '"+ where +"'  "
+						 + "WHERE `id_stolu`="+idTable+",`id_karty`="+idCard, Statement.NO_GENERATED_KEYS);
+	}
+	
+	public void setStackCard(int idTable, int idCard, int player) throws SQLException
+	{
+		stmt.executeUpdate("UPDATE `Karty_Stol` "
+						 + "SET `gracz`="+ player +", "
+						 + "WHERE `id_stolu`="+idTable+",`id_karty`="+idCard, Statement.NO_GENERATED_KEYS);
+	}
+	
+	public void moveCardToWinner(int idTable, int player) throws SQLException
+	{
+		stmt.executeUpdate("UPDATE `Karty_Stol` "
+				 		 + "SET `gdzie`='z', "
+				 		 + "`gracz`="+ player +"  "
+				 		 + "WHERE `id_stolu`="+idTable+",`gdzie`='s'" , Statement.NO_GENERATED_KEYS);
+	}
+	
+	public void setNewStacksCards(int idTable, int [] cardPlayer1, int [] cardPlayer2, int [] cardPlayer3, int [] cardPlayer4) throws SQLException
+	{
+		for(int i=0; i<cardPlayer1.length; i++)
+		{
+			this.setStackCard(idTable, cardPlayer1[i], 1, 'r');
+		}
+		
+		for(int i=0; i<cardPlayer2.length; i++)
+		{
+			this.setStackCard(idTable, cardPlayer2[i], 2, 'r');
+		}
+		
+		for(int i=0; i<cardPlayer3.length; i++)
+		{
+			this.setStackCard(idTable, cardPlayer3[i], 3, 'r');
+		}
+		
+		for(int i=0; i<cardPlayer4.length; i++)
+		{
+			this.setStackCard(idTable, cardPlayer4[i], 4, 'r');
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -312,26 +429,47 @@ public class SQL
      
         return sb.toString();
 	}
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public int getIdTable() 
 	{
 		return idTable;
 	}
-
-	public void setIdTable(int idTable) 
-	{
-		this.idTable = idTable;
-	}
-	
-
 	public String getAccessCode() 
 	{
 		return accessCode;
 	}
+	public int getPlace() {
+		return place;
+	}
 
+	
+	
+	public void setIdTable(int idTable) 
+	{
+		this.idTable = idTable;
+	}
 	public void setAccessCode(String AccessCode) 
 	{
 		this.accessCode = AccessCode;
+	}
+	public void setPlace(int place) {
+		this.place = place;
 	}
 	
 	

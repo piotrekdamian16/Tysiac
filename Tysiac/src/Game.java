@@ -1,7 +1,9 @@
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
 public class Game extends GameData
 {	
+	//Wszystkie zmienne i Funkcje są w pliku GameData.java
 	
 	public static void main(String[] args)
 	{
@@ -16,8 +18,12 @@ public class Game extends GameData
 				cards[i].display(); // wyświutla karty -> funkcja do testów
 			}
 
-			sql.BOTjoinTable("1d81beaeed"); //dodawanie BOTa do stołu o danym kodzie dostępu... 
-			sql.BOTjoinTable("1d81beaeed");
+			sql.createTable(3, 4, 0, 0, 0);
+			
+			GameData.setAccessCode(sql.getAccessCode());
+			
+			sql.BOTjoinTable(GameData.getAccessCode()); //dodawanie BOTa do stołu o danym kodzie dostępu... 
+			sql.BOTjoinTable(GameData.getAccessCode());
 
 			setPlayer1(sql.selectUser(1)); //ustawianie class User Player1 <- SQL zwraca wszystkie informacje o użytkowiku 
 			setPlayer2(sql.selectUser(2));
@@ -34,6 +40,9 @@ public class Game extends GameData
 			sql.close(); // kończenie połączenia z bazą danych 
 			
 		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
