@@ -13,29 +13,77 @@ public class SQL
 	private int place;
 	private String accessCode; 
 	
-	public SQL() throws ClassNotFoundException, SQLException
+	
+	// -----------------------------------------------------------------------------
+	// ---------------- KONSTRUKTOR bez parametrów ---------------------------------
+	// -----------------------------------------------------------------------------
+	public SQL() throws TysiacException
 	{
-		Class.forName("com.mysql.jdbc.Driver");  
-		con=DriverManager.getConnection( "jdbc:mysql://db4free.net:3306/dp1000?autoReconnect=true&useSSL=false","dp1000","baza1000");
+		try 
+		{
+			Class.forName("com.mysql.jdbc.Driver");
+			
+			
+			try 
+			{
+				con=DriverManager.getConnection( "jdbc:mysql://db4free.net:3306/dp1000?autoReconnect=true&useSSL=false","dp1000","baza1000");
+				stmt=con.createStatement(); 
+			} 
+			catch (SQLException e) 
+			{
+				throw new TysiacException(2, "SQL()");
+			}
+			
+			
+		} 
+		catch (ClassNotFoundException e) 
+		{
+			throw new TysiacException(1, "SQL()");
+		}  
 		
-		stmt=con.createStatement(); 
+	}
+
+	
+	// -----------------------------------------------------------------------------
+	// ---------------- KONSTRUKTOR z parametrami ----------------------------------
+	// -----------------------------------------------------------------------------
+	public SQL(String host, int port, String base, String user, String pass) throws TysiacException
+	{
+		try 
+		{
+			Class.forName("com.mysql.jdbc.Driver");
+			
+			
+			try 
+			{
+				String port2 = String.valueOf(port); 
+				con=DriverManager.getConnection( "jdbc:mysql://"+host+":"+port2+"/"+base+"?autoReconnect=true&useSSL=false",user,pass);
+				stmt=con.createStatement(); 
+			} 
+			catch (SQLException e) 
+			{
+				throw new TysiacException(2, "SQL(...)");
+			}
+			
+			
+		} 
+		catch (ClassNotFoundException e) 
+		{
+			throw new TysiacException(1, "SQL(...)");
+		}  
 	}
 	
-	public SQL(String host, int port, String base, String user, String pass) throws ClassNotFoundException, SQLException
-	{
-		Class.forName("com.mysql.jdbc.Driver");  
-		
-		String port2 = String.valueOf(port); 
-		con=DriverManager.getConnection( "jdbc:mysql://"+host+":"+port2+"/"+base+"?autoReconnect=true&useSSL=false",user,pass);
-		
-		stmt=con.createStatement(); 
-	}
-	
+	// -----------------------------------------------------------------------------
+	// ---------------- Zamykanie połączenia z bazą --------------------------------
+	// -----------------------------------------------------------------------------
 	public void close() throws SQLException
 	{
 		con.close();
 	}
 
+	
+	
+	
 	/*Zwraca ID Użytkownika albo 0 gdy błąd logowania*/
 	public int loginToGame(String login, String password) throws NoSuchAlgorithmException, SQLException
 	{
@@ -78,6 +126,7 @@ public class SQL
 		{
 			setIdTable(rs.getInt(1));
 		}
+		this.setPlace(1);
 		
 		stmt.executeUpdate("INSERT INTO `Karty_Stol`(`id_stolu`, `id_karty`, `gdzie`, `gracz`) "
 						 + "VALUES "
@@ -178,19 +227,19 @@ public class SQL
 	{
 		int joined = stmt.executeUpdate("UPDATE Stoly "
 						 + "SET id_gracz_1 = 1 "
-						 + "WHERE kod_dostepu = '"+ac+"' AND id_gracz_2 IS NULL", Statement.RETURN_GENERATED_KEYS);
+						 + "WHERE kod_dostepu = '"+ac+"' AND id_gracz_1 IS NULL", Statement.RETURN_GENERATED_KEYS);
 		
 		if(joined==0)
 		{
 			joined = stmt.executeUpdate("UPDATE Stoly "
 					 + "SET id_gracz_2 = 2 "
-					 + "WHERE kod_dostepu = '"+ac+"' AND id_gracz_3 IS NULL", Statement.RETURN_GENERATED_KEYS);
+					 + "WHERE kod_dostepu = '"+ac+"' AND id_gracz_2 IS NULL", Statement.RETURN_GENERATED_KEYS);
 
 			if(joined==0)
 			{
 				joined = stmt.executeUpdate("UPDATE Stoly "
 						 + "SET id_gracz_3 = 3 "
-						 + "WHERE kod_dostepu = '"+ac+"' AND id_gracz_4 IS NULL AND typ_stolu = 4", Statement.RETURN_GENERATED_KEYS);
+						 + "WHERE kod_dostepu = '"+ac+"' AND id_gracz_3 IS NULL", Statement.RETURN_GENERATED_KEYS);
 
 				if(joined==0)
 				{
@@ -314,12 +363,12 @@ public class SQL
 		return cards;
 	}
 
-	public int getCountStackCards(int idTable, int player, char where) throws SQLException
+	public int getCountStackCards(int idTable, int player, char what) throws SQLException
 	{
 		ResultSet rs=stmt.executeQuery("SELECT COUNT(id_karty) FROM Stoly_Karty " 
 									 + "WHERE id_stolu = "+ idTable +" "
 									 		+ "&& gracz = "+ player +" "
-									 		+ "&& gdzie = '"+ where +"' "); 
+									 		+ "&& gdzie = '"+ what +"' "); 
 
 		int sc = 0;
 		
@@ -331,14 +380,14 @@ public class SQL
 		return sc;
 	}
 
-	public int [] getStackCards(int idTable, int player, char where) throws SQLException
+	public int [] getStackCards(int idTable, int player, char what) throws SQLException
 	{
 		ResultSet rs=stmt.executeQuery("SELECT id_karty FROM Stoly_Karty "
 									  + "WHERE id_stolu = "+ idTable +" "
 									  		+ "&& gracz = "+ player +" "
-									  		+ "&& gdzie = '"+ where +"' ");  
+									  		+ "&& gdzie = '"+ what +"' ");  
 
-		int [] sc = new int[this.getCountStackCards(idTable, player, where)];
+		int [] sc = new int[this.getCountStackCards(idTable, player, what)];
 		int i=0;
 		
 		while(rs.next())
@@ -351,18 +400,18 @@ public class SQL
 		return sc;
 	}
 	
-	public void setStackCard(int idTable, int idCard, int player, char where) throws SQLException
+	public void setStackCard(int idTable, int idCard, int player, char what) throws SQLException
 	{
 		stmt.executeUpdate("UPDATE `Karty_Stol` "
-						 + "SET `gdzie`='"+ where +"', "
+						 + "SET `gdzie`='"+ what +"', "
 						     + "`gracz`="+ player +"  "
 						 + "WHERE `id_stolu`="+idTable+",`id_karty`="+idCard, Statement.NO_GENERATED_KEYS);
 	}
 	
-	public void setStackCard(int idTable, int idCard, char where) throws SQLException
+	public void setStackCard(int idTable, int idCard, char what) throws SQLException
 	{
 		stmt.executeUpdate("UPDATE `Karty_Stol` "
-						 + "SET `gdzie`= '"+ where +"'  "
+						 + "SET `gdzie`= '"+ what +"'  "
 						 + "WHERE `id_stolu`="+idTable+",`id_karty`="+idCard, Statement.NO_GENERATED_KEYS);
 	}
 	

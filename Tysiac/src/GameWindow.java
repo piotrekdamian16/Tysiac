@@ -200,6 +200,7 @@ public class GameWindow extends JFrame //implements ActionListener
 		add(c24);
 	}
 
+	/*
 	public static void main(String[] args)
 	{
 		GameWindow tysiac = new GameWindow();
@@ -211,4 +212,6 @@ public class GameWindow extends JFrame //implements ActionListener
 		tysiac.setTitle("Tysi�c");
 		tysiac.setResizable(false);
 	}
+	
+	*/
 }

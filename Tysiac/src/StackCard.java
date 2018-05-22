@@ -20,10 +20,11 @@ public class StackCard
 	public void setCards() throws SQLException 
 	{
 		this.cards = sql.getStackCards(this.idTable, this.player,  this.what);
+		this.count = sql.getCountStackCards(this.idTable, this.player,  this.what);
 	}
 
 	public int getIdTable() 
-	{
+	{;
 		return idTable;
 	}
 	

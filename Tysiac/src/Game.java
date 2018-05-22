@@ -1,5 +1,8 @@
+import java.awt.Color;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+
+import javax.swing.JFrame;
 
 public class Game extends GameData
 {	
@@ -9,6 +12,16 @@ public class Game extends GameData
 	{
 		
 		try {
+
+			GameWindow gw = new GameWindow();
+			Color stol = new Color(0,102,0);
+			
+			gw.setVisible(true);
+			gw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			gw.getContentPane().setBackground(stol);
+			gw.setTitle("Tysiąc");
+			gw.setResizable(false);
+			
 			sql = new SQL(); //Łączy się z bazą danych... jeżeli będzie zmiana bazdy danych to użyć konstruktora parametrowego 
 			
 			cards = sql.getCards(); // Pobiera informacje o kartach 
@@ -18,7 +31,7 @@ public class Game extends GameData
 				cards[i].display(); // wyświutla karty -> funkcja do testów
 			}
 
-			sql.createTable(3, 4, 0, 0, 0);
+			sql.createTable(3, 5, 0, 0, 0);
 			
 			GameData.setAccessCode(sql.getAccessCode());
 			
@@ -39,12 +52,18 @@ public class Game extends GameData
 			
 			sql.close(); // kończenie połączenia z bazą danych 
 			
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (TysiacException e) 
+		{
+			System.err.println(e.getErrorMessage());
+			
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
 		}
 		
     }
