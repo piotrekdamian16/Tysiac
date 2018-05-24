@@ -1,4 +1,4 @@
-import java.sql.SQLException;
+
 
 public class StackCard 
 {
@@ -7,8 +7,6 @@ public class StackCard
 	private char what;
 	private int [] cards;
 	private int count;
-	
-	private SQL sql;
 
 	public StackCard(int it, int p, char w)
 	{
@@ -17,10 +15,13 @@ public class StackCard
 		what = w;
 	}
 
-	public void setCards() throws SQLException 
+	public void setCards(int [] c)
 	{
-		this.cards = sql.getStackCards(this.idTable, this.player,  this.what);
-		this.count = sql.getCountStackCards(this.idTable, this.player,  this.what);
+		this.cards = c;
+	}
+	public void setCount(int c)
+	{
+		this.count = c;
 	}
 
 	public int getIdTable() 
@@ -41,6 +42,10 @@ public class StackCard
 	public int [] getCards() 
 	{
 		return cards;
+	}
+	public int getCard(int i) 
+	{
+		return cards[i];
 	}
 
 	public int getCount() 

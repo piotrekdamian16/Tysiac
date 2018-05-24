@@ -1,4 +1,4 @@
-import java.sql.SQLException;
+
 
 public class User 
 {
@@ -56,12 +56,18 @@ public class User
 
 	
 	
-	public void updateStacks() throws SQLException
+	public void updateStacks(int [] sch, int [] sct, int [] scw) throws TysiacException
 	{
-		scHand.setCards();
-		scTable.setCards();
-		scWinnings.setCards();
+		this.scHand.setCards(sch);
+		this.scHand.setCount(sch.length);
+		
+		this.scTable.setCards(sct);
+		this.scTable.setCount(sct.length);
+		
+		this.scWinnings.setCards(scw);
+		this.scWinnings.setCount(scw.length);
 	}
+	
 	public void setBomb(int bomb) 
 	{
 		this.bomb = bomb;
