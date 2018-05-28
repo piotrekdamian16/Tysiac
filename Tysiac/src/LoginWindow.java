@@ -94,7 +94,7 @@ public class LoginWindow extends JFrame implements ActionListener
 			JCWin.setVisible(true);
 			JCWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			JCWin.getContentPane().setBackground(stol);
-			JCWin.setTitle("Tysiac");
+			JCWin.setTitle("Tysiąc");
 			JCWin.setResizable(false);
 			
 			setVisible(false);   //niewidoczne okno login window
