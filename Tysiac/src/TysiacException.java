@@ -52,8 +52,11 @@ public class TysiacException extends Exception
 		errors.put(1, "SQL: Database Driver not found");
 		errors.put(2, "SQL: No Connection to Game's Database");
 		errors.put(3, "SQL: Error of closing connection");
+
+		errors.put(4, "SQL: Connection is not established");
+		errors.put(5, "SQL: Statement is not established");
 		
-		errors.put(10, "SQL: Error Login on Password of User");
+		errors.put(10, "SQL: Error Login or Password of User");
 		errors.put(11, "SQL: Insert Table 'stol'");
 		errors.put(12, "SQL: Insert Table 'karty_stol'");
 		errors.put(13, "SQL: Get AccesCode from base is falled");

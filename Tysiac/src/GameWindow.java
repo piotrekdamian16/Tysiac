@@ -2,12 +2,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 @SuppressWarnings("serial")
-public class GameWindow extends JFrame //implements ActionListener
+public class GameWindow extends JFrame implements ActionListener
 {
 	private JButton c1,c2,c3,c4,c5,c6,c7,c8;
 	private JButton c9,c10,c11,c12,c13,c14,c15,c16;
@@ -198,9 +201,34 @@ public class GameWindow extends JFrame //implements ActionListener
 		add(c22);
 		add(c23);
 		add(c24);
+		
+		c1.addActionListener(this);
+		c2.addActionListener(this);
+		c3.addActionListener(this);
+		c4.addActionListener(this);
+		c5.addActionListener(this);
+		c6.addActionListener(this);
+		c7.addActionListener(this);
+		c8.addActionListener(this);
+		c9.addActionListener(this);
+		c10.addActionListener(this);
+		c11.addActionListener(this);
+		c12.addActionListener(this);
+		c13.addActionListener(this);
+		c14.addActionListener(this);
+		c15.addActionListener(this);
+		c16.addActionListener(this);
+		c17.addActionListener(this);
+		c18.addActionListener(this);
+		c19.addActionListener(this);
+		c20.addActionListener(this);
+		c21.addActionListener(this);
+		c22.addActionListener(this);
+		c23.addActionListener(this);
+		c24.addActionListener(this);
+		
 	}
 
-	/*
 	public static void main(String[] args)
 	{
 		GameWindow tysiac = new GameWindow();
@@ -212,6 +240,88 @@ public class GameWindow extends JFrame //implements ActionListener
 		tysiac.setTitle("Tysi�c");
 		tysiac.setResizable(false);
 	}
-	
-	*/
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		Object source = e.getSource();
+		
+		if(source==c1){
+			c1.setVisible(false);
+			/*Container parent = c1.getParent();
+			parent.remove(c1);
+			parent.revalidate();
+			parent.repaint();*/
+		}
+		else if(source==c2){
+			c2.setVisible(false);
+		}
+		else if(source==c3){
+			c3.setVisible(false);
+		}
+		else if(source==c4){
+			c4.setVisible(false);
+		}
+		else if(source==c5){
+			c5.setVisible(false);
+		}
+		else if(source==c6){
+			c6.setVisible(false);
+		}
+		else if(source==c7){
+			c7.setVisible(false);
+		}
+		else if(source==c8){
+			c8.setVisible(false);
+		}
+		else if(source==c9){
+			c9.setVisible(false);
+		}
+		else if(source==c10){
+			c10.setVisible(false);
+		}
+		else if(source==c11){
+			c11.setVisible(false);
+		}
+		else if(source==c12){
+			c12.setVisible(false);
+		}
+		else if(source==c13){
+			c13.setVisible(false);
+		}
+		else if(source==c14){
+			c14.setVisible(false);
+		}
+		else if(source==c15){
+			c15.setVisible(false);
+		}
+		else if(source==c16){
+			c16.setVisible(false);
+		}
+		else if(source==c17){
+			c17.setVisible(false);
+		}
+		else if(source==c18){
+			c18.setVisible(false);
+		}
+		else if(source==c19){
+			c19.setVisible(false);
+		}
+		else if(source==c20){
+			c20.setVisible(false);
+		}
+		else if(source==c21){
+			c21.setVisible(false);
+		}
+		else if(source==c22){
+			c22.setVisible(false);
+		}
+		else if(source==c23){
+			c23.setVisible(false);
+		}
+		else if(source==c24){
+			c24.setVisible(false);
+		}
+		
+	}
 }

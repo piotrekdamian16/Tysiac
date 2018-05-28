@@ -4,6 +4,7 @@ import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 public class SQL 
 {
@@ -81,18 +82,22 @@ public class SQL
 		try 
 		{
 			con.close();
-		} catch (SQLException e) 
+		} 
+		catch (SQLException e) 
 		{
 			throw new TysiacException(3, "close()");
 		}
 	}
 
 	
-	
+
 	
 	/*Zwraca ID Użytkownika albo 0 gdy błąd logowania*/
 	public int loginToGame(String login, String password) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "loginToGame()");
+		if(stmt == null) throw new TysiacException(5, "loginToGame()");
+		
 		int idUser = 0;
 		String hp;
 		try 
@@ -114,6 +119,35 @@ public class SQL
 		return idUser;
 	}
 	
+	/*Zwraca ID Użytkownika albo 
+	 * 0 gdy podany login jest błędny
+	 * -1 zbyt krótki
+	 * -2 niedozwolone symbole w loginie*/
+	public int checkLogin(String login) throws TysiacException
+	{
+		if(con == null) throw new TysiacException(4, "checkLogin()");
+		if(stmt == null) throw new TysiacException(5, "checkLogin()");
+		
+		if(login.length() < 6) return -1;
+		if(Pattern.matches("^[a-zA-Z0-9-_]+$", login) == false) return -2;
+		
+		int idUser = 0;
+		try 
+		{			
+			ResultSet rs=stmt.executeQuery("select id_user from USERS WHERE login = '"+login+"'");  
+			if(rs.next())
+			{
+				idUser = rs.getInt(1);
+			}
+		}
+		catch (SQLException e) 
+		{
+			throw new TysiacException(10, "checkLogin()");
+		}
+		
+		return idUser;
+	}
+	
 	/*Tworzy stół do gry, typeTable -> 3 lub 4
 	 * 					  idPlayer1 -> id Gracza który zakłada stół 
 	 * 					  movement -> 1-4 gracz który ma wykonać obecnie ruch 
@@ -123,6 +157,9 @@ public class SQL
 	 * Tworzenie stołu + kart na stole... uzupełnia zmienne globalne SQL idTable i accessCode*/
 	public void createTable(int typeTable, int idPlayer1, int movement, int must, int trio) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "createTable()");
+		if(stmt == null) throw new TysiacException(5, "createTable()");
+		
 		if(typeTable != 3 && typeTable !=4) throw new TysiacException(111, "CreateTable() as typeTable");
 		if(idPlayer1 <= 0) throw new TysiacException(113, "CreateTable() as idPlayer");
 		if(movement <= 0 || movement >4) throw new TysiacException(112, "CreateTable() as movement");
@@ -171,8 +208,11 @@ public class SQL
 		
 	}
 	
-	public void createTableCard() throws TysiacException
+	private void createTableCard() throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "createTableCard()");
+		if(stmt == null) throw new TysiacException(5, "createTableCard()");
+		
 		try 
 		{
 			stmt.executeUpdate("INSERT INTO `Karty_Stol`(`id_stolu`, `id_karty`, `gdzie`, `gracz`) "
@@ -208,8 +248,11 @@ public class SQL
 		}
 	}
 	
-	public void setAccesCode() throws TysiacException
+	private void setAccesCode() throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "setAccesCode()");
+		if(stmt == null) throw new TysiacException(5, "setAccesCode()");
+		
 		ResultSet rs;
 		try 
 		{
@@ -235,6 +278,9 @@ public class SQL
 	//Jeżeli 1 to udało się dołączyć do stołu, 0 to nie :P 
 	public int joinTable(int ip, String ac) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "joinTable()");
+		if(stmt == null) throw new TysiacException(5, "joinTable()");
+		
 		if(ac.length() != 10) throw new TysiacException(114, "joinTable() as typeTable");
 		if(ip <= 0) throw new TysiacException(113, "joinTable() as idPlayer");
 		int joined = 0;
@@ -323,6 +369,9 @@ public class SQL
 	//Jeżeli 1 to udało się dołączyć do stołu, 0 to nie :P 
 	public int BOTjoinTable(String ac) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "BOTjoinTable()");
+		if(stmt == null) throw new TysiacException(5, "BOTjoinTable()");
+		
 		if(ac.length() != 10) throw new TysiacException(114, "joinTable() as typeTable");
 		int joined = 0;
 		
@@ -428,6 +477,9 @@ public class SQL
 	public User selectUser(int player) throws TysiacException
 	{
 
+		if(con == null) throw new TysiacException(4, "selectUser()");
+		if(stmt == null) throw new TysiacException(5, "selectUser()");
+		
 		if(player <= 0 || player >4) throw new TysiacException(113, "selectUser()");
 		
 		
@@ -487,6 +539,9 @@ public class SQL
 	// Funkcja srawdza czy na danym miejscu jest już gracz... Zwraca 0, jeżeli NULL (puste)...  innaczej id gracza
 	public int checkUser(int player) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "checkUser()");
+		if(stmt == null) throw new TysiacException(5, "checkUser()");
+		
 		if(player <= 0 || player >4) throw new TysiacException(113, "checkUser()");
 
 		
@@ -516,6 +571,9 @@ public class SQL
 	
 	public Card[] getCards() throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "getCards()");
+		if(stmt == null) throw new TysiacException(5, "getCards()");
+		
 		Card [] cards = new Card[25];
 		ResultSet rs;
 		
@@ -548,6 +606,9 @@ public class SQL
 
 	public int getCountStackCards(int player, char what) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "getCountStackCards()");
+		if(stmt == null) throw new TysiacException(5, "getCountStackCards()");
+		
 		ResultSet rs;
 
 		int sc = 0;
@@ -576,6 +637,9 @@ public class SQL
 	
 	public int [] getStackCards(int player, char what) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "getStackCards()");
+		if(stmt == null) throw new TysiacException(5, "getStackCards()");
+		
 		ResultSet rs;
 		int [] sc = new int[this.getCountStackCards(player, what)];
 		int i=0;
@@ -610,6 +674,9 @@ public class SQL
 	
 	public void setStackCard(int idCard, int player, char what) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "setStackCard()");
+		if(stmt == null) throw new TysiacException(5, "setStackCard()");
+		
 		try 
 		{
 			stmt.executeUpdate("UPDATE `Karty_Stol` "
@@ -625,6 +692,9 @@ public class SQL
 	
 	public void setStackCard(int idCard, char what) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "setStackCard()");
+		if(stmt == null) throw new TysiacException(5, "setStackCard()");
+		
 		try 
 		{
 			stmt.executeUpdate("UPDATE `Karty_Stol` "
@@ -639,6 +709,9 @@ public class SQL
 	
 	public void setStackCard(int idCard, int player) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "setStackCard()");
+		if(stmt == null) throw new TysiacException(5, "setStackCard()");
+		
 		try 
 		{
 			stmt.executeUpdate("UPDATE `Karty_Stol` "
@@ -653,6 +726,9 @@ public class SQL
 	
 	public void moveCardToWinner(int player) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "moveCardToWinner()");
+		if(stmt == null) throw new TysiacException(5, "moveCardToWinner()");
+		
 		try 
 		{
 			stmt.executeUpdate("UPDATE `Karty_Stol` "
@@ -668,6 +744,9 @@ public class SQL
 	
 	public void setNewStacksCards(int [] cardPlayer1, int [] cardPlayer2, int [] cardPlayer3, int [] cardPlayer4) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "setNewStacksCards()");
+		if(stmt == null) throw new TysiacException(5, "setNewStacksCards()");
+		
 		for(int i=0; i<cardPlayer1.length; i++)
 		{
 			try 
@@ -772,6 +851,9 @@ public class SQL
 	
 	public int getMovement() throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "getMovement()");
+		if(stmt == null) throw new TysiacException(5, "getMovement()");
+		
 		int tmp = 0;
 		
 		ResultSet rs;
@@ -796,6 +878,9 @@ public class SQL
 	
 	public void setMovement(int player) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "setMovement()");
+		if(stmt == null) throw new TysiacException(5, "setMovement()");
+		
 		if(player <= 0 || player >4) throw new TysiacException(112, "setMovement()");
 		
 		
@@ -821,6 +906,9 @@ public class SQL
 	
 	public int getMust() throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "getMust()");
+		if(stmt == null) throw new TysiacException(5, "getMust()");
+		
 		int tmp = 0;
 		
 		ResultSet rs;
@@ -845,6 +933,9 @@ public class SQL
 	
 	public void setMust(int player) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "setMust()");
+		if(stmt == null) throw new TysiacException(5, "setMust()");
+		
 		if(player <= 0 || player >4) throw new TysiacException(112, "setMust()");
 		
 		
@@ -864,6 +955,9 @@ public class SQL
 	
 	public int getTrio() throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "getTrio()");
+		if(stmt == null) throw new TysiacException(5, "getTrio()");
+		
 		int tmp = 0;
 		
 		ResultSet rs;
@@ -888,6 +982,9 @@ public class SQL
 	
 	public void setTrio(int player) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "setTrio()");
+		if(stmt == null) throw new TysiacException(5, "setTrio()");
+		
 		if(player <= 0 || player >4) throw new TysiacException(112, "setTrio()");
 		
 		
@@ -910,6 +1007,9 @@ public class SQL
 	
 	public int getSumPoint(int player) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "getSumPoint()");
+		if(stmt == null) throw new TysiacException(5, "getSumPoint()");
+		
 		if(player <= 0 || player >4) throw new TysiacException(113, "getSumPoint()");
 
 		
@@ -938,6 +1038,9 @@ public class SQL
 	
 	public void setSumPoint(int player, int points) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "setSumPoint()");
+		if(stmt == null) throw new TysiacException(5, "setSumPoint()");
+		
 		if(player <= 0 || player >4) throw new TysiacException(112, "setSumPoint()");
 		if(points > 1000) throw new TysiacException(117, "setSumPoint()");
 		if((Math.abs(points))%10 != 0 ) throw new TysiacException(116, "setSumPoint()");
@@ -958,6 +1061,9 @@ public class SQL
 	//dodaje do punkty gracza
 	public void addToSumPoint(int player, int points) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "addToSumPoint()");
+		if(stmt == null) throw new TysiacException(5, "addToSumPoint()");
+		
 		if(player <= 0 || player >4) throw new TysiacException(112, "addToSumPoint()");
 		if(points < -300 || points > 300) throw new TysiacException(115, "addToSumPoint()");
 		if((Math.abs(points))%10 != 0 ) throw new TysiacException(116, "addToSumPoint()");
@@ -977,6 +1083,9 @@ public class SQL
 	
 	public void subToSumPoint(int player, int points) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "subToSumPoint()");
+		if(stmt == null) throw new TysiacException(5, "subToSumPoint()");
+		
 		if(player <= 0 || player >4) throw new TysiacException(112, "subToSumPoint()");
 		if(points < -300 || points > 300) throw new TysiacException(115, "subToSumPoint()");
 		if((Math.abs(points))%10 != 0 ) throw new TysiacException(116, "subToSumPoint()");
@@ -1000,6 +1109,9 @@ public class SQL
 	
 	public int getRoundPoint(int player) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "getRoundPoint()");
+		if(stmt == null) throw new TysiacException(5, "getRoundPoint()");
+		
 		if(player <= 0 || player >4) throw new TysiacException(113, "getRoundPoint()");
 
 		
@@ -1028,6 +1140,9 @@ public class SQL
 	
 	public void setRoundPoint(int player, int points) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "setRoundPoint()");
+		if(stmt == null) throw new TysiacException(5, "setRoundPoint()");
+		
 		if(player <= 0 || player >4) throw new TysiacException(112, "setRoundPoint()");
 		if(points > 1000) throw new TysiacException(117, "setRoundPoint()");
 		if((Math.abs(points))%10 != 0 ) throw new TysiacException(116, "setRoundPoint()");
@@ -1048,6 +1163,9 @@ public class SQL
 	//dodaje/odejmuje do punkty gracza
 	public void addToRoundPoint(int player, int points) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "addToRoundPoint()");
+		if(stmt == null) throw new TysiacException(5, "addToRoundPoint()");
+		
 		if(player <= 0 || player >4) throw new TysiacException(112, "addToRoundPoint()");
 		if(points < -300 || points > 300) throw new TysiacException(115, "addToRoundPoint()");
 		if((Math.abs(points))%10 != 0 ) throw new TysiacException(116, "addToRoundPoint()");
@@ -1068,6 +1186,9 @@ public class SQL
 
 	public void subToRoundPoint(int player, int points) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "subToRoundPoint()");
+		if(stmt == null) throw new TysiacException(5, "subToRoundPoint()");
+		
 		if(player <= 0 || player >4) throw new TysiacException(112, "subToRoundPoint()");
 		if(points < -300 || points > 300) throw new TysiacException(115, "subToRoundPoint()");
 		if((Math.abs(points))%10 != 0 ) throw new TysiacException(116, "subToRoundPoint()");
@@ -1091,6 +1212,9 @@ public class SQL
 
 	public int getBomb(int player) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "getBomb()");
+		if(stmt == null) throw new TysiacException(5, "getBomb()");
+		
 		if(player <= 0 || player >4) throw new TysiacException(113, "getBomb()");
 
 		
@@ -1119,6 +1243,9 @@ public class SQL
 	
 	public void setBomb(int player, int value) throws TysiacException
 	{
+		if(con == null) throw new TysiacException(4, "setBomb()");
+		if(stmt == null) throw new TysiacException(5, "setBomb()");
+		
 		if(player <= 0 || player >4) throw new TysiacException(112, "setBomb()");
 		if(value != 0 || value != 1) throw new TysiacException(118, "setBomb()");
 		

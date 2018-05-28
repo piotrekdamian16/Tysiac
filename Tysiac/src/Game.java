@@ -10,7 +10,7 @@ public class Game extends GameData
 		
 		try 
 		{
-
+			
 			GameWindow gw = new GameWindow();
 			Color stol = new Color(0,102,0);
 			
@@ -43,10 +43,10 @@ public class Game extends GameData
 			
 			sql.setNewStacksCards(cp1, cp2, cp3, cp4);
 
-			player1.updateStacks(sql.getStackCards(1, 'r'), sql.getStackCards(1, 't'), sql.getStackCards(1, 'z'));
-			player2.updateStacks(sql.getStackCards(2, 'r'), sql.getStackCards(2, 't'), sql.getStackCards(2, 'z'));
-			player3.updateStacks(sql.getStackCards(3, 'r'), sql.getStackCards(3, 't'), sql.getStackCards(3, 'z'));
-			player4.updateStacks(sql.getStackCards(4, 'r'), sql.getStackCards(4, 't'), sql.getStackCards(4, 'z'));
+			player1.updateStacks(sql.getStackCards(1, 'r'), sql.getStackCards(1, 's'), sql.getStackCards(1, 'z'));
+			player2.updateStacks(sql.getStackCards(2, 'r'), sql.getStackCards(2, 's'), sql.getStackCards(2, 'z'));
+			player3.updateStacks(sql.getStackCards(3, 'r'), sql.getStackCards(3, 's'), sql.getStackCards(3, 'z'));
+			player4.updateStacks(sql.getStackCards(4, 'r'), sql.getStackCards(4, 's'), sql.getStackCards(4, 'z'));
 			
 			
 			
