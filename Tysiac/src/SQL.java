@@ -208,7 +208,7 @@ public class SQL
 		
 	}
 	
-	private void createTableCard() throws TysiacException
+	public void createTableCard() throws TysiacException
 	{
 		if(con == null) throw new TysiacException(4, "createTableCard()");
 		if(stmt == null) throw new TysiacException(5, "createTableCard()");
@@ -248,7 +248,7 @@ public class SQL
 		}
 	}
 	
-	private void setAccesCode() throws TysiacException
+	public void setAccesCode() throws TysiacException
 	{
 		if(con == null) throw new TysiacException(4, "setAccesCode()");
 		if(stmt == null) throw new TysiacException(5, "setAccesCode()");

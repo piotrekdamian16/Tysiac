@@ -10,15 +10,7 @@ public class Game extends GameData
 		
 		try 
 		{
-			
-			GameWindow gw = new GameWindow();
-			Color stol = new Color(0,102,0);
-			
-			gw.setVisible(true);
-			gw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			gw.getContentPane().setBackground(stol);
-			gw.setTitle("Tysiąc");
-			gw.setResizable(false);
+			GameData.displayLoginWindow();
 			
 			sql = new SQL(); //Łączy się z bazą danych... jeżeli będzie zmiana bazdy danych to użyć konstruktora parametrowego 
 			

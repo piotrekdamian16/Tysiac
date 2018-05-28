@@ -1,3 +1,6 @@
+import java.awt.Color;
+
+import javax.swing.JFrame;
 
 public class GameData 
 {
@@ -25,11 +28,35 @@ public class GameData
 	protected static Card[] cards = new Card[25];
 	protected static SQL sql = null;
 	
+
+	static LoginWindow LogW = new LoginWindow();
+	static GameWindow gw = new GameWindow();
+	static Color stol = new Color(0,102,0);
 	
 	
+	//------------------------------------------------------------------------------
+	protected static void displayLoginWindow()
+	{
+		
+		LogW.setVisible(true);
+		//LogW.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		LogW.getContentPane().setBackground(stol);
+		LogW.setTitle("Tysiac");
+		LogW.setResizable(false);
+	}
+	protected static void displayGameWindow()
+	{
+		gw.setVisible(true);
+		gw.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		gw.getContentPane().setBackground(stol);
+		gw.setTitle("Tysiąc");
+		gw.setResizable(false);
+	}
 	
 	
+
 	
+
 	
 
 	//===================================== Funkcje ==============================
