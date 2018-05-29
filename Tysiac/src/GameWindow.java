@@ -712,6 +712,11 @@ public class GameWindow extends JFrame implements ActionListener
 		this.auction = amount;
 	}
 	
+	public int getAuction() 
+	{
+		return this.auction;
+	}
+	
 	public void bomb()
 	{
 		//co to za gracz
