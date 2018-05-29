@@ -4,14 +4,23 @@ public class Game extends GameData
 {	
 	//Wszystkie zmienne i Funkcje są w pliku GameData.java
 	
-	public static void main(String[] args)
+	public Game() throws TysiacException
 	{
-		
+		super();
+	}
+	
+	public static void main(String[] args)
+	{		
+		Game game = null;
 		try 
 		{
-			GameData.displayLoginWindow();
+			game = new Game();
 			
-			sql = new SQL(); //Łączy się z bazą danych... jeżeli będzie zmiana bazdy danych to użyć konstruktora parametrowego 
+			game.SignIn();
+			
+			System.out.println("IdUser: " + game.idUser);
+			
+			/*
 			
 			cards = sql.getCards(); // Pobiera informacje o kartach 
 
@@ -69,13 +78,18 @@ public class Game extends GameData
 			
 			System.out.println("ID Gracza na miejscu 1: " + sql.checkUser(1)); // funkcja sql sprawdza czy na danym miejscu jest już jakiś gracz... 0 -> nie... inne to ID_user
 			
-			sql.close(); // kończenie połączenia z bazą danych 
-			
+			*/
 		} 
 		catch (TysiacException e) 
 		{
 			System.err.println(e.getErrorMessage());
 			e.printStackTrace();
+		}
+		finally
+		{
+			game.close();
+			
+			System.exit(0);
 		}
 		
     }

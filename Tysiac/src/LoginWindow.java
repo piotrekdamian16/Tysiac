@@ -11,7 +11,6 @@ import java.net.URISyntaxException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
@@ -25,10 +24,12 @@ public class LoginWindow extends JFrame implements ActionListener
 	private JPasswordField text2; 
 	private String login;
 	private String password;
-	GameData GaD = new GameData();
+	GameData GaD;
 	
-	public LoginWindow()
+	public LoginWindow(GameData a)
 	{	
+		GaD = a;
+		
 		Toolkit kit = Toolkit.getDefaultToolkit(); //zbadanie wymiarow ekranu do ustawienia okna
 		Dimension screenSize = kit.getScreenSize();
 		int sHeight = screenSize.height;
@@ -60,7 +61,7 @@ public class LoginWindow extends JFrame implements ActionListener
 		bRegistry.setBounds(140,220, 120,30);
 		
 		
-		text1 = new JTextField("admin");
+		text1 = new JTextField("");
 		text2 = new JPasswordField("");
 		
 		text1.setBounds(140,50,150,30);
@@ -73,18 +74,7 @@ public class LoginWindow extends JFrame implements ActionListener
 		bLogin.addActionListener(this);
 	}
 
-	public static void main(String[] args)
-	{
-		LoginWindow LogW = new LoginWindow();
-		Color stol = new Color(0,102,0);
-		
-		LogW.setVisible(true);
-		//LogW.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		LogW.getContentPane().setBackground(stol);
-		LogW.setTitle("Tysiac");
-		LogW.setResizable(false);
-	}
-
+	@SuppressWarnings("deprecation")
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
@@ -93,43 +83,9 @@ public class LoginWindow extends JFrame implements ActionListener
 		
 		if(source==bLogin)
 		{
-			
-			int checkL = 1;
-			//String test;
-			setLogin(text1.getText());
-			//test = text1.getText();
-			JOptionPane.showMessageDialog(null,"Zalogowano poprawnie." + getLogin());
-			setLogin(text1.getText());
-			//int checkLP = -10;
-			try 
-			{
-				checkL = GaD.checkLog(login);
-			} 
-			catch (TysiacException e1) 
-			{
-				e1.printStackTrace();
-			}
-
-			if(checkL > 0)
-			{
-				//JOptionPane.showMessageDialog(null,"Zalogowano poprawnie." );
-				
-				JoinCreateTWindow JCWin = new JoinCreateTWindow();
-				Color stol = new Color(0,102,0);
-				
-				JCWin.setVisible(true);
-				JCWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				JCWin.getContentPane().setBackground(stol);
-				JCWin.setTitle("Tysiąc");
-				JCWin.setResizable(false);
-				
-				setVisible(false);   //niewidoczne okno login window
-				//dispose();  //usuwa obiekt login window
-			}
-			else
-			{
-				JOptionPane.showMessageDialog(null,"Zły login lub hasło." );
-			}
+			GaD.setLogin(text1.getText());
+			GaD.setPassword(text2.getText());
+			GaD.setLoginClick(1);
 
 		}
 		else if(source==bRegistry)
@@ -151,7 +107,8 @@ public class LoginWindow extends JFrame implements ActionListener
 		}
 	}
 
-	public String getLogin() {
+	public String getLogin() 
+	{
 		return login;
 	}
 
@@ -160,12 +117,22 @@ public class LoginWindow extends JFrame implements ActionListener
 		this.login = login;
 	}
 
-	public String getPassword() {
+	public String getPassword() 
+	{
 		return password;
 	}
 
 	public void setPassword(String password) 
 	{
 		this.password = password;
+	}
+	public void resetPasswordField() 
+	{
+		this.text2.setText("");
+	}
+	
+	public void closeWindow()
+	{
+		dispose();
 	}
 }

@@ -789,4 +789,9 @@ public class GameWindow extends JFrame implements ActionListener
 		c23.setEnabled(true);
 		c24.setEnabled(true);
 	}
+	
+	public void closeWindow()
+	{
+		dispose();
+	}
 }

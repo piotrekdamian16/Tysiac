@@ -18,10 +18,13 @@ public class JoinCreateTWindow extends JFrame implements ActionListener
 	private JTextField TJoin, TCreate;
 	private ButtonGroup bgAmountPlayers;
 	private JRadioButton rbPlayer3, rbPlayer4;
+	GameData GaD;
 
 	
-	public JoinCreateTWindow()
+	public JoinCreateTWindow(GameData a)
 	{	
+		GaD = a;
+		
 		Toolkit kit = Toolkit.getDefaultToolkit(); //zbadanie wymiarow ekranu do ustawienia okna
 		Dimension screenSize = kit.getScreenSize();
 		int sHeight = screenSize.height;
@@ -45,11 +48,6 @@ public class JoinCreateTWindow extends JFrame implements ActionListener
 		
 		bJoin.addActionListener(this);
 		bCreate.addActionListener(this);		
-	}
-
-	public static void main(String[] args)
-	{
-
 	}
 
 	@Override
@@ -89,5 +87,10 @@ public class JoinCreateTWindow extends JFrame implements ActionListener
 			add(TJoin);
 			TJoin.setBounds(170,50,150,30);
 		}
+	}
+	
+	public void closeWindow()
+	{
+		dispose();
 	}
 }

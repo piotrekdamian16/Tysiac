@@ -77,7 +77,7 @@ public class SQL
 	// -----------------------------------------------------------------------------
 	// ---------------- Zamykanie połączenia z bazą --------------------------------
 	// -----------------------------------------------------------------------------
-	public void close() throws TysiacException
+	public void close()
 	{
 		try 
 		{
@@ -85,7 +85,7 @@ public class SQL
 		} 
 		catch (SQLException e) 
 		{
-			throw new TysiacException(3, "close()");
+			e.printStackTrace();
 		}
 	}
 
@@ -128,7 +128,7 @@ public class SQL
 		if(con == null) throw new TysiacException(4, "checkLogin()");
 		if(stmt == null) throw new TysiacException(5, "checkLogin()");
 		
-		if(login.length() < 6) return -1;
+		if(login.length() < 5) return -1;
 		if(Pattern.matches("^[a-zA-Z0-9-_]+$", login) == false) return -2;
 		
 		int idUser = 0;

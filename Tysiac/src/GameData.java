@@ -7,8 +7,11 @@ public class GameData
 	//===================================== Zmienne ==============================
 	protected static int idTable; // numer id stołu w bazie danych -> często potrzebne 
 	protected static String accessCode; // kod dostępu do stołu -> generowane przez Tworzącego stół... potrzebne by dołączyć do stołu... tworzone ze stringu z datą, więc nie powinno być powtórek
+
+	protected String login;
+	protected String password;
 	
-	protected static int idUser; //identifikator użytkownika w bazie
+	protected int idUser; //identifikator użytkownika w bazie
 	protected static int place;  //miejsce przy stole  
 
 	protected static User player1; // zmienna przechowująca dane o użytkowniku -> Hostujący stół
@@ -27,17 +30,37 @@ public class GameData
 
 	protected static Card[] cards = new Card[25];
 	protected static SQL sql = null;
+
+
+	LoginWindow LogW;
+	GameWindow GameW;
+	JoinCreateTWindow JCWin;
+	Color stol;
 	
 
-	static LoginWindow LogW = new LoginWindow();
-	static GameWindow gw = new GameWindow();
-	static Color stol = new Color(0,102,0);
+	protected volatile int loginClick = 0;
+	private volatile int playClick = 0;
 	
 	//int checkL;
 	
-	
+	//=============================================================================
+	public GameData() throws TysiacException
+	{
+		LogW = new LoginWindow(this);
+		JCWin = new JoinCreateTWindow(this);
+		GameW = new GameWindow();
+		stol = new Color(0,102,0);
+		sql = new SQL();
+	}
+	public void close()
+	{
+		sql.close(); // kończenie połączenia z bazą danych 
+		LogW.closeWindow();
+		GameW.closeWindow();
+		JCWin.closeWindow();
+	}
 	//------------------------------------------------------------------------------
-	protected static void displayLoginWindow()
+	protected void displayLoginWindow()
 	{
 		
 		LogW.setVisible(true);
@@ -46,15 +69,30 @@ public class GameData
 		LogW.setTitle("Tysiąc");
 		LogW.setResizable(false);
 	}
-	protected static void displayGameWindow()
+	protected void displayJoinCreateTWindow()
 	{
-		gw.setVisible(true);
-		gw.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		gw.getContentPane().setBackground(stol);
-		gw.setTitle("Tysiąc");
-		gw.setResizable(false);
+		//JOptionPane.showMessageDialog(null,"Zalogowano poprawnie." );
+		
+		
+		JCWin.setVisible(true);
+		JCWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		JCWin.getContentPane().setBackground(stol);
+		JCWin.setTitle("Tysiąc");
+		JCWin.setResizable(false);
+		
+		JCWin.setVisible(false);   //niewidoczne okno login window
+		//dispose();  //usuwa obiekt login window
+	}
+	protected void displayGameWindow()
+	{
+		GameW.setVisible(true);
+		GameW.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		GameW.getContentPane().setBackground(stol);
+		GameW.setTitle("Tysiąc");
+		GameW.setResizable(false);
 	}
 	
+
 	
 
 	
@@ -63,13 +101,21 @@ public class GameData
 
 	//===================================== Funkcje ==============================
 
-	protected static int getIdUser() 
+	protected int getIdUser() 
 	{
 		return idUser;
 	}
 	protected static int getIdTable() 
 	{
 		return idTable;
+	}
+	protected String getLogin() 
+	{
+		return login;
+	}
+	protected String getPassword() 
+	{
+		return password;
 	}
 	protected static String getAccessCode() 
 	{
@@ -119,17 +165,32 @@ public class GameData
 	{
 		return auctionSurrender;
 	}
-
-	
-	
-
-	protected static void setIdUser(int idUser) 
+	protected int getLoginClick() 
 	{
-		GameData.idUser = idUser;
+		return loginClick;
+	}
+	protected int getPlayClick() 
+	{
+		return playClick;
+	}
+	
+	
+
+	protected void setIdUser(int idUser) 
+	{
+		this.idUser = idUser;
 	}
 	protected static void setIdTable(int idTable) 
 	{
 		GameData.idTable = idTable;
+	}
+	protected void setLogin(String l) 
+	{
+		login = l;
+	}
+	protected void setPassword(String p) 
+	{
+		password = p;
 	}
 	protected static void setAccessCode(String accessCode) 
 	{
@@ -179,11 +240,69 @@ public class GameData
 	{
 		this.auctionSurrender = auctionSurrender;
 	}
-	
-	public int checkLog(String login) throws TysiacException
+	protected void setLoginClick(int loginClick) 
 	{
-		JOptionPane.showMessageDialog(null,"Zalogowano poprawnie." + LogW.getLogin());
-		
-		return sql.checkLogin(login);
+		this.loginClick = loginClick;
 	}
+	protected void setPlayClick(int playClick) 
+	{
+		this.playClick = playClick;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	protected void SignIn() throws TysiacException
+	{
+		int tmp=0;
+		do
+		{
+			this.setLoginClick(0);
+			this.displayLoginWindow();
+			while(this.getLoginClick() == 0);
+			this.LogW.setVisible(false);
+			tmp = sql.checkLogin(getLogin());
+			if(tmp == -2) 
+			{
+				JOptionPane.showMessageDialog(null,"Użyto niepoprawnego symbolu w loginie.");
+			}
+			else if(tmp == -1) 
+			{
+				JOptionPane.showMessageDialog(null,"Login zbyt krótki, min 5 znaków");
+			}
+			else if(tmp == 0) 
+			{
+				JOptionPane.showMessageDialog(null,"Brak podanego loginu w bazie");
+			}
+			else
+			{
+				tmp = sql.loginToGame(getLogin(), getPassword());
+				if(tmp <= 0)
+				{
+					JOptionPane.showMessageDialog(null,"Błędny Login lub Hasło");
+				}
+			}
+			this.LogW.resetPasswordField();
+			
+		}
+		while(tmp<=0);
+		
+		this.setIdUser(tmp);
+	}
+/*
+	protected void SitToTable()
+	{
+		this.setPlayClick(0);
+		this.displayJoinCreateTWindow();
+		while(this.getPlayClick() == 0);
+	}
+*/
+
 }
