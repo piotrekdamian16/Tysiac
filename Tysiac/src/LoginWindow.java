@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
@@ -22,6 +23,8 @@ public class LoginWindow extends JFrame implements ActionListener
 	private JLabel lLogin, lPass;
 	private JTextField text1; 
 	private JPasswordField text2; 
+	private String login;
+	private String password;
 	
 	public LoginWindow()
 	{	
@@ -88,17 +91,33 @@ public class LoginWindow extends JFrame implements ActionListener
 		
 		if(source==bLogin)
 		{
-			JoinCreateTWindow JCWin = new JoinCreateTWindow();
-			Color stol = new Color(0,102,0);
 			
-			JCWin.setVisible(true);
-			JCWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			JCWin.getContentPane().setBackground(stol);
-			JCWin.setTitle("Tysiąc");
-			JCWin.setResizable(false);
+			int checkL = -10;
+			//int checkLP = -10;
 			
-			setVisible(false);   //niewidoczne okno login window
-			dispose();  //usuwa obiekt login window
+			this.setLogin(text1.getText());
+
+			if(checkL > 0)
+			{
+				JOptionPane.showMessageDialog(null,"Zalogowano poprawnie." );
+				
+				JoinCreateTWindow JCWin = new JoinCreateTWindow();
+				Color stol = new Color(0,102,0);
+				
+				JCWin.setVisible(true);
+				JCWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				JCWin.getContentPane().setBackground(stol);
+				JCWin.setTitle("Tysiąc");
+				JCWin.setResizable(false);
+				
+				setVisible(false);   //niewidoczne okno login window
+				dispose();  //usuwa obiekt login window
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null,"Zły login lub hasło." );
+			}
+
 		}
 		else if(source==bRegistry)
 		{
@@ -118,5 +137,23 @@ public class LoginWindow extends JFrame implements ActionListener
 			}
 			
 		}
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) 
+	{
+		this.login = login;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) 
+	{
+		this.password = password;
 	}
 }

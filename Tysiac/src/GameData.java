@@ -41,7 +41,7 @@ public class GameData
 		LogW.setVisible(true);
 		//LogW.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		LogW.getContentPane().setBackground(stol);
-		LogW.setTitle("Tysiac");
+		LogW.setTitle("Tysiąc");
 		LogW.setResizable(false);
 	}
 	protected static void displayGameWindow()

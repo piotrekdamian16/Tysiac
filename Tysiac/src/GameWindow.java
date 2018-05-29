@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,11 +15,14 @@ public class GameWindow extends JFrame implements ActionListener
 {
 	private JButton c1,c2,c3,c4,c5,c6,c7,c8;
 	private JButton c9,c10,c11,c12,c13,c14,c15,c16;
-	private JButton c17,c18,c19,c20,c21,c22,c23,c24;
+	private JButton c17,c18,c19,c20,c21,c22,c23,c24, cGame1, cGame2, cGame3;
 	private JButton l110, l120, l130, l140, l150, l160, l170;
 	private JButton l180, l190, l200, l210, l220, l230, l240;
 	private JButton l250, l260, l270, l280, l290, l300, lPass, Bomba;
 	private JLabel p1,p2,p3,p4;
+	private int auction;
+	
+	int check1 = 0;
 	
 	public GameWindow()
 	{	
@@ -54,6 +58,10 @@ public class GameWindow extends JFrame implements ActionListener
 		c22 = new JButton();
 		c23 = new JButton();
 		c24 = new JButton();
+	
+		cGame1 = new JButton();
+		cGame2 = new JButton();
+		cGame3 = new JButton();
 		
 		l110 = new JButton("110");
 		l120 = new JButton("120");
@@ -112,6 +120,18 @@ public class GameWindow extends JFrame implements ActionListener
 		
 		lPass.setBounds(715,620,130,30);
 		Bomba.setBounds(855,620,130,30);
+		
+		cGame2.setBounds(239,230,70,42);
+		cGame1.setBounds(319,250,42,72);
+		cGame3.setBounds(371,230,70,42);
+		
+		add(cGame1);
+		add(cGame2);
+		add(cGame3);
+		
+		cGame1.setVisible(false);
+		cGame2.setVisible(false);
+		cGame3.setVisible(false);
 		
 		add(l110);
 		add(l120);
@@ -227,6 +247,28 @@ public class GameWindow extends JFrame implements ActionListener
 		c23.addActionListener(this);
 		c24.addActionListener(this);
 		
+		l110.addActionListener(this);
+		l120.addActionListener(this);
+		l130.addActionListener(this);
+		l140.addActionListener(this);
+		l150.addActionListener(this);
+		l160.addActionListener(this);
+		l170.addActionListener(this);
+		l180.addActionListener(this);
+		l190.addActionListener(this);
+		l200.addActionListener(this);
+		l210.addActionListener(this);
+		l220.addActionListener(this);
+		l230.addActionListener(this);
+		l240.addActionListener(this);
+		l250.addActionListener(this);
+		l260.addActionListener(this);
+		l270.addActionListener(this);
+		l280.addActionListener(this);
+		l290.addActionListener(this);
+		l300.addActionListener(this);
+		lPass.addActionListener(this);
+		Bomba.addActionListener(this);	
 	}
 
 	public static void main(String[] args)
@@ -237,7 +279,7 @@ public class GameWindow extends JFrame implements ActionListener
 		tysiac.setVisible(true);
 		tysiac.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		tysiac.getContentPane().setBackground(stol);
-		tysiac.setTitle("Tysi�c");
+		tysiac.setTitle("Tysiąc");
 		tysiac.setResizable(false);
 	}
 
@@ -248,6 +290,17 @@ public class GameWindow extends JFrame implements ActionListener
 		
 		if(source==c1){
 			c1.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(2);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(2);
+			
 			/*Container parent = c1.getParent();
 			parent.remove(c1);
 			parent.revalidate();
@@ -255,73 +308,480 @@ public class GameWindow extends JFrame implements ActionListener
 		}
 		else if(source==c2){
 			c2.setVisible(false);
+			
+			try {
+				changeLayoutCard(2);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(2);
 		}
 		else if(source==c3){
 			c3.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(2);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(2);
 		}
-		else if(source==c4){
+		else if(source==c4)
+		{
 			c4.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(2);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(2);
 		}
 		else if(source==c5){
 			c5.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(2);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(2);
 		}
 		else if(source==c6){
 			c6.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(2);
+			} 
+			catch (InterruptedException e1) 
+			{
+
+				e1.printStackTrace();
+			}
+			setDisableButton(2);
 		}
 		else if(source==c7){
 			c7.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(2);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(2);
 		}
 		else if(source==c8){
 			c8.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(2);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(2);
 		}
 		else if(source==c9){
 			c9.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(1);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(1);
 		}
 		else if(source==c10){
 			c10.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(1);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(1);
 		}
 		else if(source==c11){
 			c11.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(1);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(1);
 		}
 		else if(source==c12){
 			c12.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(1);
+			} catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(1);
 		}
 		else if(source==c13){
 			c13.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(1);
+			} catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(1);
 		}
 		else if(source==c14){
 			c14.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(1);
+			} 
+			catch (InterruptedException e1) 
+			{		
+				e1.printStackTrace();
+			}
+			setDisableButton(1);
 		}
 		else if(source==c15){
 			c15.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(1);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(1);
 		}
 		else if(source==c16){
 			c16.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(1);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(1);
 		}
 		else if(source==c17){
 			c17.setVisible(false);
+			
+			try {
+				changeLayoutCard(3);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(3);
 		}
 		else if(source==c18){
 			c18.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(3);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(3);
 		}
 		else if(source==c19){
 			c19.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(3);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(3);
 		}
 		else if(source==c20){
 			c20.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(3);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(3);
 		}
 		else if(source==c21){
 			c21.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(3);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(3);
 		}
 		else if(source==c22){
 			c22.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(3);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(3);
 		}
 		else if(source==c23){
 			c23.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(3);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(3);
 		}
 		else if(source==c24){
 			c24.setVisible(false);
+			
+			try 
+			{
+				changeLayoutCard(3);
+			} 
+			catch (InterruptedException e1) 
+			{
+				e1.printStackTrace();
+			}
+			setDisableButton(3);
+		}
+		else if(source==l110){
+			setAuction(110);
+		}
+		else if(source==l120){
+			setAuction(120);
+		}
+		else if(source==l130){
+			setAuction(130);
+		}
+		else if(source==l140){
+			setAuction(140);
+		}
+		else if(source==l150){
+			setAuction(150);
+		}
+		else if(source==l160){
+			setAuction(160);
+		}
+		else if(source==l170){
+			setAuction(170);
+		}
+		else if(source==l180){
+			setAuction(180);
+		}
+		else if(source==l190){
+			setAuction(190);
+		}
+		else if(source==l200){
+			setAuction(200);
+		}
+		else if(source==l210){
+			setAuction(210);
+		}
+		else if(source==l220){
+			setAuction(220);
+		}
+		else if(source==l230){
+			setAuction(230);
+		}
+		else if(source==l240){
+			setAuction(240);
+		}
+		else if(source==l250){
+			setAuction(250);
+		}
+		else if(source==l260){
+			setAuction(260);
+		}
+		else if(source==l270){
+			setAuction(270);
+		}
+		else if(source==l280){
+			setAuction(280);
+		}
+		else if(source==l290){
+			setAuction(290);
+		}
+		else if(source==l300){
+			setAuction(300);
+		}
+		else if(source==lPass){
+			setAuction(1);
+		}
+		else if(source==Bomba){
+			bomb();
 		}
 		
+	}
+	
+	public void changeLayoutCard(int checkC) throws InterruptedException
+	{
+		if(checkC==1)
+		{
+			cGame1.setVisible(true);
+		}
+		else if(checkC==2)
+		{
+			cGame2.setVisible(true);
+		}
+		else if(checkC==3)
+		{
+			cGame3.setVisible(true);
+		}
+		check1++;
+		
+		if(check1==3)
+		{
+			check1 = 0;
+			notVisibleCard();
+		}
+	}
+	
+	public void notVisibleCard() throws InterruptedException
+	{
+		TimeUnit.MILLISECONDS.sleep(2000);
+		
+		cGame1.setVisible(false);
+		cGame2.setVisible(false);
+		cGame3.setVisible(false);
+		
+		setEnableButton();
+		
+	}
+	
+	public void setAuction(int amount) 
+	{
+		this.auction = amount;
+	}
+	
+	public void bomb()
+	{
+		//co to za gracz
+		//brak mozliwosci kolejnej bomby
+		//dodaj po 60 pkt innnym
+		Bomba.setVisible(false);
+	}
+	
+	public void setDisableButton(int checkB)
+	{
+		if(checkB==2)
+		{
+			c1.setEnabled(false);
+			c2.setEnabled(false);
+			c3.setEnabled(false);
+			c4.setEnabled(false);
+			c5.setEnabled(false);
+			c6.setEnabled(false);
+			c7.setEnabled(false);
+			c8.setEnabled(false);
+		}	
+		else if(checkB==1)
+		{
+			c9.setEnabled(false);
+			c10.setEnabled(false);
+			c11.setEnabled(false);
+			c12.setEnabled(false);
+			c13.setEnabled(false);
+			c14.setEnabled(false);
+			c15.setEnabled(false);
+			c16.setEnabled(false);	
+		}
+		else if(checkB==3)
+		{
+			c17.setEnabled(false);
+			c18.setEnabled(false);
+			c19.setEnabled(false);
+			c20.setEnabled(false);
+			c21.setEnabled(false);
+			c22.setEnabled(false);
+			c23.setEnabled(false);
+			c24.setEnabled(false);	
+		}
+	}
+	
+	public void setEnableButton()
+	{
+		c1.setEnabled(true);
+		c2.setEnabled(true);
+		c3.setEnabled(true);
+		c4.setEnabled(true);
+		c5.setEnabled(true);
+		c6.setEnabled(true);
+		c7.setEnabled(true);
+		c8.setEnabled(true);
+		c9.setEnabled(true);
+		c10.setEnabled(true);
+		c11.setEnabled(true);
+		c12.setEnabled(true);
+		c13.setEnabled(true);
+		c14.setEnabled(true);
+		c15.setEnabled(true);
+		c16.setEnabled(true);
+		c17.setEnabled(true);
+		c18.setEnabled(true);
+		c19.setEnabled(true);
+		c20.setEnabled(true);
+		c21.setEnabled(true);
+		c22.setEnabled(true);
+		c23.setEnabled(true);
+		c24.setEnabled(true);
 	}
 }
