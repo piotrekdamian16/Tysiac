@@ -1262,17 +1262,7 @@ public class SQL
 		}
 	}	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	public int getIdTable() 
 	{
 		return idTable;

@@ -1,6 +1,6 @@
 import java.awt.Color;
-
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class GameData 
 {
@@ -32,6 +32,8 @@ public class GameData
 	static LoginWindow LogW = new LoginWindow();
 	static GameWindow gw = new GameWindow();
 	static Color stol = new Color(0,102,0);
+	
+	//int checkL;
 	
 	
 	//------------------------------------------------------------------------------
@@ -176,5 +178,12 @@ public class GameData
 	protected void setAuctionSurrender(int auctionSurrender) 
 	{
 		this.auctionSurrender = auctionSurrender;
+	}
+	
+	public int checkLog(String login) throws TysiacException
+	{
+		JOptionPane.showMessageDialog(null,"Zalogowano poprawnie." + LogW.getLogin());
+		
+		return sql.checkLogin(login);
 	}
 }

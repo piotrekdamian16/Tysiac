@@ -25,6 +25,7 @@ public class LoginWindow extends JFrame implements ActionListener
 	private JPasswordField text2; 
 	private String login;
 	private String password;
+	GameData GaD = new GameData();
 	
 	public LoginWindow()
 	{	
@@ -59,7 +60,7 @@ public class LoginWindow extends JFrame implements ActionListener
 		bRegistry.setBounds(140,220, 120,30);
 		
 		
-		text1 = new JTextField("");
+		text1 = new JTextField("admin");
 		text2 = new JPasswordField("");
 		
 		text1.setBounds(140,50,150,30);
@@ -88,18 +89,30 @@ public class LoginWindow extends JFrame implements ActionListener
 	public void actionPerformed(ActionEvent e) 
 	{
 		Object source = e.getSource();
+
 		
 		if(source==bLogin)
 		{
 			
-			int checkL = -10;
+			int checkL = 1;
+			//String test;
+			setLogin(text1.getText());
+			//test = text1.getText();
+			JOptionPane.showMessageDialog(null,"Zalogowano poprawnie." + getLogin());
+			setLogin(text1.getText());
 			//int checkLP = -10;
-			
-			this.setLogin(text1.getText());
+			try 
+			{
+				checkL = GaD.checkLog(login);
+			} 
+			catch (TysiacException e1) 
+			{
+				e1.printStackTrace();
+			}
 
 			if(checkL > 0)
 			{
-				JOptionPane.showMessageDialog(null,"Zalogowano poprawnie." );
+				//JOptionPane.showMessageDialog(null,"Zalogowano poprawnie." );
 				
 				JoinCreateTWindow JCWin = new JoinCreateTWindow();
 				Color stol = new Color(0,102,0);
@@ -111,7 +124,7 @@ public class LoginWindow extends JFrame implements ActionListener
 				JCWin.setResizable(false);
 				
 				setVisible(false);   //niewidoczne okno login window
-				dispose();  //usuwa obiekt login window
+				//dispose();  //usuwa obiekt login window
 			}
 			else
 			{
@@ -135,7 +148,6 @@ public class LoginWindow extends JFrame implements ActionListener
 			{
 				
 			}
-			
 		}
 	}
 
