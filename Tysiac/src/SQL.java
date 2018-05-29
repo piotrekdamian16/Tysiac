@@ -1264,6 +1264,480 @@ public class SQL
 	
 	
 	
+
+	public int getAuctionValue() throws TysiacException
+	{
+		if(con == null) throw new TysiacException(4, "getAuctionValue()");
+		if(stmt == null) throw new TysiacException(5, "getAuctionValue()");
+		
+		int auction = 0;
+		
+		ResultSet rs;
+		try 
+		{
+			rs = stmt.executeQuery("SELECT  licytacja_ile  "
+										 + "FROM Stoly "
+										 + "where id_stolu =" + this.idTable);
+
+			if(rs.next())
+			{
+				auction = rs.getInt(1);
+			}
+		} 
+		catch (SQLException e) 
+		{
+			throw new TysiacException(16, "getAuctionValue()");
+		} 
+		
+		
+		return auction;
+	}
+	
+	public void setAuctionValue(int value) throws TysiacException
+	{
+		if(con == null) throw new TysiacException(4, "setAuctionValue()");
+		if(stmt == null) throw new TysiacException(5, "setAuctionValue()");
+		
+		if(value != 110 || value != 300) throw new TysiacException(119, "setAuctionValue()");
+		
+		
+		try 
+		{
+			stmt.executeUpdate("UPDATE `Stoly` "
+							 + "SET `licytacja_ile`= "+ value +"  "
+							 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+		} 
+		catch (SQLException e) 
+		{
+			throw new TysiacException(20, "setAuctionValue()");
+		}
+	}	
+	
+
+	
+
+	public int getAuctionPlayer() throws TysiacException
+	{
+		if(con == null) throw new TysiacException(4, "getAuctionPlayer()");
+		if(stmt == null) throw new TysiacException(5, "getAuctionPlayer()");
+		
+		int auction = 0;
+		
+		ResultSet rs;
+		try 
+		{
+			rs = stmt.executeQuery("SELECT  licytacja_gracz  "
+										 + "FROM Stoly "
+										 + "where id_stolu =" + this.idTable);
+
+			if(rs.next())
+			{
+				auction = rs.getInt(1);
+			}
+		} 
+		catch (SQLException e) 
+		{
+			throw new TysiacException(16, "getAuctionPlayer()");
+		} 
+		
+		
+		return auction;
+	}
+	
+	public void setAuctionPlayer(int player) throws TysiacException
+	{
+		if(con == null) throw new TysiacException(4, "setAuctionPlayer()");
+		if(stmt == null) throw new TysiacException(5, "setAuctionPlayer()");
+
+		if(player <= 0 || player >4) throw new TysiacException(112, "setAuctionPlayer()");
+		
+		
+		try 
+		{
+			stmt.executeUpdate("UPDATE `Stoly` "
+							 + "SET `licytacja_gracz`= "+ player +"  "
+							 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+		} 
+		catch (SQLException e) 
+		{
+			throw new TysiacException(20, "setAuctionPlayer()");
+		}
+	}	
+	
+	
+	
+
+	
+
+	public char getColor() throws TysiacException
+	{
+		if(con == null) throw new TysiacException(4, "getColor()");
+		if(stmt == null) throw new TysiacException(5, "getColor()");
+		
+		char color = 0;
+		
+		ResultSet rs;
+		try 
+		{
+			rs = stmt.executeQuery("SELECT  kolor  "
+										 + "FROM Stoly "
+										 + "where id_stolu =" + this.idTable);
+
+			if(rs.next())
+			{
+				color = rs.getString(1).charAt(0);
+			}
+		} 
+		catch (SQLException e) 
+		{
+			throw new TysiacException(16, "getColor()");
+		} 
+		
+		
+		return color;
+	}
+	
+	public void setColor(char color) throws TysiacException
+	{
+		if(con == null) throw new TysiacException(4, "setColor()");
+		if(stmt == null) throw new TysiacException(5, "setColor()");
+
+		if(color == 'C' || color == 'D' || color == 'Z' || color == 'W' || color == '\0' ) throw new TysiacException(120, "setColor()");
+		
+		
+		try 
+		{
+			if(color == '\0')
+			{
+				stmt.executeUpdate("UPDATE `Stoly` "
+						 + "SET `kolor`= NULL  "
+						 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+			}
+			else
+			{
+				stmt.executeUpdate("UPDATE `Stoly` "
+						 + "SET `kolor`= '"+ color +"'  "
+						 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+			}
+		} 
+		catch (SQLException e) 
+		{
+			throw new TysiacException(20, "setColor()");
+		}
+	}	
+	
+	
+	
+
+
+	public String getStatus() throws TysiacException
+	{
+		if(con == null) throw new TysiacException(4, "getStatus()");
+		if(stmt == null) throw new TysiacException(5, "getStatus()");
+		
+		String status = "";
+		
+		ResultSet rs;
+		try 
+		{
+			rs = stmt.executeQuery("SELECT  status  "
+										 + "FROM Stoly "
+										 + "where id_stolu =" + this.idTable);
+
+			if(rs.next())
+			{
+				status = rs.getString(1);
+			}
+		} 
+		catch (SQLException e) 
+		{
+			throw new TysiacException(16, "getStatus()");
+		} 
+		
+		
+		return status;
+	}
+	
+	public void setStatus(String status) throws TysiacException
+	{
+		if(con == null) throw new TysiacException(4, "setStatus()");
+		if(stmt == null) throw new TysiacException(5, "setStatus()");
+		
+		
+		try 
+		{
+			stmt.executeUpdate("UPDATE `Stoly` "
+							 + "SET `status`= '"+ status +"'  "
+							 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+		} 
+		catch (SQLException e) 
+		{
+			throw new TysiacException(20, "setStatus()");
+		}
+	}
+	
+	
+	
+	
+	
+
+	public int getSumCardValue(int player) throws TysiacException
+	{
+		if(con == null) throw new TysiacException(4, "getSumCardValue()");
+		if(stmt == null) throw new TysiacException(5, "getSumCardValue()");
+		
+		if(player <= 0 || player >4) throw new TysiacException(113, "getSumCardValue()");
+		
+		int sum = 0;
+		
+		ResultSet rs;
+		try 
+		{
+			rs = stmt.executeQuery("SELECT suma "
+								 + "FROM ( "
+								 	+ "SELECT ks.gracz, sum(k.wartosc) as suma "
+								 	+ "FROM `Karty_Stol` as ks "
+								 	+ "JOIN `Karty` as k on k.id_karty = ks.id_karty "
+								 	+ "WHERE ks.id_stolu = "+ this.idTable +" AND ks.gdzie = 'r' "
+								 	+ "GROUP BY ks.gracz ) as t1 "
+								 + "WHERE gracz = " + player);
+
+			if(rs.next())
+			{
+				sum = rs.getInt(1);
+			}
+		} 
+		catch (SQLException e) 
+		{
+			throw new TysiacException(16, "getSumCardValue()");
+		} 
+		
+		
+		return sum;
+	}
+	
+
+	
+	public int countCardInColor(int player, char color) throws TysiacException
+	{
+		if(con == null) throw new TysiacException(4, "countCardInColor()");
+		if(stmt == null) throw new TysiacException(5, "countCardInColor()");
+		
+		if(player <= 0 || player >4) throw new TysiacException(113, "countCardInColor()");
+		if(color == 'C' || color == 'D' || color == 'Z' || color == 'W' || color == '\0' ) throw new TysiacException(120, "setColor()");
+		
+		int cards = 0;
+		
+		ResultSet rs;
+		try 
+		{
+			rs = stmt.executeQuery("SELECT ile "
+								 + "FROM ( "
+								 	+ "SELECT ks.gracz, count(k.wartosc) as ile "
+								 	+ "FROM `Karty_Stol` as ks "
+								 	+ "JOIN `Karty` as k on k.id_karty = ks.id_karty "
+								 	+ "WHERE ks.id_stolu="+ this.idTable +" AND ks.gdzie = 'r' AND k.kolor = '"+color+"' "
+								 	+ "GROUP BY ks.gracz) as t1 "
+								 + "WHERE gracz = " + player);
+
+			if(rs.next())
+			{
+				cards = rs.getInt(1);
+			}
+		} 
+		catch (SQLException e) 
+		{
+			throw new TysiacException(16, "countCardInColor()");
+		} 
+		
+		return cards;
+	}
+	
+	public int [] getCardInColor(int player, char color) throws TysiacException
+	{
+		if(con == null) throw new TysiacException(4, "getCardInColor()");
+		if(stmt == null) throw new TysiacException(5, "getCardInColor()");
+		
+		if(player <= 0 || player >4) throw new TysiacException(113, "getCardInColor()");
+		if(color == 'C' || color == 'D' || color == 'Z' || color == 'W' || color == '\0' ) throw new TysiacException(120, "setColor()");
+		
+		int [] cards = null;
+		
+		if(this.countCardInColor(player, color) > 0)
+		{
+			cards = new int[this.countCardInColor(player, color)];
+			
+			ResultSet rs;
+			try 
+			{
+				rs = stmt.executeQuery("SELECT id_karty "
+									 + "FROM ( "
+									 	+ "SELECT ks.gracz, ks.id_karty "
+									 	+ "FROM `Karty_Stol` as ks "
+									 	+ "JOIN `Karty` as k on k.id_karty = ks.id_karty "
+									 	+ "WHERE ks.id_stolu="+ this.idTable +" AND ks.gdzie = 'r' AND k.kolor = '"+color+"' "
+									 	+ "GROUP BY ks.gracz) as t1 "
+									 + "WHERE gracz = " + player);
+				int i=0;
+				while(rs.next())
+				{
+					cards[i] = rs.getInt(1);
+					i++;
+				}
+			} 
+			catch (SQLException e) 
+			{
+				throw new TysiacException(16, "getCardInColor()");
+			} 
+		}
+		else
+		{
+			char color2 = this.getColor(); //kolor meldunku
+			
+			if(this.countCardInColor(player, color2) > 0)
+			{
+
+				cards = new int[this.countCardInColor(player, color2)];
+				ResultSet rs;
+				try 
+				{
+					rs = stmt.executeQuery("SELECT id_karty "
+										 + "FROM ( "
+										 	+ "SELECT ks.gracz, ks.id_karty "
+										 	+ "FROM `Karty_Stol` as ks "
+										 	+ "JOIN `Karty` as k on k.id_karty = ks.id_karty "
+										 	+ "WHERE ks.id_stolu="+ this.idTable +" AND ks.gdzie = 'r' AND k.kolor = '"+color2+"' "
+										 	+ "GROUP BY ks.gracz) as t1 "
+										 + "WHERE gracz = " + player);
+					int i=0;
+					while(rs.next())
+					{
+						cards[i] = rs.getInt(1);
+						i++;
+					}
+				} 
+				catch (SQLException e) 
+				{
+					throw new TysiacException(16, "getCardInColor()");
+				} 
+			}
+		}
+		
+		return cards;
+	}
+	
+	
+	
+
+	
+	public int countHihgerCardInColor(int player, char color, int value) throws TysiacException
+	{
+		if(con == null) throw new TysiacException(4, "countHihgerCardInColor()");
+		if(stmt == null) throw new TysiacException(5, "countHihgerCardInColor()");
+		
+		if(player <= 0 || player >4) throw new TysiacException(113, "countCardInColor()");
+		if(color == 'C' || color == 'D' || color == 'Z' || color == 'W' || color == '\0' ) throw new TysiacException(120, "setColor()");
+		
+		int cards = 0;
+		
+		ResultSet rs;
+		try 
+		{
+			rs = stmt.executeQuery("SELECT ile "
+								 + "FROM ( "
+								 	+ "SELECT ks.gracz, count(k.wartosc) as ile "
+								 	+ "FROM `Karty_Stol` as ks "
+								 	+ "JOIN `Karty` as k on k.id_karty = ks.id_karty "
+								 	+ "WHERE ks.id_stolu="+ this.idTable +" AND ks.gdzie = 'r' AND k.kolor = '"+color+"'  AND k.wartosc > "+ value + ""
+								 	+ "GROUP BY ks.gracz) as t1 "
+								 + "WHERE gracz = " + player);
+
+			if(rs.next())
+			{
+				cards = rs.getInt(1);
+			}
+		} 
+		catch (SQLException e) 
+		{
+			throw new TysiacException(16, "countHihgerCardInColor()");
+		} 
+		
+		return cards;
+	}
+	
+	public int [] getHihgerCardInColor(int player, char color, int value) throws TysiacException
+	{
+		if(con == null) throw new TysiacException(4, "getHihgerCardInColor()");
+		if(stmt == null) throw new TysiacException(5, "getHihgerCardInColor()");
+		
+		if(player <= 0 || player >4) throw new TysiacException(113, "getHihgerCardInColor()");
+		if(color == 'C' || color == 'D' || color == 'Z' || color == 'W' || color == '\0' ) throw new TysiacException(120, "setColor()");
+		
+		int [] cards = null;
+		
+		if(this.countCardInColor(player, color) > 0)
+		{
+			cards = new int[this.countHihgerCardInColor(player, color, value)];
+			
+			ResultSet rs;
+			try 
+			{
+				rs = stmt.executeQuery("SELECT id_karty "
+									 + "FROM ( "
+									 	+ "SELECT ks.gracz, ks.id_karty "
+									 	+ "FROM `Karty_Stol` as ks "
+									 	+ "JOIN `Karty` as k on k.id_karty = ks.id_karty "
+									 	+ "WHERE ks.id_stolu="+ this.idTable +" AND ks.gdzie = 'r' AND k.kolor = '"+color+"' AND k.wartosc > "+ value + ""
+									 	+ "GROUP BY ks.gracz) as t1 "
+									 + "WHERE gracz = " + player);
+				int i=0;
+				while(rs.next())
+				{
+					cards[i] = rs.getInt(1);
+					i++;
+				}
+			} 
+			catch (SQLException e) 
+			{
+				throw new TysiacException(16, "getHihgerCardInColor()");
+			} 
+		}
+		else
+		{
+			char color2 = this.getColor(); //kolor meldunku
+			
+			if(this.countHihgerCardInColor(player, color2, value) > 0)
+			{
+
+				cards = new int[this.countCardInColor(player, color2)];
+				ResultSet rs;
+				try 
+				{
+					rs = stmt.executeQuery("SELECT id_karty "
+										 + "FROM ( "
+										 	+ "SELECT ks.gracz, ks.id_karty "
+										 	+ "FROM `Karty_Stol` as ks "
+										 	+ "JOIN `Karty` as k on k.id_karty = ks.id_karty "
+										 	+ "WHERE ks.id_stolu="+ this.idTable +" AND ks.gdzie = 'r' AND k.kolor = '"+color2+"' "
+										 	+ "GROUP BY ks.gracz) as t1 "
+										 + "WHERE gracz = " + player);
+					int i=0;
+					while(rs.next())
+					{
+						cards[i] = rs.getInt(1);
+						i++;
+					}
+				} 
+				catch (SQLException e) 
+				{
+					throw new TysiacException(16, "getHihgerCardInColor()");
+				} 
+			}
+		}
+		
+		return cards;
+	}
+	
 	
 	
 	
