@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
@@ -15,10 +16,10 @@ import javax.swing.JTextField;
 public class JoinCreateTWindow extends JFrame implements ActionListener
 {
 	private JButton bJoin, bCreate, bPlay;
-	private JTextField TJoin, TCreate;
+	private JTextField TJoin;
 	private ButtonGroup bgAmountPlayers;
 	private JRadioButton rbPlayer3, rbPlayer4;
-	GameData GaD;
+	private GameData GaD;
 
 	
 	public JoinCreateTWindow(GameData a)
@@ -47,7 +48,8 @@ public class JoinCreateTWindow extends JFrame implements ActionListener
 		
 		
 		bJoin.addActionListener(this);
-		bCreate.addActionListener(this);		
+		bCreate.addActionListener(this);	
+		bPlay.addActionListener(this);		
 	}
 
 	@Override
@@ -57,9 +59,8 @@ public class JoinCreateTWindow extends JFrame implements ActionListener
 		
 		if(source==bCreate)
 		{		
-			TCreate = new JTextField("");
-			add(TCreate);
-			TCreate.setBounds(170,120,150,30);
+			GaD.setPlayClick2(1);
+			bJoin.setEnabled(false);
 			
 			bgAmountPlayers = new ButtonGroup();
 
@@ -83,10 +84,45 @@ public class JoinCreateTWindow extends JFrame implements ActionListener
 		}
 		else if(source==bJoin)
 		{
+			GaD.setPlayClick2(2);
+			bCreate.setEnabled(false);
+			
 			TJoin = new JTextField("");
 			add(TJoin);
 			TJoin.setBounds(170,50,150,30);
 		}
+		else if(source==bPlay)
+		{
+			if(GaD.getPlayClick2() == 0)
+			{
+				JOptionPane.showMessageDialog(null,"Nie wybrano `Stwórz` lub `Dołącz`");
+			}
+			else if(GaD.getPlayClick2() == 1)
+			{
+				if(rbPlayer3.isSelected()) GaD.setTypeTable(3);
+				if(rbPlayer4.isSelected()) GaD.setTypeTable(4);
+
+				GaD.setPlayClick(1);
+			}
+			else if(GaD.getPlayClick2() == 2)
+			{
+				if(TJoin.getText() != "")
+				{
+					GaD.setAccessCode(TJoin.getText());
+					GaD.setPlayClick(1);
+				}
+				else 
+				{
+					JOptionPane.showMessageDialog(null,"Kod dostępu jest pusty");
+				}
+				
+			}
+		}
+	}
+
+	public GameData getGameData() 
+	{
+		return GaD;
 	}
 	
 	public void closeWindow()

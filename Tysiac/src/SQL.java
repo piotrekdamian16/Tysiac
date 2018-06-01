@@ -10,16 +10,20 @@ public class SQL
 {
 	private static Connection con;
 	private static Statement stmt;
-	private int idTable;
-	private int place;
-	private String accessCode; 
-	
+	private GameData GaD;
+
+	public GameData getGameData() 
+	{
+		return GaD;
+	}
 	
 	// -----------------------------------------------------------------------------
 	// ---------------- KONSTRUKTOR bez parametrów ---------------------------------
 	// -----------------------------------------------------------------------------
-	public SQL() throws TysiacException
+	public SQL(GameData a) throws TysiacException
 	{
+		GaD = a;
+		
 		try 
 		{
 			Class.forName("com.mysql.jdbc.Driver");
@@ -48,8 +52,9 @@ public class SQL
 	// -----------------------------------------------------------------------------
 	// ---------------- KONSTRUKTOR z parametrami ----------------------------------
 	// -----------------------------------------------------------------------------
-	public SQL(String host, int port, String base, String user, String pass) throws TysiacException
+	public SQL(GameData a, String host, int port, String base, String user, String pass) throws TysiacException
 	{
+		GaD = a;
 		try 
 		{
 			Class.forName("com.mysql.jdbc.Driver");
@@ -171,23 +176,23 @@ public class SQL
 			Date date = new Date();
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 			String code = this.hashPassword(dateFormat.format(date));
-			this.setAccessCode(code.substring(0, 10));
+			GaD.setAccessCode(code.substring(0, 10));
 			
 			try 
 			{
 				stmt.executeUpdate("INSERT INTO `Stoly`(`kod_dostepu`, `typ_stolu`, `id_gracz_1`, `id_gracz_2`, `id_gracz_3`, `id_gracz_4`, `ruch`, `musek`, `trojka`, "
-							     + "`suma_pkt_1`, `suma_pkt_2`, `suma_pkt_3`, `suma_pkt_4`, `runda_pkt_1`, `runda_pkt_2`, `runda_pkt_3`, `runda_pkt_4`, `bomba_gracz_1`, `bomba_gracz_2`, `bomba_gracz_3`, `bomba_gracz_4`, `licytacja_ile`, `licytacja_gracz`, `kolor`, `status`) "
+							     + "`suma_pkt_1`, `suma_pkt_2`, `suma_pkt_3`, `suma_pkt_4`, `runda_pkt_1`, `runda_pkt_2`, `runda_pkt_3`, `runda_pkt_4`, `bomba_gracz_1`, `bomba_gracz_2`, `bomba_gracz_3`, `bomba_gracz_4`, `licytacja_ile`, `licytacja_gracz`, `kolor`, `status`, `zaczal`) "
 								 + "VALUES "
-								 + "('"+this.getAccessCode()+"', "+typeTable+", "+idPlayer1+",NULL,NULL,NULL,"+movement+", "+must+", "+trio+", "
-								 + "0,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL,'Tworzenie stolu') ", Statement.RETURN_GENERATED_KEYS);
+								 + "('"+GaD.getAccessCode()+"', "+typeTable+", "+idPlayer1+",NULL,NULL,NULL,"+movement+", "+must+", "+trio+", "
+								 + "0,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL,'Tworzenie stolu', 1) ", Statement.RETURN_GENERATED_KEYS);
 
 				ResultSet rs = stmt.getGeneratedKeys();
 				
 				if(rs.next())
 				{
-					setIdTable(rs.getInt(1));
+					GaD.setIdTable(rs.getInt(1));
 				}
-				this.setPlace(1);
+				GaD.setPlace(1);
 				
 				this.createTableCard();
 				this.setAccesCode();
@@ -217,30 +222,30 @@ public class SQL
 		{
 			stmt.executeUpdate("INSERT INTO `Karty_Stol`(`id_stolu`, `id_karty`, `gdzie`, `gracz`) "
 							 + "VALUES "
-							 + "("+this.getIdTable()+",  0, 's', 0),"
-							 + "("+this.getIdTable()+",  1, 's', 0),"
-							 + "("+this.getIdTable()+",  2, 's', 0),"
-							 + "("+this.getIdTable()+",  3, 's', 0),"
-							 + "("+this.getIdTable()+",  4, 's', 0),"
-							 + "("+this.getIdTable()+",  5, 's', 0),"
-							 + "("+this.getIdTable()+",  6, 's', 0),"
-							 + "("+this.getIdTable()+",  7, 's', 0),"
-							 + "("+this.getIdTable()+",  8, 's', 0),"
-							 + "("+this.getIdTable()+",  9, 's', 0),"
-							 + "("+this.getIdTable()+", 10, 's', 0),"
-							 + "("+this.getIdTable()+", 11, 's', 0),"
-							 + "("+this.getIdTable()+", 12, 's', 0),"
-							 + "("+this.getIdTable()+", 13, 's', 0),"
-							 + "("+this.getIdTable()+", 14, 's', 0),"
-							 + "("+this.getIdTable()+", 15, 's', 0),"
-							 + "("+this.getIdTable()+", 16, 's', 0),"
-							 + "("+this.getIdTable()+", 17, 's', 0),"
-							 + "("+this.getIdTable()+", 18, 's', 0),"
-							 + "("+this.getIdTable()+", 19, 's', 0),"
-							 + "("+this.getIdTable()+", 20, 's', 0),"
-							 + "("+this.getIdTable()+", 21, 's', 0),"
-							 + "("+this.getIdTable()+", 22, 's', 0),"
-							 + "("+this.getIdTable()+", 23, 's', 0);", Statement.NO_GENERATED_KEYS);
+							 + "("+GaD.getIdTable()+",  0, 's', 0),"
+							 + "("+GaD.getIdTable()+",  1, 's', 0),"
+							 + "("+GaD.getIdTable()+",  2, 's', 0),"
+							 + "("+GaD.getIdTable()+",  3, 's', 0),"
+							 + "("+GaD.getIdTable()+",  4, 's', 0),"
+							 + "("+GaD.getIdTable()+",  5, 's', 0),"
+							 + "("+GaD.getIdTable()+",  6, 's', 0),"
+							 + "("+GaD.getIdTable()+",  7, 's', 0),"
+							 + "("+GaD.getIdTable()+",  8, 's', 0),"
+							 + "("+GaD.getIdTable()+",  9, 's', 0),"
+							 + "("+GaD.getIdTable()+", 10, 's', 0),"
+							 + "("+GaD.getIdTable()+", 11, 's', 0),"
+							 + "("+GaD.getIdTable()+", 12, 's', 0),"
+							 + "("+GaD.getIdTable()+", 13, 's', 0),"
+							 + "("+GaD.getIdTable()+", 14, 's', 0),"
+							 + "("+GaD.getIdTable()+", 15, 's', 0),"
+							 + "("+GaD.getIdTable()+", 16, 's', 0),"
+							 + "("+GaD.getIdTable()+", 17, 's', 0),"
+							 + "("+GaD.getIdTable()+", 18, 's', 0),"
+							 + "("+GaD.getIdTable()+", 19, 's', 0),"
+							 + "("+GaD.getIdTable()+", 20, 's', 0),"
+							 + "("+GaD.getIdTable()+", 21, 's', 0),"
+							 + "("+GaD.getIdTable()+", 22, 's', 0),"
+							 + "("+GaD.getIdTable()+", 23, 's', 0);", Statement.NO_GENERATED_KEYS);
 		} 
 		catch (SQLException e) 
 		{
@@ -258,14 +263,14 @@ public class SQL
 		{
 			rs = stmt.executeQuery("SELECT kod_dostepu "
 					 		   + "FROM Stoly "
-					 		   + "WHERE id_stolu = '"+this.getIdTable()+"' ");
+					 		   + "WHERE id_stolu = '"+GaD.getIdTable()+"' ");
 			
 
 			if(rs.next())
 			{
 				String ac = rs.getString(1);
 
-				this.setAccessCode(ac);
+				GaD.setAccessCode(ac);
 			}
 		} 
 		catch (SQLException e) 
@@ -324,17 +329,17 @@ public class SQL
 				
 				if(joined == 1)
 				{
-					this.setPlace(2);
+					GaD.setPlace(2);
 				}
 			}
 			else
 			{
-				this.setPlace(3);
+				GaD.setPlace(3);
 			}
 		}
 		else
 		{
-			this.setPlace(2);
+			GaD.setPlace(2);
 		}
 		
 		if(joined == 1)
@@ -352,8 +357,8 @@ public class SQL
 				{
 					int it = rs.getInt(1);
 					
-					this.setAccessCode(ac);
-					this.setIdTable(it);
+					GaD.setAccessCode(ac);
+					GaD.setIdTable(it);
 				}
 			} 
 			catch (SQLException e) 
@@ -428,22 +433,22 @@ public class SQL
 
 					if(joined == 1)
 					{
-						this.setPlace(2);
+						GaD.setPlace(4);
 					}
 				}
 				else
 				{
-					this.setPlace(3);
+					GaD.setPlace(3);
 				}
 			}
 			else
 			{
-				this.setPlace(2);
+				GaD.setPlace(2);
 			}
 		}
 		else
 		{
-			this.setPlace(1);
+			GaD.setPlace(1);
 		}
 		
 		if(joined == 1)
@@ -459,8 +464,8 @@ public class SQL
 				{
 					int it = rs.getInt(1);
 					
-					this.setAccessCode(ac);
-					this.setIdTable(it);
+					GaD.setAccessCode(ac);
+					GaD.setIdTable(it);
 				}
 			} 
 			catch (SQLException e) 
@@ -493,7 +498,7 @@ public class SQL
 		{
 			rs = stmt.executeQuery("SELECT id_gracz_"+player+", typ_stolu "
 										 + "FROM Stoly "
-										 + "where id_stolu =" + idTable);
+										 + "where id_stolu =" + GaD.getIdTable());
 			
 			if(rs.next())
 			{
@@ -503,7 +508,7 @@ public class SQL
 			
 			if(tt==3 && player==4)
 			{
-				User user = new User(idTable, 0, "MUSEK", player);
+				User user = new User(GaD.getIdTable(), 0, "MUSEK", player);
 				return user;
 			}
 			if(iu > 0 )
@@ -532,7 +537,7 @@ public class SQL
 			throw new TysiacException(16, "selectUser()");
 		} 
 		
-		User user = new User(idTable, iu, un, player);
+		User user = new User(GaD.getIdTable(), iu, un, player);
 		return user;
 	}
 	
@@ -552,7 +557,7 @@ public class SQL
 		{
 			rs = stmt.executeQuery("SELECT id_gracz_"+player+" "
 										 + "FROM Stoly "
-										 + "where id_stolu =" + idTable);
+										 + "where id_stolu =" + GaD.getIdTable());
 
 			if(rs.next())
 			{
@@ -616,7 +621,7 @@ public class SQL
 		try 
 		{
 			rs = stmt.executeQuery("SELECT COUNT(id_karty) FROM Karty_Stol " 
-										 + "WHERE id_stolu = "+ this.idTable +" "
+										 + "WHERE id_stolu = "+ GaD.getIdTable() +" "
 										 		+ "AND gracz = "+ player +" "
 										 		+ "AND gdzie = '"+ what +"' ");
 			
@@ -647,7 +652,7 @@ public class SQL
 		try 
 		{
 			rs = stmt.executeQuery("SELECT id_karty FROM Karty_Stol "
-										  + "WHERE id_stolu = "+ this.idTable +" "
+										  + "WHERE id_stolu = "+ GaD.getIdTable() +" "
 										  		+ "&& gracz = "+ player +" "
 										  		+ "&& gdzie = '"+ what +"' ");
 			
@@ -682,7 +687,7 @@ public class SQL
 			stmt.executeUpdate("UPDATE `Karty_Stol` "
 							 + "SET `gdzie`='"+ what +"', "
 							     + "`gracz`="+ player +"  "
-							 + "WHERE `id_stolu`="+this.idTable+" AND `id_karty`="+idCard, Statement.NO_GENERATED_KEYS);
+							 + "WHERE `id_stolu`="+GaD.getIdTable()+" AND `id_karty`="+idCard, Statement.NO_GENERATED_KEYS);
 		} 
 		catch (SQLException e) 
 		{
@@ -699,7 +704,7 @@ public class SQL
 		{
 			stmt.executeUpdate("UPDATE `Karty_Stol` "
 							 + "SET `gdzie`= '"+ what +"'  "
-							 + "WHERE `id_stolu`="+this.idTable+" AND `id_karty`="+idCard, Statement.NO_GENERATED_KEYS);
+							 + "WHERE `id_stolu`="+GaD.getIdTable()+" AND `id_karty`="+idCard, Statement.NO_GENERATED_KEYS);
 		} 
 		catch (SQLException e) 
 		{
@@ -716,7 +721,7 @@ public class SQL
 		{
 			stmt.executeUpdate("UPDATE `Karty_Stol` "
 							 + "SET `gracz`="+ player +", "
-							 + "WHERE `id_stolu`="+this.idTable+" AND `id_karty`="+idCard, Statement.NO_GENERATED_KEYS);
+							 + "WHERE `id_stolu`="+GaD.getIdTable()+" AND `id_karty`="+idCard, Statement.NO_GENERATED_KEYS);
 		} 
 		catch (SQLException e) 
 		{
@@ -734,7 +739,7 @@ public class SQL
 			stmt.executeUpdate("UPDATE `Karty_Stol` "
 					 		 + "SET `gdzie`='z', "
 					 		 + "`gracz`="+ player +"  "
-					 		 + "WHERE `id_stolu`="+this.idTable+" AND `gdzie`='s'" , Statement.NO_GENERATED_KEYS);
+					 		 + "WHERE `id_stolu`="+GaD.getIdTable()+" AND `gdzie`='s'" , Statement.NO_GENERATED_KEYS);
 		} 
 		catch (SQLException e) 
 		{
@@ -861,7 +866,7 @@ public class SQL
 		{
 			rs = stmt.executeQuery("SELECT ruch "
 										 + "FROM Stoly "
-										 + "where id_stolu =" + this.idTable);
+										 + "where id_stolu =" + GaD.getIdTable());
 
 			if(rs.next())
 			{
@@ -888,7 +893,7 @@ public class SQL
 		{
 			stmt.executeUpdate("UPDATE `Stoly` "
 							 + "SET `ruch`= "+ player +"  "
-							 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+							 + "WHERE `id_stolu`="+GaD.getIdTable(), Statement.NO_GENERATED_KEYS);
 		} 
 		catch (SQLException e) 
 		{
@@ -916,7 +921,7 @@ public class SQL
 		{
 			rs = stmt.executeQuery("SELECT musek "
 										 + "FROM Stoly "
-										 + "where id_stolu =" + this.idTable);
+										 + "where id_stolu =" + GaD.getIdTable());
 
 			if(rs.next())
 			{
@@ -943,7 +948,7 @@ public class SQL
 		{
 			stmt.executeUpdate("UPDATE `Stoly` "
 							 + "SET `musek`= "+ player +"  "
-							 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+							 + "WHERE `id_stolu`="+GaD.getIdTable(), Statement.NO_GENERATED_KEYS);
 		} 
 		catch (SQLException e) 
 		{
@@ -965,7 +970,7 @@ public class SQL
 		{
 			rs = stmt.executeQuery("SELECT trojka "
 										 + "FROM Stoly "
-										 + "where id_stolu =" + this.idTable);
+										 + "where id_stolu =" + GaD.getIdTable());
 
 			if(rs.next())
 			{
@@ -992,7 +997,7 @@ public class SQL
 		{
 			stmt.executeUpdate("UPDATE `Stoly` "
 							 + "SET `trojka`= "+ player +"  "
-							 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+							 + "WHERE `id_stolu`="+GaD.getIdTable(), Statement.NO_GENERATED_KEYS);
 		} 
 		catch (SQLException e) 
 		{
@@ -1020,7 +1025,7 @@ public class SQL
 		{
 			rs = stmt.executeQuery("SELECT suma_pkt_"+player+" "
 										 + "FROM Stoly "
-										 + "where id_stolu =" + this.idTable);
+										 + "where id_stolu =" + GaD.getIdTable());
 
 			if(rs.next())
 			{
@@ -1050,7 +1055,7 @@ public class SQL
 		{
 			stmt.executeUpdate("UPDATE `Stoly` "
 							 + "SET `suma_pkt_"+player+"`= "+ points +"  "
-							 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+							 + "WHERE `id_stolu`="+GaD.getIdTable(), Statement.NO_GENERATED_KEYS);
 		} 
 		catch (SQLException e) 
 		{
@@ -1073,7 +1078,7 @@ public class SQL
 		{
 			stmt.executeUpdate("UPDATE `Stoly` "
 							 + "SET `suma_pkt_"+player+"`= `suma_pkt_"+player+"` + ("+ points +")  "
-							 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+							 + "WHERE `id_stolu`="+GaD.getIdTable(), Statement.NO_GENERATED_KEYS);
 		} 
 		catch (SQLException e) 
 		{
@@ -1096,7 +1101,7 @@ public class SQL
 		{
 			stmt.executeUpdate("UPDATE `Stoly` "
 							 + "SET `suma_pkt_"+player+"`= `suma_pkt_"+player+"` - ("+ points +")  "
-							 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+							 + "WHERE `id_stolu`="+GaD.getIdTable(), Statement.NO_GENERATED_KEYS);
 		} 
 		catch (SQLException e) 
 		{
@@ -1122,7 +1127,7 @@ public class SQL
 		{
 			rs = stmt.executeQuery("SELECT runda_pkt_"+player+" "
 										 + "FROM Stoly "
-										 + "where id_stolu =" + this.idTable);
+										 + "where id_stolu =" + GaD.getIdTable());
 
 			if(rs.next())
 			{
@@ -1152,7 +1157,7 @@ public class SQL
 		{
 			stmt.executeUpdate("UPDATE `Stoly` "
 							 + "SET `runda_pkt_"+player+"`= "+ points +"  "
-							 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+							 + "WHERE `id_stolu`="+GaD.getIdTable(), Statement.NO_GENERATED_KEYS);
 		} 
 		catch (SQLException e) 
 		{
@@ -1175,7 +1180,7 @@ public class SQL
 		{
 			stmt.executeUpdate("UPDATE `Stoly` "
 							 + "SET `runda_pkt_"+player+"`= `runda_pkt_"+player+"` + ("+ points +")  "
-							 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+							 + "WHERE `id_stolu`="+GaD.getIdTable(), Statement.NO_GENERATED_KEYS);
 		} 
 		catch (SQLException e) 
 		{
@@ -1199,7 +1204,7 @@ public class SQL
 		{
 			stmt.executeUpdate("UPDATE `Stoly` "
 							 + "SET `runda_pkt_"+player+"`= `runda_pkt_"+player+"` - ("+ points +")  "
-							 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+							 + "WHERE `id_stolu`="+GaD.getIdTable(), Statement.NO_GENERATED_KEYS);
 		} 
 		catch (SQLException e) 
 		{
@@ -1225,7 +1230,7 @@ public class SQL
 		{
 			rs = stmt.executeQuery("SELECT  bomba_gracz_"+player+" "
 										 + "FROM Stoly "
-										 + "where id_stolu =" + this.idTable);
+										 + "where id_stolu =" + GaD.getIdTable());
 
 			if(rs.next())
 			{
@@ -1254,7 +1259,7 @@ public class SQL
 		{
 			stmt.executeUpdate("UPDATE `Stoly` "
 							 + "SET `bomba_gracz_"+player+"`= "+ value +"  "
-							 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+							 + "WHERE `id_stolu`="+GaD.getIdTable(), Statement.NO_GENERATED_KEYS);
 		} 
 		catch (SQLException e) 
 		{
@@ -1277,7 +1282,7 @@ public class SQL
 		{
 			rs = stmt.executeQuery("SELECT  licytacja_ile  "
 										 + "FROM Stoly "
-										 + "where id_stolu =" + this.idTable);
+										 + "where id_stolu =" + GaD.getIdTable());
 
 			if(rs.next())
 			{
@@ -1305,7 +1310,7 @@ public class SQL
 		{
 			stmt.executeUpdate("UPDATE `Stoly` "
 							 + "SET `licytacja_ile`= "+ value +"  "
-							 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+							 + "WHERE `id_stolu`="+GaD.getIdTable(), Statement.NO_GENERATED_KEYS);
 		} 
 		catch (SQLException e) 
 		{
@@ -1328,7 +1333,7 @@ public class SQL
 		{
 			rs = stmt.executeQuery("SELECT  licytacja_gracz  "
 										 + "FROM Stoly "
-										 + "where id_stolu =" + this.idTable);
+										 + "where id_stolu =" + GaD.getIdTable());
 
 			if(rs.next())
 			{
@@ -1356,7 +1361,7 @@ public class SQL
 		{
 			stmt.executeUpdate("UPDATE `Stoly` "
 							 + "SET `licytacja_gracz`= "+ player +"  "
-							 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+							 + "WHERE `id_stolu`="+GaD.getIdTable(), Statement.NO_GENERATED_KEYS);
 		} 
 		catch (SQLException e) 
 		{
@@ -1381,7 +1386,7 @@ public class SQL
 		{
 			rs = stmt.executeQuery("SELECT  kolor  "
 										 + "FROM Stoly "
-										 + "where id_stolu =" + this.idTable);
+										 + "where id_stolu =" + GaD.getIdTable());
 
 			if(rs.next())
 			{
@@ -1411,13 +1416,13 @@ public class SQL
 			{
 				stmt.executeUpdate("UPDATE `Stoly` "
 						 + "SET `kolor`= NULL  "
-						 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+						 + "WHERE `id_stolu`="+GaD.getIdTable(), Statement.NO_GENERATED_KEYS);
 			}
 			else
 			{
 				stmt.executeUpdate("UPDATE `Stoly` "
 						 + "SET `kolor`= '"+ color +"'  "
-						 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+						 + "WHERE `id_stolu`="+GaD.getIdTable(), Statement.NO_GENERATED_KEYS);
 			}
 		} 
 		catch (SQLException e) 
@@ -1442,7 +1447,7 @@ public class SQL
 		{
 			rs = stmt.executeQuery("SELECT  status  "
 										 + "FROM Stoly "
-										 + "where id_stolu =" + this.idTable);
+										 + "where id_stolu =" + GaD.getIdTable());
 
 			if(rs.next())
 			{
@@ -1468,7 +1473,7 @@ public class SQL
 		{
 			stmt.executeUpdate("UPDATE `Stoly` "
 							 + "SET `status`= '"+ status +"'  "
-							 + "WHERE `id_stolu`="+this.idTable, Statement.NO_GENERATED_KEYS);
+							 + "WHERE `id_stolu`="+GaD.getIdTable(), Statement.NO_GENERATED_KEYS);
 		} 
 		catch (SQLException e) 
 		{
@@ -1498,7 +1503,7 @@ public class SQL
 								 	+ "SELECT ks.gracz, sum(k.wartosc) as suma "
 								 	+ "FROM `Karty_Stol` as ks "
 								 	+ "JOIN `Karty` as k on k.id_karty = ks.id_karty "
-								 	+ "WHERE ks.id_stolu = "+ this.idTable +" AND ks.gdzie = 'r' "
+								 	+ "WHERE ks.id_stolu = "+ GaD.getIdTable() +" AND ks.gdzie = 'r' "
 								 	+ "GROUP BY ks.gracz ) as t1 "
 								 + "WHERE gracz = " + player);
 
@@ -1536,7 +1541,7 @@ public class SQL
 								 	+ "SELECT ks.gracz, count(k.wartosc) as ile "
 								 	+ "FROM `Karty_Stol` as ks "
 								 	+ "JOIN `Karty` as k on k.id_karty = ks.id_karty "
-								 	+ "WHERE ks.id_stolu="+ this.idTable +" AND ks.gdzie = 'r' AND k.kolor = '"+color+"' "
+								 	+ "WHERE ks.id_stolu="+ GaD.getIdTable() +" AND ks.gdzie = 'r' AND k.kolor = '"+color+"' "
 								 	+ "GROUP BY ks.gracz) as t1 "
 								 + "WHERE gracz = " + player);
 
@@ -1575,7 +1580,7 @@ public class SQL
 									 	+ "SELECT ks.gracz, ks.id_karty "
 									 	+ "FROM `Karty_Stol` as ks "
 									 	+ "JOIN `Karty` as k on k.id_karty = ks.id_karty "
-									 	+ "WHERE ks.id_stolu="+ this.idTable +" AND ks.gdzie = 'r' AND k.kolor = '"+color+"' "
+									 	+ "WHERE ks.id_stolu="+ GaD.getIdTable() +" AND ks.gdzie = 'r' AND k.kolor = '"+color+"' "
 									 	+ "GROUP BY ks.gracz) as t1 "
 									 + "WHERE gracz = " + player);
 				int i=0;
@@ -1606,7 +1611,7 @@ public class SQL
 										 	+ "SELECT ks.gracz, ks.id_karty "
 										 	+ "FROM `Karty_Stol` as ks "
 										 	+ "JOIN `Karty` as k on k.id_karty = ks.id_karty "
-										 	+ "WHERE ks.id_stolu="+ this.idTable +" AND ks.gdzie = 'r' AND k.kolor = '"+color2+"' "
+										 	+ "WHERE ks.id_stolu="+ GaD.getIdTable() +" AND ks.gdzie = 'r' AND k.kolor = '"+color2+"' "
 										 	+ "GROUP BY ks.gracz) as t1 "
 										 + "WHERE gracz = " + player);
 					int i=0;
@@ -1648,7 +1653,7 @@ public class SQL
 								 	+ "SELECT ks.gracz, count(k.wartosc) as ile "
 								 	+ "FROM `Karty_Stol` as ks "
 								 	+ "JOIN `Karty` as k on k.id_karty = ks.id_karty "
-								 	+ "WHERE ks.id_stolu="+ this.idTable +" AND ks.gdzie = 'r' AND k.kolor = '"+color+"'  AND k.wartosc > "+ value + ""
+								 	+ "WHERE ks.id_stolu="+ GaD.getIdTable() +" AND ks.gdzie = 'r' AND k.kolor = '"+color+"'  AND k.wartosc > "+ value + ""
 								 	+ "GROUP BY ks.gracz) as t1 "
 								 + "WHERE gracz = " + player);
 
@@ -1687,7 +1692,7 @@ public class SQL
 									 	+ "SELECT ks.gracz, ks.id_karty "
 									 	+ "FROM `Karty_Stol` as ks "
 									 	+ "JOIN `Karty` as k on k.id_karty = ks.id_karty "
-									 	+ "WHERE ks.id_stolu="+ this.idTable +" AND ks.gdzie = 'r' AND k.kolor = '"+color+"' AND k.wartosc > "+ value + ""
+									 	+ "WHERE ks.id_stolu="+ GaD.getIdTable() +" AND ks.gdzie = 'r' AND k.kolor = '"+color+"' AND k.wartosc > "+ value + ""
 									 	+ "GROUP BY ks.gracz) as t1 "
 									 + "WHERE gracz = " + player);
 				int i=0;
@@ -1718,7 +1723,7 @@ public class SQL
 										 	+ "SELECT ks.gracz, ks.id_karty "
 										 	+ "FROM `Karty_Stol` as ks "
 										 	+ "JOIN `Karty` as k on k.id_karty = ks.id_karty "
-										 	+ "WHERE ks.id_stolu="+ this.idTable +" AND ks.gdzie = 'r' AND k.kolor = '"+color2+"' "
+										 	+ "WHERE ks.id_stolu="+ GaD.getIdTable() +" AND ks.gdzie = 'r' AND k.kolor = '"+color2+"' "
 										 	+ "GROUP BY ks.gracz) as t1 "
 										 + "WHERE gracz = " + player);
 					int i=0;
@@ -1736,36 +1741,6 @@ public class SQL
 		}
 		
 		return cards;
-	}
-	
-	
-	
-	
-
-	public int getIdTable() 
-	{
-		return idTable;
-	}
-	public String getAccessCode() 
-	{
-		return accessCode;
-	}
-	public int getPlace() {
-		return place;
-	}
-
-	
-	
-	public void setIdTable(int idTable) 
-	{
-		this.idTable = idTable;
-	}
-	public void setAccessCode(String AccessCode) 
-	{
-		this.accessCode = AccessCode;
-	}
-	public void setPlace(int place) {
-		this.place = place;
 	}
 	
 	

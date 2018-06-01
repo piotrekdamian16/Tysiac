@@ -17,14 +17,14 @@ import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
 public class LoginWindow extends JFrame implements ActionListener
-{
+{	
 	private JButton bLogin, bRegistry;
 	private JLabel lLogin, lPass;
 	private JTextField text1; 
 	private JPasswordField text2; 
 	private String login;
 	private String password;
-	GameData GaD;
+	private GameData GaD;
 	
 	public LoginWindow(GameData a)
 	{	
@@ -72,6 +72,9 @@ public class LoginWindow extends JFrame implements ActionListener
 		
 		bRegistry.addActionListener(this);
 		bLogin.addActionListener(this);
+		
+
+		
 	}
 
 	@SuppressWarnings("deprecation")
@@ -129,6 +132,11 @@ public class LoginWindow extends JFrame implements ActionListener
 	public void resetPasswordField() 
 	{
 		this.text2.setText("");
+	}
+
+	public GameData getGameData() 
+	{
+		return GaD;
 	}
 	
 	public void closeWindow()
