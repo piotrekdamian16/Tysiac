@@ -1004,7 +1004,55 @@ public class SQL
 			throw new TysiacException(20, "setTrio()");
 		}
 	}
+
 	
+	
+	public int getStarted() throws TysiacException
+	{
+		if(con == null) throw new TysiacException(4, "getStarted()");
+		if(stmt == null) throw new TysiacException(5, "getStarted()");
+		
+		int tmp = 0;
+		
+		ResultSet rs;
+		try 
+		{
+			rs = stmt.executeQuery("SELECT zaczal "
+										 + "FROM Stoly "
+										 + "where id_stolu =" + GaD.getIdTable());
+
+			if(rs.next())
+			{
+				tmp = rs.getInt(1);
+			}
+		} 
+		catch (SQLException e) 
+		{
+			throw new TysiacException(19, "getStarted()");
+		} 
+		
+		return tmp;
+	}
+	
+	public void setStarted(int player) throws TysiacException
+	{
+		if(con == null) throw new TysiacException(4, "setStarted()");
+		if(stmt == null) throw new TysiacException(5, "setStarted()");
+		
+		if(player <= 0 || player >4) throw new TysiacException(112, "setStarted()");
+		
+		
+		try 
+		{
+			stmt.executeUpdate("UPDATE `Stoly` "
+							 + "SET `zaczal`= "+ player +"  "
+							 + "WHERE `id_stolu`="+GaD.getIdTable(), Statement.NO_GENERATED_KEYS);
+		} 
+		catch (SQLException e) 
+		{
+			throw new TysiacException(20, "setStarted()");
+		}
+	}
 	
 	
 	
