@@ -5,7 +5,6 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,46 +13,55 @@ import javax.swing.JLabel;
 @SuppressWarnings("serial")
 public class GameWindow extends JFrame implements ActionListener
 {
-	private JButton [] card;
-	private JButton cGame1, cGame2, cGame3;
 	private JButton [] bAuction;
 	private JButton lPass, Bomba;
+	private JButton line;
 	private JLabel p1,p2,p3,p4;
+	private JLabel LabelB, LabelL, LabelR, LabelT;
+	private JLabel arrowB, arrowL, arrowR, arrowT;
 	private int auction;
 	private GameData GaD;
+	
+	
 
-	private Font f100;
-	private Font f70;
-	private Font f50;
-	private Font f35;
+	private JButton [] pbCardHand = new JButton[24];
+	private JButton [] pbCardTable = new JButton[24];
+	private JButton [] pbCardWinning = new JButton[24];
 
+	private JButton [] plCardHand = new JButton[24];
+	private JButton [] plCardHandB = new JButton[24];
+	private JButton [] plCardTable = new JButton[24];
+
+	private JButton [] prCardHand = new JButton[24];
+	private JButton [] prCardHandB = new JButton[24];
+	private JButton [] prCardTable = new JButton[24];
+
+	private JButton [] ptCardHand = new JButton[24];
+	private JButton [] ptCardHandB = new JButton[24];
+	private JButton [] ptCardTable = new JButton[24];
+	
+	
+	private Font f100 = new Font("Monospaced", Font.BOLD, 80);
+	private Font f70 = new Font("Monospaced", Font.BOLD, 48);
+	private Font f40 = new Font("Monospaced", Font.BOLD, 30);
 	private Dimension playerBottomHand = new Dimension(65,100);
-	private Dimension playerBottomTable = new Dimension(42,70);
-	private Dimension playerBottomWinning = new Dimension(30,50);
+	private Dimension playerBottomTable = new Dimension(65,100);
+	private Dimension playerBottomWinning = new Dimension(26,40);
 	
-	private Dimension playerLeftHand = new Dimension(70,42);
-	private Dimension playerLeftTable = new Dimension(100,60);
-	private Dimension playerLeftWinning = new Dimension(35,21);
+	private Dimension playerLeftHand = new Dimension(65,42);
+	private Dimension playerLeftTable = new Dimension(100,65);
 	
-	private Dimension playerRightHand = new Dimension(70,42);
-	private Dimension playerRightTable = new Dimension(100,60);
-	private Dimension playerRightWinning = new Dimension(35,21);
+	private Dimension playerRightHand = new Dimension(65,42);
+	private Dimension playerRightTable = new Dimension(100,65);
 	
-	private Dimension playerTopHand = new Dimension(42,70);
-	private Dimension playerTopTable = new Dimension(42,70);
-	private Dimension playerTopWinning = new Dimension(30,50);
-	
-	
+	private Dimension playerTopHand = new Dimension(42,65);
+	private Dimension playerTopTable = new Dimension(65,100);
+
 	int check1 = 0;
 	
 	public GameWindow(GameData a)
 	{	
 		GaD = a;
-
-		f100 = new Font("Monospaced", Font.BOLD, 80);
-		f70 = new Font("Monospaced", Font.BOLD, 35);
-		f50 = new Font("Monospaced", Font.BOLD, 20);
-		f35 = new Font("Monospaced", Font.BOLD, 20);
 		
 		Toolkit kit = Toolkit.getDefaultToolkit(); //zbadanie wymiar�w ekranu do ustawienia okna
 		Dimension screenSize = kit.getScreenSize();
@@ -63,34 +71,218 @@ public class GameWindow extends JFrame implements ActionListener
 		setBounds((sWidth/2)-1000/2,(sHeight/2)-700/2,1000,700);
 		setLayout(null);
 
-		card = new JButton[25];
-		bAuction = new JButton[20];
-
-		for(int i=0; i<25; i++)
-		{
-			card[i] = new JButton("");
-		}
-		for(int i=0; i<20; i++)
-		{
-			bAuction[i] = new JButton(Integer.toString(100+(i+1)*10));
-		}
+		//Separator okna 
+		line = new JButton();
+		line.setBounds(700, 0, 5, 700);
+		add(line);
+		line.setEnabled(false);
 		
-		cGame1 = new JButton();
-		cGame2 = new JButton();
-		cGame3 = new JButton();
+		
+		this.createCardsButton();
+		this.createAuctionButton();
+		this.createPlayerBaner();
+		
 
+
+		
+		
+		
+
+		
+
+	
+	}
+	
+	private void createCardsButton()
+	{
+
+		TextIcon t1;
+		RotatedIcon r1;
+		
+		for(int i=0; i<24; i++)
+		{
+			
+			//Karty gracza na dole HAND
+			pbCardHand[i] = new JButton(GaD.cards[i].getUnicodeValue());
+			pbCardHand[i].setFont(f100);
+			pbCardHand[i].setSize(playerBottomHand);
+			pbCardHand[i].addActionListener(this);
+			pbCardHand[i].setMargin(new Insets(-5, -30, -5, -30));
+
+			//Karty gracza na dole TABLE
+			pbCardTable[i] = new JButton(GaD.cards[i].getUnicodeValue());
+			pbCardTable[i].setFont(f100);
+			pbCardTable[i].setSize(playerBottomTable);
+			pbCardTable[i].setMargin(new Insets(-5, -30, -5, -30));
+			
+			//Karty gracza na dole WINNING
+			pbCardWinning[i] = new JButton(GaD.cards[i].getUnicodeValue());
+			pbCardWinning[i].setFont(f40);
+			pbCardWinning[i].setSize(playerBottomWinning);
+			pbCardWinning[i].setMargin(new Insets(-5, -30, -5, -30));
+			
+			
+			//Karty grzacza LEWO HAND 
+			plCardHand[i] = new JButton();
+			t1 = new TextIcon(plCardHand[i], GaD.cards[i].getUnicodeValue(), TextIcon.Layout.HORIZONTAL);
+			r1 = new RotatedIcon(t1, RotatedIcon.Rotate.DOWN);
+			plCardHand[i].setIcon( r1 );
+			plCardHand[i].setFont(f70);
+			plCardHand[i].setSize(playerLeftHand);
+			plCardHand[i].setMargin(new Insets(0,-90,0,0));
+
+			//Karty grzacza LEWO HAND TYŁEM
+			plCardHandB[i] = new JButton();
+			t1 = new TextIcon(plCardHandB[i], GaD.cards[24].getUnicodeValue(), TextIcon.Layout.HORIZONTAL);
+			r1 = new RotatedIcon(t1, RotatedIcon.Rotate.DOWN);
+			plCardHandB[i].setIcon( r1 );
+			plCardHandB[i].setFont(f70);
+			plCardHandB[i].setSize(playerLeftHand);
+			plCardHandB[i].setMargin(new Insets(0,-90,0,0));
+			
+			//Karty grzacza LEWO TABLE 
+			plCardTable[i] = new JButton();
+			t1 = new TextIcon(plCardTable[i], GaD.cards[i].getUnicodeValue(), TextIcon.Layout.HORIZONTAL);
+			r1 = new RotatedIcon(t1, RotatedIcon.Rotate.DOWN);
+			plCardTable[i].setIcon( r1 );
+			plCardTable[i].setFont(f100);
+			plCardTable[i].setSize(playerLeftTable);
+			plCardTable[i].setLocation(200, 270);
+			plCardTable[i].setMargin(new Insets(0,-150,0,0));
+			
+			
+			
+
+			//Karty grzacza PRAWO HAND 
+			prCardHand[i] = new JButton();
+			t1 = new TextIcon(prCardHand[i], GaD.cards[i].getUnicodeValue(), TextIcon.Layout.HORIZONTAL);
+			r1 = new RotatedIcon(t1, RotatedIcon.Rotate.UP);
+			prCardHand[i].setIcon( r1 );
+			prCardHand[i].setFont(f70);
+			prCardHand[i].setSize(playerRightHand);
+			prCardHand[i].setMargin(new Insets(0,90,0,0));
+
+			//Karty grzacza PRAWO HAND TYŁEM
+			prCardHandB[i] = new JButton();
+			t1 = new TextIcon(prCardHandB[i], GaD.cards[24].getUnicodeValue(), TextIcon.Layout.HORIZONTAL);
+			r1 = new RotatedIcon(t1, RotatedIcon.Rotate.UP);
+			prCardHandB[i].setIcon( r1 );
+			prCardHandB[i].setFont(f70);
+			prCardHandB[i].setSize(playerRightHand);
+			prCardHandB[i].setMargin(new Insets(0,90,0,0));
+
+			//Karty grzacza PRAWO TABLE 
+			prCardTable[i] = new JButton();
+			t1 = new TextIcon(prCardTable[i], GaD.cards[i].getUnicodeValue(), TextIcon.Layout.HORIZONTAL);
+			r1 = new RotatedIcon(t1, RotatedIcon.Rotate.UP);
+			prCardTable[i].setIcon( r1 );
+			prCardTable[i].setFont(f100);
+			prCardTable[i].setSize(playerRightTable);
+			prCardTable[i].setLocation(400, 270);
+			prCardTable[i].setMargin(new Insets(0,150,0,0));
+			
+
+			//Karty grzacza GÓRA HAND 
+			ptCardHand[i] = new JButton();
+			t1 = new TextIcon(ptCardHand[i], GaD.cards[i].getUnicodeValue(), TextIcon.Layout.HORIZONTAL);
+			r1 = new RotatedIcon(t1, RotatedIcon.Rotate.UPSIDE_DOWN);
+			ptCardHand[i].setIcon( r1 );
+			ptCardHand[i].setFont(f70);
+			ptCardHand[i].setSize(playerTopHand);
+			ptCardHand[i].setMargin(new Insets(-175,0,0,0));
+
+			//Karty grzacza GÓRA HAND TYŁEM
+			ptCardHandB[i] = new JButton();
+			t1 = new TextIcon(ptCardHandB[i], GaD.cards[24].getUnicodeValue(), TextIcon.Layout.HORIZONTAL);
+			r1 = new RotatedIcon(t1, RotatedIcon.Rotate.UPSIDE_DOWN);
+			ptCardHandB[i].setIcon( r1 );
+			ptCardHandB[i].setFont(f70);
+			ptCardHandB[i].setSize(playerTopHand);
+			ptCardHandB[i].setMargin(new Insets(-175,0,0,0));
+
+			//Karty grzacza GÓRA TABLE 
+			ptCardTable[i] = new JButton();
+			t1 = new TextIcon(ptCardTable[i], GaD.cards[i].getUnicodeValue(), TextIcon.Layout.HORIZONTAL);
+			r1 = new RotatedIcon(t1, RotatedIcon.Rotate.UPSIDE_DOWN);
+			ptCardTable[i].setIcon( r1 );
+			ptCardTable[i].setFont(f100);
+			ptCardTable[i].setSize(playerTopTable);
+			ptCardTable[i].setLocation(320, 150);
+			ptCardTable[i].setMargin(new Insets(-295,0,0,0));
+			
+			
+			
+			if(GaD.cards[i].getColor() == 'C' || GaD.cards[i].getColor() == 'D')
+			{
+				pbCardHand[i].setForeground(Color.RED);
+				pbCardTable[i].setForeground(Color.RED);
+				pbCardWinning[i].setForeground(Color.RED);
+
+				plCardHand[i].setForeground(Color.RED);
+				plCardTable[i].setForeground(Color.RED);
+
+				prCardHand[i].setForeground(Color.RED);
+				prCardTable[i].setForeground(Color.RED);
+
+				ptCardHand[i].setForeground(Color.RED);
+				ptCardTable[i].setForeground(Color.RED);
+			}
+			else
+			{
+				pbCardHand[i].setForeground(Color.BLACK);
+				pbCardTable[i].setForeground(Color.BLACK);
+				pbCardWinning[i].setForeground(Color.BLACK);
+
+				plCardHand[i].setForeground(Color.BLACK);
+				plCardTable[i].setForeground(Color.BLACK);
+
+				prCardHand[i].setForeground(Color.BLACK);
+				prCardTable[i].setForeground(Color.BLACK);
+
+				ptCardHand[i].setForeground(Color.BLACK);
+				ptCardTable[i].setForeground(Color.BLACK);
+			}
+
+			plCardHandB[i].setForeground(Color.BLUE);
+			prCardHandB[i].setForeground(Color.BLUE);
+			ptCardHandB[i].setForeground(Color.BLUE);
+
+
+			add(pbCardHand[i]);
+			add(pbCardTable[i]);
+			add(pbCardWinning[i]);
+
+
+			add(plCardHand[i]);
+			add(plCardHandB[i]);
+			add(plCardTable[i]);
+
+			add(prCardHand[i]);
+			add(prCardHandB[i]);
+			add(prCardTable[i]);
+
+			add(ptCardHand[i]);
+			add(ptCardHandB[i]);
+			add(ptCardTable[i]);
+		}
+	}
+	private void createAuctionButton()
+	{
+		bAuction = new JButton[20];
 		lPass = new JButton("PASS");
 		Bomba = new JButton("Bomba");
 		
-		p1 = new JLabel("Player 1: 1111");
-		p2 = new JLabel("Player 2: 1111");
-		p3 = new JLabel("Player 3: 1111");
-		p4 = new JLabel("Player 4: 1111");
-		
-		p1.setBounds(780,100,200,30);
-		p2.setBounds(780,150,200,30);
-		p3.setBounds(780,200,200,30);
-		p4.setBounds(780,250,200,30);
+		for(int i=0; i<20; i++)
+		{
+			bAuction[i] = new JButton(Integer.toString(100+(i+1)*10));
+			
+			add(bAuction[i]);
+			bAuction[i].addActionListener(this);
+		}
+		add(lPass);
+		add(Bomba);
+		lPass.addActionListener(this);
+		Bomba.addActionListener(this);
 		
 		bAuction[0].setBounds(715,445,60,30);  //ustaw przyciski licytacji
 		bAuction[1].setBounds(785,445,60,30);
@@ -112,72 +304,23 @@ public class GameWindow extends JFrame implements ActionListener
 		bAuction[17].setBounds(785,585,60,30);
 		bAuction[18].setBounds(855,585,60,30);
 		bAuction[19].setBounds(925,585,60,30);
-		
-
-		/*
-		card[0].setBounds(75,500,60,100);
-		card[1].setBounds(145,500,60,100);
-		card[2].setBounds(215,500,60,100);
-		card[3].setBounds(285,500,60,100);
-		card[4].setBounds(355,500,60,100);
-		card[5].setBounds(425,500,60,100);         
-		card[6].setBounds(495,500,60,100);
-		card[7].setBounds(565,500,60,100);
-		card[8].setBounds(30,420,70,42);
-		card[9].setBounds(30,370,70,42);
-		card[10].setBounds(30,320,70,42);
-		card[11].setBounds(30,270,70,42);
-		card[12].setBounds(30,220,70,42);
-		card[13].setBounds(30,170,70,42);         
-		card[14].setBounds(30,120,70,42);
-		card[15].setBounds(30,70,70,42);
-		card[16].setBounds(628,420,70,42);
-		card[17].setBounds(628,370,70,42);
-		card[18].setBounds(628,320,70,42);
-		card[19].setBounds(628,270,70,42);
-		card[20].setBounds(628,220,70,42);
-		card[21].setBounds(628,170,70,42);         
-		card[22].setBounds(628,120,70,42);
-		card[23].setBounds(628,70,70,42);
-		card[24].setBounds(628,70,150,42);
-		*/
-		
-		
 		lPass.setBounds(715,620,130,30);
 		Bomba.setBounds(855,620,130,30);
 		
-		cGame2.setBounds(239,230,70,42);
-		cGame1.setBounds(319,250,42,72);
-		cGame3.setBounds(371,230,70,42);
-		
-		add(cGame1);
-		add(cGame2);
-		add(cGame3);
-		
-		cGame1.setVisible(false);
-		cGame2.setVisible(false);
-		cGame3.setVisible(false);
-		
+	}
+	private void createPlayerBaner()
+	{
 
-		for(int i=0; i<25; i++)
-		{
-			add(card[i]);
-			card[i].addActionListener(this);
-			card[i].setMargin(new Insets(-5, -30, -5, -30));
-			
-			if(GaD.cards[i].getColor() == 'C' || GaD.cards[i].getColor() == 'D' || GaD.cards[i].getColor() == 'L')
-			{
-				card[i].setForeground(Color.RED);
-			}
-		}
-		for(int i=0; i<20; i++)
-		{
-			add(bAuction[i]);
-			bAuction[i].addActionListener(this);
-		}
 		
-		add(lPass);
-		add(Bomba);
+		p1 = new JLabel();
+		p2 = new JLabel();
+		p3 = new JLabel();
+		p4 = new JLabel();
+		
+		p1.setBounds(710,60,280,60);
+		p2.setBounds(710,120,280,60);
+		p3.setBounds(710,190,280,60);
+		p4.setBounds(710,250,280,60);	
 		
 		p1.setForeground(Color.white);
 		p2.setForeground(Color.white);
@@ -194,17 +337,123 @@ public class GameWindow extends JFrame implements ActionListener
 		add(p3);
 		add(p4);
 		
-		lPass.addActionListener(this);
-		Bomba.addActionListener(this);	
+		LabelB = new JLabel();
+		LabelL = new JLabel();
+		LabelR = new JLabel();
+		LabelT = new JLabel();
 		
+		LabelB.setBounds(150,500,80,25);
+		LabelL.setBounds(25,25,80,25);
+		LabelR.setBounds(610,25,80,25);
+		LabelT.setBounds(150,0,80,25);	
+		
+		LabelB.setForeground(Color.white);
+		LabelL.setForeground(Color.white);
+		LabelR.setForeground(Color.white);
+		LabelT.setForeground(Color.white);
+		
+		LabelB.setFont(new Font("Dejavu Sans", Font.BOLD, 10));
+		LabelL.setFont(new Font("Dejavu Sans", Font.BOLD, 10)); 
+		LabelR.setFont(new Font("Dejavu Sans", Font.BOLD, 10)); 
+		LabelT.setFont(new Font("Dejavu Sans", Font.BOLD, 10)); 
+		
+		add(LabelB);
+		add(LabelL);
+		add(LabelR);
+		add(LabelT);
 		
 
+
+		arrowB = new JLabel("\u25BC"); 
+		arrowL = new JLabel("\u25C0"); 
+		arrowR = new JLabel("\u25B6"); 
+		arrowT = new JLabel("\u25B2"); 
+
+		arrowB.setBounds(335,460,35,40);
+		arrowL.setBounds(145,280,35,40);
+		arrowR.setBounds(525,280,35,40);
+		arrowT.setBounds(335,100,35,40);	
 		
-		for(int i=0; i<25; i++)
-		{
-			card[i].setText(GaD.cards[i].getUnicodeValue());
-		}
+		arrowB.setForeground(Color.white);
+		arrowL.setForeground(Color.white);
+		arrowR.setForeground(Color.white);
+		arrowT.setForeground(Color.white);
+		
+		
+		arrowB.setVisible(false);
+		arrowL.setVisible(false);
+		arrowR.setVisible(false);
+		arrowT.setVisible(false);
+		
+		arrowB.setFont(new Font("Dejavu Sans", Font.BOLD, 40));
+		arrowL.setFont(new Font("Dejavu Sans", Font.BOLD, 40)); 
+		arrowR.setFont(new Font("Dejavu Sans", Font.BOLD, 40)); 
+		arrowT.setFont(new Font("Dejavu Sans", Font.BOLD, 40)); 
+		
+		add(arrowB);
+		add(arrowL);
+		add(arrowR);
+		add(arrowT);
+	}
 	
+	
+	public void displayMovementArrow()
+	{
+		if(GaD.getTypeTable() == 3 && GaD.getPlace() == 1)
+		{
+			if(GaD.getMovement() == 1) arrowB.setVisible(true);
+			else if(GaD.getMovement() == 2) arrowL.setVisible(true);
+			else if(GaD.getMovement() == 3) arrowR.setVisible(true);
+			else if(GaD.getMovement() == 4) arrowT.setVisible(true);
+		}
+		else if(GaD.getTypeTable() == 3 && GaD.getPlace() == 2)
+		{
+
+			if(GaD.getMovement() == 1) arrowR.setVisible(true);
+			else if(GaD.getMovement() == 2) arrowB.setVisible(true);
+			else if(GaD.getMovement() == 3) arrowL.setVisible(true);
+			else if(GaD.getMovement() == 4) arrowT.setVisible(true);
+		}
+		else if(GaD.getTypeTable() == 3 && GaD.getPlace() == 3)
+		{
+
+			if(GaD.getMovement() == 1) arrowL.setVisible(true);
+			else if(GaD.getMovement() == 2) arrowR.setVisible(true);
+			else if(GaD.getMovement() == 3) arrowB.setVisible(true);
+			else if(GaD.getMovement() == 4) arrowT.setVisible(true);
+		}
+		else if(GaD.getTypeTable() == 4 && GaD.getPlace() == 1)
+		{
+
+			if(GaD.getMovement() == 1) arrowB.setVisible(true);
+			else if(GaD.getMovement() == 2) arrowL.setVisible(true);
+			else if(GaD.getMovement() == 3) arrowR.setVisible(true);
+			else if(GaD.getMovement() == 4) arrowT.setVisible(true);
+		}
+		else if(GaD.getTypeTable() == 4 && GaD.getPlace() == 2)
+		{
+
+			if(GaD.getMovement() == 1) arrowR.setVisible(true);
+			else if(GaD.getMovement() == 2) arrowB.setVisible(true);
+			else if(GaD.getMovement() == 3) arrowT.setVisible(true);
+			else if(GaD.getMovement() == 4) arrowR.setVisible(true);
+		}
+		else if(GaD.getTypeTable() == 4 && GaD.getPlace() == 3)
+		{
+
+			if(GaD.getMovement() == 1) arrowL.setVisible(true);
+			else if(GaD.getMovement() == 2) arrowT.setVisible(true);
+			else if(GaD.getMovement() == 3) arrowB.setVisible(true);
+			else if(GaD.getMovement() == 4) arrowR.setVisible(true);
+		}
+		else if(GaD.getTypeTable() == 4 && GaD.getPlace() == 4)
+		{
+
+			if(GaD.getMovement() == 1) arrowT.setVisible(true);
+			else if(GaD.getMovement() == 2) arrowR.setVisible(true);
+			else if(GaD.getMovement() == 3) arrowL.setVisible(true);
+			else if(GaD.getMovement() == 4) arrowB.setVisible(true);
+		}
 	}
 
 	public void displayAuction(boolean show)
@@ -223,117 +472,175 @@ public class GameWindow extends JFrame implements ActionListener
 		}
 	}
 	
-	public void displayCard()
+	public void displayCard(boolean showCard)
 	{
-		int [] p1h = GaD.getPlayer1().getScHand().getCards();
-		int [] p1t = GaD.getPlayer1().getScTable().getCards();
-		int [] p1w = GaD.getPlayer1().getScWinnings().getCards();
+		User pb = null, pl = null, pr = null, pt = null;	
+		
+		for(int i=0; i<24; i++)
+		{
+			pbCardHand[i].setVisible(false);
+			pbCardTable[i].setVisible(false);
+			pbCardWinning[i].setVisible(false);
 
-		int [] p2h = GaD.getPlayer2().getScHand().getCards();
-		int [] p2t = GaD.getPlayer2().getScTable().getCards();
-		int [] p2w = GaD.getPlayer2().getScWinnings().getCards();
 
-		int [] p3h = GaD.getPlayer3().getScHand().getCards();
-		int [] p3t = GaD.getPlayer3().getScTable().getCards();
-		int [] p3w = GaD.getPlayer3().getScWinnings().getCards();
+			plCardHand[i].setVisible(false);
+			plCardHandB[i].setVisible(false);
+			plCardTable[i].setVisible(false);
 
-		int [] p4h = GaD.getPlayer4().getScHand().getCards();
-		int [] p4t = GaD.getPlayer4().getScTable().getCards();
-		int [] p4w = GaD.getPlayer4().getScWinnings().getCards();
-		
-		for(int i=0; i<p1h.length; i++)
-		{
-			card[p1h[i]].setFont(f100);
-			card[p1h[i]].setSize(playerBottomHand);
-			card[p1h[i]].setLocation(75+i*70, 500);
+			prCardHand[i].setVisible(false);
+			prCardHandB[i].setVisible(false);
+			prCardTable[i].setVisible(false);
+
+			ptCardHand[i].setVisible(false);
+			ptCardHandB[i].setVisible(false);
+			ptCardTable[i].setVisible(false);
 		}
 		
-		for(int i=0; i<p1t.length; i++)
+		
+		if(GaD.getTypeTable() == 3 && GaD.getPlace() == 1)
 		{
-			card[p1t[i]].setFont(f70);
-			card[p1t[i]].setSize(playerBottomTable);
-			card[p1t[i]].setLocation(319, 250);
+			pb = GaD.getPlayer1();
+			pl = GaD.getPlayer2();
+			pr = GaD.getPlayer3();
+			pt = GaD.getPlayer4();
+		}
+		else if(GaD.getTypeTable() == 3 && GaD.getPlace() == 2)
+		{
+			pb = GaD.getPlayer2();
+			pl = GaD.getPlayer3();
+			pr = GaD.getPlayer1();
+			pt = GaD.getPlayer4();
+		}
+		else if(GaD.getTypeTable() == 3 && GaD.getPlace() == 3)
+		{
+			pb = GaD.getPlayer3();
+			pl = GaD.getPlayer1();
+			pr = GaD.getPlayer2();
+			pt = GaD.getPlayer4();
+		}
+		else if(GaD.getTypeTable() == 4 && GaD.getPlace() == 1)
+		{
+			pb = GaD.getPlayer1();
+			pl = GaD.getPlayer2();
+			pr = GaD.getPlayer3();
+			pt = GaD.getPlayer4();
+		}
+		else if(GaD.getTypeTable() == 4 && GaD.getPlace() == 2)
+		{
+			pb = GaD.getPlayer2();
+			pl = GaD.getPlayer4();
+			pr = GaD.getPlayer1();
+			pt = GaD.getPlayer3();
+		}
+		else if(GaD.getTypeTable() == 4 && GaD.getPlace() == 3)
+		{
+			pb = GaD.getPlayer3();
+			pl = GaD.getPlayer1();
+			pr = GaD.getPlayer4();
+			pt = GaD.getPlayer2();
+		}
+		else if(GaD.getTypeTable() == 4 && GaD.getPlace() == 4)
+		{
+			pb = GaD.getPlayer4();
+			pl = GaD.getPlayer3();
+			pr = GaD.getPlayer2();
+			pt = GaD.getPlayer1();
 		}
 		
-		for(int i=0; i<p1w.length; i++)
+		
+		
+		int [] pb_h = pb.getScHand().getCards();
+		int [] pb_t = pb.getScTable().getCards();
+		int [] pb_w = pb.getScWinnings().getCards();
+
+		int [] pl_h = pl.getScHand().getCards();
+		int [] pl_t = pl.getScTable().getCards();
+
+		int [] pr_h = pr.getScHand().getCards();
+		int [] pr_t = pr.getScTable().getCards();
+
+		int [] pt_h = pt.getScHand().getCards();
+		int [] pt_t = pt.getScTable().getCards();
+		
+		
+		//Karty gracza na dole Hand table i Winning
+		for(int i=0; i<pb_h.length; i++)
 		{
-			card[p1w[i]].setFont(f50);
-			card[p1w[i]].setSize(playerBottomWinning);
-			card[p1w[i]].setLocation(20+i*32, 520);
+			pbCardHand[pb_h[i]].setLocation(25+i*70 +((10-pb_h.length)*35), 525);
+			pbCardHand[pb_h[i]].setVisible(true);
+		}
+		for(int i=0; i<pb_t.length; i++)
+		{
+			pbCardTable[pb_t[i]].setLocation(320, 350);
+			pbCardTable[pb_t[i]].setVisible(true);
+		}
+		for(int i=0; i<pb_w.length; i++)
+		{
+			pbCardWinning[pb_w[i]].setLocation(10+i*28, 630);
+			pbCardWinning[pb_w[i]].setVisible(true);
 		}
 		
+	
+		//Karty po lewo Hand i table
+		for(int i=0; i<pl_h.length; i++)
+		{
+			if(showCard == true)
+			{
+				plCardHand[pl_h[i]].setLocation(25, 70+i*45 +((10-pl_h.length)*22));
+				plCardHand[pl_h[i]].setVisible(true);
+			}
+			else
+			{
+				plCardHandB[pl_h[i]].setLocation(25, 70+i*45 +((10-pl_h.length)*22));
+				plCardHandB[pl_h[i]].setVisible(true);
+			}
+		}
+		for(int i=0; i<pl_t.length; i++)
+		{
+			plCardTable[pl_t[i]].setVisible(true);
+		}
 		
 
-		
-		for(int i=0; i<p2h.length; i++)
+		//Karty po prawo Hand i table
+		for(int i=0; i<pr_h.length; i++)
 		{
-			card[p2h[i]].setFont(f70);
-			card[p2h[i]].setSize(playerLeftHand);
-			card[p2h[i]].setLocation(30, 70+i*45);
+			if(showCard == true)
+			{
+				prCardHand[pr_h[i]].setLocation(605, 70+i*45 +((10-pr_h.length)*22));
+				prCardHand[pr_h[i]].setVisible(true);
+			}
+			else
+			{
+				prCardHandB[pr_h[i]].setLocation(605, 70+i*45 +((10-pr_h.length)*22));
+				prCardHandB[pr_h[i]].setVisible(true);
+			}
 		}
-		
-		for(int i=0; i<p2t.length; i++)
+		for(int i=0; i<pr_t.length; i++)
 		{
-			card[p2t[i]].setFont(f70);
-			card[p2t[i]].setSize(playerLeftTable);
-			card[p2t[i]].setLocation(239, 230);
+			prCardTable[pr_t[i]].setVisible(true);
 		}
-		
-		for(int i=0; i<p2w.length; i++)
-		{
-			card[p2w[i]].setFont(f35);
-			card[p2w[i]].setSize(playerLeftWinning);
-			card[p2w[i]].setLocation(319, 250);
-		}
-		
 		
 
-		
-		for(int i=0; i<p3h.length; i++)
-		{
-			card[p3h[i]].setFont(f70);
-			card[p3h[i]].setSize(playerRightHand);
-			card[p3h[i]].setLocation(628, 70+i*45);
-		}
-		
-		for(int i=0; i<p3t.length; i++)
-		{
-			card[p3t[i]].setFont(f70);
-			card[p3t[i]].setSize(playerRightTable);
-			card[p3t[i]].setLocation(371, 230);
-		}
-		
-		for(int i=0; i<p3w.length; i++)
-		{
-			card[p3w[i]].setFont(f35);
-			card[p3w[i]].setSize(playerRightWinning);
-			card[p3w[i]].setLocation(319, 250);
-		}
-		
-		
 
-		
-		for(int i=0; i<p4h.length; i++)
+		//Karty po góra Hand i table
+		for(int i=0; i<pt_h.length; i++)
 		{
-			card[p4h[i]].setFont(f70);
-			card[p4h[i]].setSize(playerTopHand);
-			card[p4h[i]].setLocation(120+i*45, 20);
+			if(showCard == true)
+			{
+				ptCardHand[pt_h[i]].setLocation(125+i*45 +((10-pt_h.length)*22), 25);
+				ptCardHand[pt_h[i]].setVisible(true);
+			}
+			else
+			{
+				ptCardHandB[pt_h[i]].setLocation(125+i*45 +((10-pt_h.length)*22), 25);
+				ptCardHandB[pt_h[i]].setVisible(true);
+			}
 		}
-		
-		for(int i=0; i<p4t.length; i++)
+		for(int i=0; i<pt_t.length; i++)
 		{
-			card[p4t[i]].setFont(f70);
-			card[p4t[i]].setSize(playerTopTable);
-			card[p4t[i]].setLocation(319, 170);
+			ptCardTable[pt_t[i]].setVisible(true);
 		}
-		
-		for(int i=0; i<p1w.length; i++)
-		{
-			card[p4w[i]].setFont(f50);
-			card[p4w[i]].setSize(playerTopWinning);
-			card[p4w[i]].setLocation(319, 250);
-		}
-		
+
 		
 	}
 	
@@ -345,7 +652,7 @@ public class GameWindow extends JFrame implements ActionListener
 	{
 		Object source = e.getSource();
 		
-		if(source == card[0])
+		if(source == lPass)
 		{
 			
 		}
@@ -742,41 +1049,6 @@ public class GameWindow extends JFrame implements ActionListener
 	}
 	*/
 	
-	public void changeLayoutCard(int checkC) throws InterruptedException
-	{
-		if(checkC==1)
-		{
-			cGame1.setVisible(true);
-		}
-		else if(checkC==2)
-		{
-			cGame2.setVisible(true);
-		}
-		else if(checkC==3)
-		{
-			cGame3.setVisible(true);
-		}
-		check1++;
-		
-		if(check1==3)
-		{
-			check1 = 0;
-			notVisibleCard();
-		}
-	}
-	
-	public void notVisibleCard() throws InterruptedException
-	{
-		TimeUnit.MILLISECONDS.sleep(2000);
-		
-		cGame1.setVisible(false);
-		cGame2.setVisible(false);
-		cGame3.setVisible(false);
-		
-	//	setEnableButton();
-		
-	}
-	
 	public void setAuction(int amount) 
 	{
 		this.auction = amount;
@@ -786,7 +1058,7 @@ public class GameWindow extends JFrame implements ActionListener
 	{
 		return this.auction;
 	}
-	
+
 	public void bomb()
 	{
 		//co to za gracz
@@ -861,6 +1133,68 @@ public class GameWindow extends JFrame implements ActionListener
 		c24.setEnabled(true);
 	}
 */
+	
+	public void setPlayerName(String player1, String player2, String player3, String player4)
+	{
+		p1.setText("<html>Player1: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + player1 + "</html>");
+		p2.setText("<html>Player2: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + player2 + "</html>");
+		p3.setText("<html>Player3: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + player3 + "</html>");
+		p4.setText("<html>Player4: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + player4 + "</html>");
+		
+		
+
+		
+		if(GaD.getTypeTable() == 3 && GaD.getPlace() == 1)
+		{
+			LabelB.setText(player1);
+			LabelL.setText(player2);
+			LabelR.setText(player3);
+			LabelT.setText(player4);
+		}
+		else if(GaD.getTypeTable() == 3 && GaD.getPlace() == 2)
+		{
+			LabelB.setText(player2);
+			LabelL.setText(player3);
+			LabelR.setText(player1);
+			LabelT.setText(player4);
+		}
+		else if(GaD.getTypeTable() == 3 && GaD.getPlace() == 3)
+		{
+			LabelB.setText(player3);
+			LabelL.setText(player1);
+			LabelR.setText(player2);
+			LabelT.setText(player4);
+		}
+		else if(GaD.getTypeTable() == 4 && GaD.getPlace() == 1)
+		{
+			LabelB.setText(player1);
+			LabelL.setText(player2);
+			LabelR.setText(player3);
+			LabelT.setText(player4);
+		}
+		else if(GaD.getTypeTable() == 4 && GaD.getPlace() == 2)
+		{
+			LabelB.setText(player2);
+			LabelL.setText(player4);
+			LabelR.setText(player1);
+			LabelT.setText(player3);
+		}
+		else if(GaD.getTypeTable() == 4 && GaD.getPlace() == 3)
+		{
+			LabelB.setText(player3);
+			LabelL.setText(player1);
+			LabelR.setText(player4);
+			LabelT.setText(player2);
+		}
+		else if(GaD.getTypeTable() == 4 && GaD.getPlace() == 4)
+		{
+			LabelB.setText(player4);
+			LabelL.setText(player3);
+			LabelR.setText(player2);
+			LabelT.setText(player1);
+		}
+		
+	}
 
 	public GameData getGameData() 
 	{

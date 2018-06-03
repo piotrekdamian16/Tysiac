@@ -8,7 +8,9 @@ public class User
 	private StackCard scHand;
 	private StackCard scTable;
 	private StackCard scWinnings;
-	private int bomb;
+	private int bomb=0;
+
+	private int reportC, reportZ, reportD, reportW;
 	
 	public User (int it, int iu, String un, int p)
 	{
@@ -54,7 +56,39 @@ public class User
 		return bomb;
 	}
 
+
+
+	public void setReports(char color, int who)  //ustawia kto ma jaki meldunek w reku
+	{
+		if(color == 'C')
+		{
+			this.reportC = who;
+		}
+		else if(color == 'Z')
+		{
+			this.reportZ = who;
+		}
+		else if(color == 'D')
+		{
+			this.reportD = who;
+		}
+		else if(color == 'W')
+		{
+			this.reportW = who;
+		}
+	}
 	
+	public int [] getReports() // zwraca tablice z wartościami ktory gracz ma dany meldunek 
+	{																			// [0] - czerwo
+		int [] tabReports = new int[4];											// [1] - zoladz
+																				// [2] - dzwonek
+		tabReports[0] = reportC;												// [3] - wino
+		tabReports[1] = reportZ;
+		tabReports[2] = reportD;
+		tabReports[3] = reportW;	
+		
+		return tabReports;																		
+	}	
 	
 	public void updateStacks(int [] sch, int [] sct, int [] scw) throws TysiacException
 	{
