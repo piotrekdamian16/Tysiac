@@ -1,4 +1,4 @@
-
+import javax.swing.JOptionPane;
 
 public class Game extends GameData
 {	
@@ -16,51 +16,50 @@ public class Game extends GameData
 		{
 			game = new Game();
 			
-			//game.SignIn();
-			//game.SitToTable();
+			game.SignIn();
+			game.SitToTable();
 			
-			//game.BOTSitToTable();
+			game.displayGameWindow();
+
+			if(game.getPlace() == 1) game.sql.setStatus("Czekanie na graczy");
+			game.setStatus();
+			game.GameW.setStatus(game.getStatus());
 			
-			game.setAccessCode("59ca633cdd");
-			game.setIdTable(1);
-			game.setTypeTable(4);
-			
-			game.setIdUser(4);
-			game.setPlace(4);
+			while(game.sql.checkUser(game.getTypeTable()) == 0);			
 			
 			game.setPlayerInfo();
-
-			game.player1.updateStacks(game.sql.getStackCards(1, 'r'), game.sql.getStackCards(1, 's'), game.sql.getStackCards(1, 'z'));
-			game.player2.updateStacks(game.sql.getStackCards(2, 'r'), game.sql.getStackCards(2, 's'), game.sql.getStackCards(2, 'z'));
-			game.player3.updateStacks(game.sql.getStackCards(3, 'r'), game.sql.getStackCards(3, 's'), game.sql.getStackCards(3, 'z'));
-			game.player4.updateStacks(game.sql.getStackCards(4, 'r'), game.sql.getStackCards(4, 's'), game.sql.getStackCards(4, 'z'));
-
-
-
-			game.displayGameWindow();
 			
-			game.setMovement(game.sql.getMovement());
-			game.setMust(game.sql.getMust());
-			game.setTrio(game.sql.getTrio());
-			game.setStarted(game.sql.getStarted());
+			game.setMovement();
+			game.setMust();
+			game.setTrio();
+			game.setStarted();
 			
-			game.GameW.displayCard(false);
-			game.GameW.enableAuctionMore120(false);
+			
+			if(game.getPlace() == 1) game.sql.setStatus("Rozdawanie Kart");
+			game.setStatus();
+			game.GameW.setStatus(game.getStatus());
+			
+			if(game.getPlace() == 1) game.giveCards(); //rozdaje karty
+			
+
+			
+			if(game.getPlace() == 1) game.sql.setStatus("TEST");
+			game.setStatus();
+			game.GameW.setStatus(game.getStatus());
+			game.updateStacks(); //przypisuje karty z bazy do graczy
+
+
+			game.GameW.displayCard(true);
 			game.GameW.displayMovementArrow();
-
-
+			
+			
+			game.GameW.enableAuctionMore120(false);
 			
 		} 
 		catch (TysiacException e) 
 		{
-			//System.err.println(e.getErrorMessage());
+			JOptionPane.showMessageDialog(null,e.getErrorMessage());
 			e.printStackTrace();
-		}
-		finally
-		{
-			//game.close();
-			
-			//System.exit(0);
 		}
 		
     }

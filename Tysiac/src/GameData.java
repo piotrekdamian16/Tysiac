@@ -27,13 +27,15 @@ public class GameData
 
 	protected int auction; // wartość licytacji
 	protected int auctionPlayer; // kto się licytuje i wygrywa (potem kto wygrał jak reszta spasuje)
-	protected int auctionSurrender; //czy spasował licytację 
+	protected boolean auctionSurrender; //czy spasował licytację 
 	
+	protected String status; 
+	protected boolean finished = false;
 
 	protected Card[] cards = new Card[25];
 	protected SQL sql = null;
 
-	
+	private boolean BOTShowGameWindow;
 	
 
 	LoginWindow LogW;
@@ -48,10 +50,10 @@ public class GameData
 	
 
 	
-	protected int [] cp1; //= {10, 7, 9, 8, 18, 17, 15};
-	protected int [] cp2; //= {11, 21, 4, 12, 0, 16, 23};
-	protected int [] cp3; //= {20, 5, 2, 13, 19, 3, 22};
-	protected int [] cp4; //= {14, 6, 1};
+	protected int [] cp1 = new int[7]; //= {10, 7, 9, 8, 18, 17, 15};
+	protected int [] cp2 = new int[7]; //= {11, 21, 4, 12, 0, 16, 23};
+	protected int [] cp3 = new int[7]; //= {20, 5, 2, 13, 19, 3, 22};
+	protected int [] cp4 = new int[3]; //= {14, 6, 1};
 	
 	protected int Round = 0,tmpRound = 0;
 	
@@ -149,7 +151,7 @@ public class GameData
 		GameW.setVisible(true);
 		GameW.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		GameW.getContentPane().setBackground(stol);
-		GameW.setTitle("Tysiąc");
+		//GameW.setTitle("Tysiąc");
 		GameW.setResizable(false);
 		
 		GameW.addWindowListener(new java.awt.event.WindowAdapter() 
@@ -239,9 +241,13 @@ public class GameData
 	{
 		return auctionPlayer;
 	}
-	protected int getAuctionSurrender() 
+	protected boolean getAuctionSurrender() 
 	{
 		return auctionSurrender;
+	}
+	protected String getStatus() 
+	{
+		return status;
 	}
 	protected int getLoginClick() 
 	{
@@ -258,6 +264,10 @@ public class GameData
 	protected int getTypeTable() 
 	{
 		return typeTable;
+	}
+	protected boolean getBOTShowGameWindow() 
+	{
+		return BOTShowGameWindow;
 	}
 	
 	
@@ -288,47 +298,53 @@ public class GameData
 	{
 		this.place = place;
 	}
-	protected void setPlayer1(User player1) 
+	protected void setPlayer1() throws TysiacException 
 	{
-		this.player1 = player1;
+		this.player1 = sql.selectUser(1);
 	}
-	protected void setPlayer2(User player2) 
+	protected void setPlayer2() throws TysiacException 
 	{
-		this.player2 = player2;
+		this.player2 = sql.selectUser(2);
 	}
-	protected void setPlayer3(User player3) 
+	protected void setPlayer3() throws TysiacException 
 	{
-		this.player3 = player3;
+		this.player3 = sql.selectUser(3);
 	}
-	protected void setPlayer4(User player4) 
+	protected void setPlayer4() throws TysiacException 
 	{
-		this.player4 = player4;
+		this.player4 = sql.selectUser(4);
 	}
-	protected void setMust(int must) 
+	protected void setMust() throws TysiacException 
 	{
-		this.must = must;
+		this.must = sql.getMust();
 	}
-	protected void setMovement(int movement) 
+	protected void setMovement() throws TysiacException 
 	{
-		this.movement = movement;
+		this.movement = sql.getMovement();
 	}
-	protected void setStarted(int started) 
+	protected void setStarted() throws TysiacException 
 	{
-		this.started = started;
+		this.started = sql.getStarted();
 	}
-	protected void setTrio(int trio) 
+	protected void setTrio() throws TysiacException 
 	{
-		this.trio = trio;
+		this.trio = sql.getTrio();
 	}
-	protected void setAuction(int auction) 
+	protected void setAuction() throws TysiacException 
 	{
-		this.auction = auction;
+		this.auction = sql.getAuctionValue();
+		this.GameW.setbAuctionValue(auction);
 	}
-	protected void setAuctionPlayer(int auctionPlayer) 
+	protected void setAuctionPlayer() throws TysiacException 
 	{
-		this.auctionPlayer = auctionPlayer;
+		this.auctionPlayer = sql.getAuctionPlayer();
+		this.GameW.setbAuctionPlayer(auctionPlayer);
 	}
-	protected void setAuctionSurrender(int auctionSurrender) 
+	protected void setStatus() throws TysiacException 
+	{
+		this.status = sql.getStatus();
+	}
+	protected void setAuctionSurrender(boolean auctionSurrender) 
 	{
 		this.auctionSurrender = auctionSurrender;
 	}
@@ -348,6 +364,12 @@ public class GameData
 	{
 		this.typeTable = typeTable;
 	}
+	protected void setBOTShowGameWindow(boolean botShowGameWindow) 
+	{
+		BOTShowGameWindow = botShowGameWindow;
+	}
+	
+	
 	
 	
 	
@@ -477,128 +499,177 @@ public class GameData
 	
 	protected void setPlayerInfo() throws TysiacException
 	{
-		this.setPlayer1(sql.selectUser(1)); //ustawianie class User Player1 <- SQL zwraca wszystkie informacje o użytkowiku 
-		this.setPlayer2(sql.selectUser(2));
-		this.setPlayer3(sql.selectUser(3));
-		this.setPlayer4(sql.selectUser(4));
+		this.setPlayer1(); //ustawianie class User Player1 <- SQL zwraca wszystkie informacje o użytkowiku 
+		this.setPlayer2();
+		this.setPlayer3();
+		this.setPlayer4();
 		
 		GameW.setPlayerName(this.getPlayer1().getUserName(), this.getPlayer2().getUserName(), this.getPlayer3().getUserName(), this.getPlayer4().getUserName());
 	}
 	
+	protected void updateStacks() throws TysiacException
+	{
+		player1.updateStacks(sql.getStackCards(1, 'r'), sql.getStackCards(1, 's'), sql.getStackCards(1, 'z'));
+		player2.updateStacks(sql.getStackCards(2, 'r'), sql.getStackCards(2, 's'), sql.getStackCards(2, 'z'));
+		player3.updateStacks(sql.getStackCards(3, 'r'), sql.getStackCards(3, 's'), sql.getStackCards(3, 'z'));
+		player4.updateStacks(sql.getStackCards(4, 'r'), sql.getStackCards(4, 's'), sql.getStackCards(4, 'z'));
+	}
+	
+	
+	
+	
+	protected void nextPlayer() throws TysiacException
+	{
+		int tmp = this.getMovement();
+		
+		if(typeTable == 3 && tmp == 1) tmp=2;
+		else if(typeTable == 3 && tmp == 2) tmp=3;
+		else if(typeTable == 3 && tmp == 3) tmp=1;
+		else if(typeTable == 4 && tmp == 1) tmp=2;
+		else if(typeTable == 4 && tmp == 2) tmp=4;
+		else if(typeTable == 4 && tmp == 4) tmp=3;
+		else if(typeTable == 4 && tmp == 3) tmp=1;
+		
+		if(tmp == 1 && tmp == trio) tmp=2;
+		else if(tmp == 2 && tmp == trio) tmp=4;
+		else if(tmp == 4 && tmp == trio) tmp=3;
+		else if(tmp == 3 && tmp == trio) tmp=1;
+		
+		this.sql.setMovement(tmp);
+		this.setMovement();
+	}
+	
 	
 	//============================= FUNKCJE od PIOTRKA ==========================
-
 	
-	protected void startMove()  //czyj pierwszy ruch
-	{	
-		try 
-		{
-			sql.createTable(this.getTypeTable(), this.getIdUser(), 1, 2, 3);
-		} 
-		catch (TysiacException e) 
-		{
-			e.printStackTrace();
-		}
-	}
-	
-	protected void check18()  //sprawdza czy jest 18 lub wiecej w kartach jeśli nie to losuje od nowa
-	{
-		int sumCardHand;
-		for(int i = 1; i < 5; i++)
-		{
-			try 
-			{
-				sumCardHand = sql.getSumCardValue(1);
-				
-				if(sumCardHand < 18)
-				{
-					giveCards();
-				}
-			} 
-			catch (TysiacException e) 
-			{
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	protected void checkFour9()  // sprawdza czy sa 4 dziewiatki jesli sa to od nowa losuje
-	{
-		int tmp1 = 0;
-		int tmp2 = 0;
-		int tmp3 = 0;
-		int tmp4 = 0;
-		
-		for(int i=0; i<8; i++)
-		{
-			if(cp1[i] == 5 || cp1[i] == 11 || cp1[i] == 17 || cp1[i] == 23)
-			{
-				tmp1++;
-			}
-			if(cp2[i] == 5 || cp2[i] == 11 || cp2[i] == 17 || cp2[i] == 23)
-			{
-				tmp2++;
-			}
-			if(cp3[i] == 5 || cp3[i] == 11 || cp3[i] == 17 || cp3[i] == 23)
-			{
-				tmp3++;
-			}
-			if(cp4[i] == 5 || cp4[i] == 11 || cp4[i] == 17 || cp4[i] == 23)
-			{
-				tmp4++;
-			}
-		}
-		
-		if(tmp1 == 4 || tmp2 == 4 || tmp3 == 4 || tmp4 == 4)
-		{
-			giveCards();
-		}
-	}
-	
-	protected void giveCards()  //przypisuje karty graczom
+	protected void giveCards() throws TysiacException  //przypisuje karty graczom
 	{
 		int[] tab = new int[24];
-		
-		for(int i=0; i<24; i++)
-		{
-			tab[i] = randomCards(tab,i);
-		}
-		
-		for(int k=0; k<7; k++)
-		{
-			cp1[k] = tab[k]; 
-			cp2[k] = tab[k+7]; 
-			cp3[k] = tab[k+14];
-			
-			if(k<3)
-			{
-				cp4[k] = tab[k+21];
-			}
-		}
-	}
-	
-	protected int randomCards(int [] tab, int i)  // losuje karte
-	{
-		int tmp;
+		boolean [] check = new boolean[24];
+		boolean less18 = false, four9 = false;
+		int tmp = 0;
 
         Random rand = new Random();
-            
-        tmp = rand.nextInt(24);
-        checkCard(tmp,tab,i);
+   
+        do
+        {
+        	for(int i=0; i<24; i++)
+        	{
+        		check[i] = false;
+        	}
 
-        return  tmp;
+        	less18 = false;
+        	four9 = false;
+    		for(int i=0; i<24; i++)
+    		{
+    			tmp = rand.nextInt(24);
+    			while(check[tmp] == true)
+    			{
+    				tmp = rand.nextInt(24);
+    			}
+    			check[tmp] = true;
+    			tab[i] = tmp;
+    		}
+
+    		cp1[0] = tab[0];
+    		cp2[0] = tab[1];
+    		cp3[0] = tab[2];
+    		cp4[0] = tab[3];
+    		cp1[1] = tab[4];
+    		cp2[1] = tab[5];
+    		cp3[1] = tab[6];
+    		cp4[1] = tab[7];
+    		cp1[2] = tab[8];
+    		cp2[2] = tab[9];
+    		cp3[2] = tab[10];
+    		cp4[2] = tab[11];
+    		cp1[3] = tab[12];
+    		cp2[3] = tab[13];
+    		cp3[3] = tab[14];
+    		cp1[4] = tab[15];
+    		cp2[4] = tab[16];
+    		cp3[4] = tab[17];
+    		cp1[5] = tab[18];
+    		cp2[5] = tab[19];
+    		cp3[5] = tab[20];
+    		cp1[6] = tab[21];
+    		cp2[6] = tab[22];
+    		cp3[6] = tab[23];
+    		
+    		four9 = checkFour9(cp1, cp2, cp3, cp4);
+    		less18 = checkLess18(cp1, cp2, cp3);
+        }
+        while(four9==true || less18 == true);
+
+        if(trio == 1) sql.setNewStacksCards(cp4, cp1, cp2, cp3);
+        else if(trio == 2) sql.setNewStacksCards(cp1, cp4, cp2, cp3);
+        else if(trio == 3) sql.setNewStacksCards(cp1, cp2, cp4, cp3);
+        else if(trio == 4) sql.setNewStacksCards(cp1, cp2, cp3, cp4);
 	}
 	
-	protected void checkCard(int tmp, int [] tab, int i)  // sprawdza czy sie powtórzyły karty
+	private boolean checkFour9(int [] c1, int [] c2, int [] c3, int [] c4)
 	{
-		for(int spr=0; spr<i; spr++)
+		int counter =0;
+		for(int i=0; i<c1.length; i++)
 		{
-			if(tmp == tab[spr])
-			{
-				randomCards(tab,i);
-			}
+			if(cards[c1[i]].getSymbol() == "9") counter++;
 		}
+		if(counter == 4) return true;
+		
+		counter =0;
+		for(int i=0; i<c2.length; i++)
+		{
+			if(cards[c2[i]].getSymbol() == "9") counter++;
+
+		}
+		if(counter == 4) return true;
+		
+		counter =0;
+		for(int i=0; i<c3.length; i++)
+		{
+			if(cards[c3[i]].getSymbol() == "9") counter++;
+		}
+		if(counter == 4) return true;
+		
+		counter =0;
+		for(int i=0; i<c4.length; i++)
+		{
+			if(cards[c4[i]].getSymbol() == "9") counter++;
+		}
+		if(counter == 4) return true;
+		
+		
+		return false;
 	}
+	
+	private boolean checkLess18(int [] c1, int [] c2, int [] c3)
+	{
+		int counter =0;
+		for(int i=0; i<c1.length; i++)
+		{
+			counter += cards[c1[i]].getValue();
+		}
+		if(counter < 18) return true;
+		
+		counter =0;
+		for(int i=0; i<c2.length; i++)
+		{
+			counter += cards[c2[i]].getValue();
+		}
+		if(counter < 18) return true;
+		
+		counter =0;
+		for(int i=0; i<c3.length; i++)
+		{
+			counter += cards[c3[i]].getValue();
+		}
+		if(counter < 18) return true;
+		
+		
+		return false;
+	}
+	
+	
 	
 	protected void checkReports()  // przypisuje meldunkowi numer gracza jesli ma
 	{	
@@ -688,26 +759,7 @@ public class GameData
 	
 	protected char getColorC(int card) //sprawdza kolor danej korty
 	{
-		char color = 0;
-		
-		if(card >= 0 && card < 6)
-		{
-			color = 'C';
-		}
-		else if(card > 5 && card < 12)
-		{
-			color = 'Z';
-		}
-		else if(card > 11 && card < 18)
-		{
-			color = 'D';
-		}
-		else if(card > 17 && card < 24)
-		{
-			color = 'W';
-		}
-		
-		return color;
+		return cards[card].getColor();
 	}
 	
 	protected int checkCardsReports(int c1, int c2, int c3, int c4) //c1 to pierwszy ruch // sprawdza czyj ruch jak po meldunku
@@ -730,7 +782,7 @@ public class GameData
 			else tab[2] = c3;
 			
 			if(getColorC(c3) != colorR) tab[3] = 100;
-			else tab[3] = c3;
+			else tab[3] = c4;
 			
 			min = tab[0];
 			

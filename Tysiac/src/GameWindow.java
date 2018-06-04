@@ -9,16 +9,20 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 @SuppressWarnings("serial")
 public class GameWindow extends JFrame implements ActionListener
 {
 	private JButton [] bAuction;
+	private JLabel bAuctionValue, bAuctionPlayer;
 	private JButton lPass, Bomba;
 	private JButton line;
 	private JLabel p1,p2,p3,p4;
+	private JButton ptk1, ptk2, ptk3, ptk4;
 	private JLabel LabelB, LabelL, LabelR, LabelT;
 	private JLabel arrowB, arrowL, arrowR, arrowT;
+	private JLabel statusText, status;
 	private int auction;
 	private GameData GaD;
 	
@@ -76,6 +80,24 @@ public class GameWindow extends JFrame implements ActionListener
 		line.setBounds(700, 0, 5, 700);
 		add(line);
 		line.setEnabled(false);
+		
+
+		statusText = new JLabel("Status Gry:");
+		statusText.setBounds(710, 300, 280, 25);
+		statusText.setFont(new Font("Dejavu Sans", Font.BOLD, 15));
+		statusText.setForeground(Color.white);
+		statusText.setBackground(new Color(20,80,0));
+		statusText.setOpaque(true);
+		add(statusText);
+		
+
+		status = new JLabel();
+		status.setBounds(710, 325, 280, 25);
+		status.setFont(new Font("Dejavu Sans", Font.BOLD, 15));
+		status.setForeground(Color.white);
+		status.setBackground(new Color(20,80,0));
+		status.setOpaque(true);
+		add(status);
 		
 		
 		this.createCardsButton();
@@ -264,6 +286,23 @@ public class GameWindow extends JFrame implements ActionListener
 			add(ptCardHand[i]);
 			add(ptCardHandB[i]);
 			add(ptCardTable[i]);
+
+			pbCardHand[i].setVisible(false);
+			pbCardTable[i].setVisible(false);
+			pbCardWinning[i].setVisible(false);
+
+
+			plCardHand[i].setVisible(false);
+			plCardHandB[i].setVisible(false);
+			plCardTable[i].setVisible(false);
+
+			prCardHand[i].setVisible(false);
+			prCardHandB[i].setVisible(false);
+			prCardTable[i].setVisible(false);
+
+			ptCardHand[i].setVisible(false);
+			ptCardHandB[i].setVisible(false);
+			ptCardTable[i].setVisible(false);
 		}
 	}
 	private void createAuctionButton()
@@ -271,6 +310,9 @@ public class GameWindow extends JFrame implements ActionListener
 		bAuction = new JButton[20];
 		lPass = new JButton("PASS");
 		Bomba = new JButton("Bomba");
+		bAuctionValue = new JLabel();
+		bAuctionPlayer = new JLabel();
+		
 		
 		for(int i=0; i<20; i++)
 		{
@@ -281,6 +323,8 @@ public class GameWindow extends JFrame implements ActionListener
 		}
 		add(lPass);
 		add(Bomba);
+		add(bAuctionValue);
+		add(bAuctionPlayer);
 		lPass.addActionListener(this);
 		Bomba.addActionListener(this);
 		
@@ -306,6 +350,9 @@ public class GameWindow extends JFrame implements ActionListener
 		bAuction[19].setBounds(925,585,60,30);
 		lPass.setBounds(715,620,130,30);
 		Bomba.setBounds(855,620,130,30);
+
+		bAuctionPlayer.setBounds(710, 350, 140, 25);
+		bAuctionValue.setBounds(850, 350, 140, 25);
 		
 	}
 	private void createPlayerBaner()
@@ -317,25 +364,65 @@ public class GameWindow extends JFrame implements ActionListener
 		p3 = new JLabel();
 		p4 = new JLabel();
 		
-		p1.setBounds(710,60,280,60);
-		p2.setBounds(710,120,280,60);
-		p3.setBounds(710,190,280,60);
-		p4.setBounds(710,250,280,60);	
+		p1.setBounds(710,10,280,40);
+		p2.setBounds(710,80,280,40);
+		p3.setBounds(710,150,280,40);
+		p4.setBounds(710,220,280,40);	
 		
 		p1.setForeground(Color.white);
 		p2.setForeground(Color.white);
 		p3.setForeground(Color.white);
 		p4.setForeground(Color.white);
 		
-		p1.setFont(new Font("Dejavu Sans", Font.BOLD, 20));
-		p2.setFont(new Font("Dejavu Sans", Font.BOLD, 20)); 
-		p3.setFont(new Font("Dejavu Sans", Font.BOLD, 20)); 
-		p4.setFont(new Font("Dejavu Sans", Font.BOLD, 20)); 
+		p1.setBackground(new Color(20,80,0));
+		p2.setBackground(new Color(20,80,0));
+		p3.setBackground(new Color(20,80,0));
+		p4.setBackground(new Color(20,80,0));
+
+		p1.setOpaque(true);
+		p2.setOpaque(true);
+		p3.setOpaque(true);
+		p4.setOpaque(true);
+		
+		p1.setFont(new Font("Dejavu Sans", Font.BOLD, 15));
+		p2.setFont(new Font("Dejavu Sans", Font.BOLD, 15)); 
+		p3.setFont(new Font("Dejavu Sans", Font.BOLD, 15)); 
+		p4.setFont(new Font("Dejavu Sans", Font.BOLD, 15)); 
 		
 		add(p1);
 		add(p2);
 		add(p3);
 		add(p4);
+		
+
+		
+		ptk1 = new JButton("0");
+		ptk2 = new JButton("0");
+		ptk3 = new JButton("0");
+		ptk4 = new JButton("0");
+		
+		ptk1.setBounds(710,50,280,20);
+		ptk2.setBounds(710,120,280,20);
+		ptk3.setBounds(710,190,280,20);
+		ptk4.setBounds(710,260,280,20);	
+		
+		ptk1.setBackground(Color.white);
+		ptk2.setBackground(Color.white);
+		ptk3.setBackground(Color.white);
+		ptk4.setBackground(Color.white);
+		
+		ptk1.setFont(new Font("Dejavu Sans", Font.BOLD, 14));
+		ptk2.setFont(new Font("Dejavu Sans", Font.BOLD, 14)); 
+		ptk3.setFont(new Font("Dejavu Sans", Font.BOLD, 14)); 
+		ptk4.setFont(new Font("Dejavu Sans", Font.BOLD, 14)); 
+		
+		
+		add(ptk1);
+		add(ptk2);
+		add(ptk3);
+		add(ptk4);
+	
+		
 		
 		LabelB = new JLabel();
 		LabelL = new JLabel();
@@ -469,6 +556,13 @@ public class GameWindow extends JFrame implements ActionListener
 		for(int i=2; i<20; i++)
 		{
 			bAuction[i].setEnabled(show);
+		}
+	}
+	public void enableCard(boolean show)
+	{
+		for(int i=0; i<24; i++)
+		{
+			pbCardHand[i].setEnabled(show);
 		}
 	}
 	
@@ -652,402 +746,74 @@ public class GameWindow extends JFrame implements ActionListener
 	{
 		Object source = e.getSource();
 		
+		for(int i=0; i<24; i++)
+		{
+			if(source == pbCardHand[i])
+			{
+				try 
+				{
+					GaD.sql.setStackCard(i, 's');
+				} 
+				catch (TysiacException e1) 
+				{
+					JOptionPane.showMessageDialog(null,e1.getErrorMessage());
+					e1.printStackTrace();
+				}
+				
+				this.enableCard(false);
+			}
+		}
+		for(int i=0; i<20; i++)
+		{
+			if(source == bAuction[i])
+			{
+				try 
+				{
+					GaD.sql.setAuctionValue(100+(i+1)*10);
+					GaD.sql.setAuctionPlayer(GaD.getPlace());
+				} 
+				catch (TysiacException e1) 
+				{
+					JOptionPane.showMessageDialog(null,e1.getErrorMessage());
+					e1.printStackTrace();
+				}
+			}
+		}
+
 		if(source == lPass)
 		{
-			
+			GaD.setAuctionSurrender(true);
+		}
+		if(source == Bomba)
+		{
+			try 
+			{
+				GaD.sql.setBomb(GaD.getPlace(), 1);
+			} 
+			catch (TysiacException e1) 
+			{
+				JOptionPane.showMessageDialog(null,e1.getErrorMessage());
+				e1.printStackTrace();
+			}
+			if(GaD.getPlace() == 1) GaD.getPlayer1().setBomb(1);
+			else if(GaD.getPlace() == 2) GaD.getPlayer2().setBomb(1);
+			else if(GaD.getPlace() == 3) GaD.getPlayer3().setBomb(1);
+			else if(GaD.getPlace() == 4) GaD.getPlayer4().setBomb(1);
+			remove(Bomba);
+		}
+		
+		try 
+		{
+			GaD.nextPlayer();
+		} 
+		catch (TysiacException e1) 
+		{
+			JOptionPane.showMessageDialog(null,e1.getErrorMessage());
+			e1.printStackTrace();
 		}
 	}
 	
-	/*
-	@Override
-	public void actionPerformed(ActionEvent e)
-	{
-		Object source = e.getSource();
-		
-		if(source==c1){
-			c1.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(2);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(2);
-			
-			//Container parent = c1.getParent();
-			//parent.remove(c1);
-			//parent.revalidate();
-			//parent.repaint();
-		}
-		else if(source==c2){
-			c2.setVisible(false);
-			
-			try {
-				changeLayoutCard(2);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(2);
-		}
-		else if(source==c3){
-			c3.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(2);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(2);
-		}
-		else if(source==c4)
-		{
-			c4.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(2);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(2);
-		}
-		else if(source==c5){
-			c5.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(2);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(2);
-		}
-		else if(source==c6){
-			c6.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(2);
-			} 
-			catch (InterruptedException e1) 
-			{
-
-				e1.printStackTrace();
-			}
-			setDisableButton(2);
-		}
-		else if(source==c7){
-			c7.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(2);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(2);
-		}
-		else if(source==c8){
-			c8.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(2);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(2);
-		}
-		else if(source==c9){
-			c9.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(1);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(1);
-		}
-		else if(source==c10){
-			c10.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(1);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(1);
-		}
-		else if(source==c11){
-			c11.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(1);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(1);
-		}
-		else if(source==c12){
-			c12.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(1);
-			} catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(1);
-		}
-		else if(source==c13){
-			c13.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(1);
-			} catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(1);
-		}
-		else if(source==c14){
-			c14.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(1);
-			} 
-			catch (InterruptedException e1) 
-			{		
-				e1.printStackTrace();
-			}
-			setDisableButton(1);
-		}
-		else if(source==c15){
-			c15.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(1);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(1);
-		}
-		else if(source==c16){
-			c16.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(1);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(1);
-		}
-		else if(source==c17){
-			c17.setVisible(false);
-			
-			try {
-				changeLayoutCard(3);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(3);
-		}
-		else if(source==c18){
-			c18.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(3);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(3);
-		}
-		else if(source==c19){
-			c19.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(3);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(3);
-		}
-		else if(source==c20){
-			c20.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(3);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(3);
-		}
-		else if(source==c21){
-			c21.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(3);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(3);
-		}
-		else if(source==c22){
-			c22.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(3);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(3);
-		}
-		else if(source==c23){
-			c23.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(3);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(3);
-		}
-		else if(source==c24){
-			c24.setVisible(false);
-			
-			try 
-			{
-				changeLayoutCard(3);
-			} 
-			catch (InterruptedException e1) 
-			{
-				e1.printStackTrace();
-			}
-			setDisableButton(3);
-		}
-		else if(source==l110){
-			setAuction(110);
-		}
-		else if(source==l120){
-			setAuction(120);
-		}
-		else if(source==l130){
-			setAuction(130);
-		}
-		else if(source==l140){
-			setAuction(140);
-		}
-		else if(source==l150){
-			setAuction(150);
-		}
-		else if(source==l160){
-			setAuction(160);
-		}
-		else if(source==l170){
-			setAuction(170);
-		}
-		else if(source==l180){
-			setAuction(180);
-		}
-		else if(source==l190){
-			setAuction(190);
-		}
-		else if(source==l200){
-			setAuction(200);
-		}
-		else if(source==l210){
-			setAuction(210);
-		}
-		else if(source==l220){
-			setAuction(220);
-		}
-		else if(source==l230){
-			setAuction(230);
-		}
-		else if(source==l240){
-			setAuction(240);
-		}
-		else if(source==l250){
-			setAuction(250);
-		}
-		else if(source==l260){
-			setAuction(260);
-		}
-		else if(source==l270){
-			setAuction(270);
-		}
-		else if(source==l280){
-			setAuction(280);
-		}
-		else if(source==l290){
-			setAuction(290);
-		}
-		else if(source==l300){
-			setAuction(300);
-		}
-		else if(source==lPass){
-			setAuction(1);
-		}
-		else if(source==Bomba){
-			bomb();
-		}
-		
-	}
-	*/
+	
 	
 	public void setAuction(int amount) 
 	{
@@ -1058,81 +824,7 @@ public class GameWindow extends JFrame implements ActionListener
 	{
 		return this.auction;
 	}
-
-	public void bomb()
-	{
-		//co to za gracz
-		//brak mozliwosci kolejnej bomby
-		//dodaj po 60 pkt innnym
-		Bomba.setVisible(false);
-	}
 	
-	/*
-	public void setDisableButton(int checkB)
-	{
-		if(checkB==2)
-		{
-			c1.setEnabled(false);
-			c2.setEnabled(false);
-			c3.setEnabled(false);
-			c4.setEnabled(false);
-			c5.setEnabled(false);
-			c6.setEnabled(false);
-			c7.setEnabled(false);
-			c8.setEnabled(false);
-		}	
-		else if(checkB==1)
-		{
-			c9.setEnabled(false);
-			c10.setEnabled(false);
-			c11.setEnabled(false);
-			c12.setEnabled(false);
-			c13.setEnabled(false);
-			c14.setEnabled(false);
-			c15.setEnabled(false);
-			c16.setEnabled(false);	
-		}
-		else if(checkB==3)
-		{
-			c17.setEnabled(false);
-			c18.setEnabled(false);
-			c19.setEnabled(false);
-			c20.setEnabled(false);
-			c21.setEnabled(false);
-			c22.setEnabled(false);
-			c23.setEnabled(false);
-			c24.setEnabled(false);	
-		}
-	}
-	
-	public void setEnableButton()
-	{
-		c1.setEnabled(true);
-		c2.setEnabled(true);
-		c3.setEnabled(true);
-		c4.setEnabled(true);
-		c5.setEnabled(true);
-		c6.setEnabled(true);
-		c7.setEnabled(true);
-		c8.setEnabled(true);
-		c9.setEnabled(true);
-		c10.setEnabled(true);
-		c11.setEnabled(true);
-		c12.setEnabled(true);
-		c13.setEnabled(true);
-		c14.setEnabled(true);
-		c15.setEnabled(true);
-		c16.setEnabled(true);
-		c17.setEnabled(true);
-		c18.setEnabled(true);
-		c19.setEnabled(true);
-		c20.setEnabled(true);
-		c21.setEnabled(true);
-		c22.setEnabled(true);
-		c23.setEnabled(true);
-		c24.setEnabled(true);
-	}
-*/
 	
 	public void setPlayerName(String player1, String player2, String player3, String player4)
 	{
@@ -1196,6 +888,51 @@ public class GameWindow extends JFrame implements ActionListener
 		
 	}
 
+	public void setPlayer1Point(int point)
+	{
+		ptk1.setText(Integer.toString(point));
+	}
+	public void setPlayer2Point(int point)
+	{
+		ptk2.setText(Integer.toString(point));
+	}
+	public void setPlayer3Point(int point)
+	{
+		ptk3.setText(Integer.toString(point));
+	}
+	public void setPlayer4Point(int point)
+	{
+		ptk4.setText(Integer.toString(point));
+	}
+	public void setbAuctionValue(int value) 
+	{
+		bAuctionValue.setText(Integer.toString(value));
+	}
+	public void setbAuctionPlayer(int player) 
+	{
+		bAuctionPlayer.setText("Player" + Integer.toString(player) + ": ");
+	}
+
+	public void setPlayersPoint(int point1, int point2, int point3)
+	{
+		this.setPlayer1Point(point1);
+		this.setPlayer2Point(point2);
+		this.setPlayer3Point(point3);
+	}
+	public void setPlayersPoint(int point1, int point2, int point3, int point4)
+	{
+		this.setPlayer1Point(point1);
+		this.setPlayer2Point(point2);
+		this.setPlayer3Point(point3);
+		this.setPlayer4Point(point4);
+	}
+	
+	public void setStatus(String s)
+	{
+		status.setText(s);
+	}
+	
+
 	public GameData getGameData() 
 	{
 		return GaD;
@@ -1204,4 +941,5 @@ public class GameWindow extends JFrame implements ActionListener
 	{
 		dispose();
 	}
+
 }

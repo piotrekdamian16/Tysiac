@@ -184,7 +184,7 @@ public class SQL
 							     + "`suma_pkt_1`, `suma_pkt_2`, `suma_pkt_3`, `suma_pkt_4`, `runda_pkt_1`, `runda_pkt_2`, `runda_pkt_3`, `runda_pkt_4`, `bomba_gracz_1`, `bomba_gracz_2`, `bomba_gracz_3`, `bomba_gracz_4`, `licytacja_ile`, `licytacja_gracz`, `kolor`, `status`, `zaczal`) "
 								 + "VALUES "
 								 + "('"+GaD.getAccessCode()+"', "+typeTable+", "+idPlayer1+",NULL,NULL,NULL,"+movement+", "+must+", "+trio+", "
-								 + "0,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL,'Tworzenie stolu', 1) ", Statement.RETURN_GENERATED_KEYS);
+								 + "0,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL,'Tworzenie stołu', 1) ", Statement.RETURN_GENERATED_KEYS);
 
 				ResultSet rs = stmt.getGeneratedKeys();
 				
@@ -1530,9 +1530,7 @@ public class SQL
 	}
 	
 	
-	
-	
-	
+
 
 	public int getSumCardValue(int player) throws TysiacException
 	{
