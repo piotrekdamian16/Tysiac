@@ -43,7 +43,7 @@ public class Game extends GameData
 			
 
 			
-			if(game.getPlace() == 1) game.sql.setStatus("TEST");
+			if(game.getPlace() == 1) game.sql.setStatus("TEST"); //ala ma kota 
 			game.setStatus();
 			game.GameW.setStatus(game.getStatus());
 			game.updateStacks(); //przypisuje karty z bazy do graczy
