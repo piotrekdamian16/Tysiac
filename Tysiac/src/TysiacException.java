@@ -82,7 +82,7 @@ public class TysiacException extends Exception
 		errors.put(116, "Incorrect value of parameter, points must be divisible by 10");
 		errors.put(117, "Incorrect value of parameter, expected max 1000");
 		errors.put(118, "Incorrect value of parameter, expected 0 or 1");
-		errors.put(119, "Incorrect value of parameter, expected 110 - 300");
+		errors.put(119, "Incorrect value of parameter, expected 100 - 300");
 		errors.put(120, "Incorrect value of parameter, expected `C`, `D`, `Z`, `W` or `\\0` as null color");
 		
 		//Wyswietlanie

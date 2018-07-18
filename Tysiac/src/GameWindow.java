@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
 public class GameWindow extends JFrame implements ActionListener
@@ -25,6 +26,7 @@ public class GameWindow extends JFrame implements ActionListener
 	private JLabel statusText, status;
 	private int auction;
 	private GameData GaD;
+	private JTextField accessCode;
 	
 	
 
@@ -77,13 +79,13 @@ public class GameWindow extends JFrame implements ActionListener
 
 		//Separator okna 
 		line = new JButton();
-		line.setBounds(700, 0, 5, 700);
+		line.setBounds(300, 0, 5, 700);
 		add(line);
 		line.setEnabled(false);
 		
 
 		statusText = new JLabel("Status Gry:");
-		statusText.setBounds(710, 300, 280, 25);
+		statusText.setBounds(10, 300, 280, 25);
 		statusText.setFont(new Font("Dejavu Sans", Font.BOLD, 15));
 		statusText.setForeground(Color.white);
 		statusText.setBackground(new Color(20,80,0));
@@ -92,7 +94,7 @@ public class GameWindow extends JFrame implements ActionListener
 		
 
 		status = new JLabel();
-		status.setBounds(710, 325, 280, 25);
+		status.setBounds(10, 325, 280, 25);
 		status.setFont(new Font("Dejavu Sans", Font.BOLD, 15));
 		status.setForeground(Color.white);
 		status.setBackground(new Color(20,80,0));
@@ -312,7 +314,9 @@ public class GameWindow extends JFrame implements ActionListener
 		Bomba = new JButton("Bomba");
 		bAuctionValue = new JLabel();
 		bAuctionPlayer = new JLabel();
-		
+
+		bAuctionPlayer.setForeground(Color.WHITE);
+		bAuctionValue.setForeground(Color.WHITE);
 		
 		for(int i=0; i<20; i++)
 		{
@@ -328,31 +332,31 @@ public class GameWindow extends JFrame implements ActionListener
 		lPass.addActionListener(this);
 		Bomba.addActionListener(this);
 		
-		bAuction[0].setBounds(715,445,60,30);  //ustaw przyciski licytacji
-		bAuction[1].setBounds(785,445,60,30);
-		bAuction[2].setBounds(855,445,60,30);
-		bAuction[3].setBounds(925,445,60,30);
-		bAuction[4].setBounds(715,480,60,30);
-		bAuction[5].setBounds(785,480,60,30);
-		bAuction[6].setBounds(855,480,60,30);
-		bAuction[7].setBounds(925,480,60,30);
-		bAuction[8].setBounds(715,515,60,30);
-		bAuction[9].setBounds(785,515,60,30);
-		bAuction[10].setBounds(855,515,60,30);
-		bAuction[11].setBounds(925,515,60,30);
-		bAuction[12].setBounds(715,550,60,30);
-		bAuction[13].setBounds(785,550,60,30);
-		bAuction[14].setBounds(855,550,60,30);
-		bAuction[15].setBounds(925,550,60,30);
-		bAuction[16].setBounds(715,585,60,30);
-		bAuction[17].setBounds(785,585,60,30);
-		bAuction[18].setBounds(855,585,60,30);
-		bAuction[19].setBounds(925,585,60,30);
-		lPass.setBounds(715,620,130,30);
-		Bomba.setBounds(855,620,130,30);
+		bAuction[0].setBounds(15,445,60,30);  //ustaw przyciski licytacji
+		bAuction[1].setBounds(85,445,60,30);
+		bAuction[2].setBounds(155,445,60,30);
+		bAuction[3].setBounds(225,445,60,30);
+		bAuction[4].setBounds(15,480,60,30);
+		bAuction[5].setBounds(85,480,60,30);
+		bAuction[6].setBounds(155,480,60,30);
+		bAuction[7].setBounds(225,480,60,30);
+		bAuction[8].setBounds(15,515,60,30);
+		bAuction[9].setBounds(85,515,60,30);
+		bAuction[10].setBounds(155,515,60,30);
+		bAuction[11].setBounds(225,515,60,30);
+		bAuction[12].setBounds(15,550,60,30);
+		bAuction[13].setBounds(85,550,60,30);
+		bAuction[14].setBounds(155,550,60,30);
+		bAuction[15].setBounds(225,550,60,30);
+		bAuction[16].setBounds(15,585,60,30);
+		bAuction[17].setBounds(85,585,60,30);
+		bAuction[18].setBounds(155,585,60,30);
+		bAuction[19].setBounds(225,585,60,30);
+		lPass.setBounds(15,620,130,30);
+		Bomba.setBounds(155,620,130,30);
 
-		bAuctionPlayer.setBounds(710, 350, 140, 25);
-		bAuctionValue.setBounds(850, 350, 140, 25);
+		bAuctionPlayer.setBounds(10, 350, 140, 25);
+		bAuctionValue.setBounds(150, 350, 140, 25);
 		
 	}
 	private void createPlayerBaner()
@@ -364,10 +368,10 @@ public class GameWindow extends JFrame implements ActionListener
 		p3 = new JLabel();
 		p4 = new JLabel();
 		
-		p1.setBounds(710,10,280,40);
-		p2.setBounds(710,80,280,40);
-		p3.setBounds(710,150,280,40);
-		p4.setBounds(710,220,280,40);	
+		p1.setBounds(10,10,280,40);
+		p2.setBounds(10,80,280,40);
+		p3.setBounds(10,150,280,40);
+		p4.setBounds(10,220,280,40);	
 		
 		p1.setForeground(Color.white);
 		p2.setForeground(Color.white);
@@ -401,10 +405,10 @@ public class GameWindow extends JFrame implements ActionListener
 		ptk3 = new JButton("0");
 		ptk4 = new JButton("0");
 		
-		ptk1.setBounds(710,50,280,20);
-		ptk2.setBounds(710,120,280,20);
-		ptk3.setBounds(710,190,280,20);
-		ptk4.setBounds(710,260,280,20);	
+		ptk1.setBounds(10,50,280,20);
+		ptk2.setBounds(10,120,280,20);
+		ptk3.setBounds(10,190,280,20);
+		ptk4.setBounds(10,260,280,20);	
 		
 		ptk1.setBackground(Color.white);
 		ptk2.setBackground(Color.white);
@@ -484,8 +488,10 @@ public class GameWindow extends JFrame implements ActionListener
 	}
 	
 	
-	public void displayMovementArrow()
+	public void displayMovementArrow() throws TysiacException
 	{
+		GaD.setMovement();
+		
 		if(GaD.getTypeTable() == 3 && GaD.getPlace() == 1)
 		{
 			if(GaD.getMovement() == 1) arrowB.setVisible(true);
@@ -556,6 +562,19 @@ public class GameWindow extends JFrame implements ActionListener
 		for(int i=2; i<20; i++)
 		{
 			bAuction[i].setEnabled(show);
+		}
+	}
+	public void enableAuctionOver(int value)
+	{
+		int i=0; 
+		if(value > 100) i = (value - 100)/10-1;
+		for(int j=0; j<=i; j++)
+		{
+			bAuction[i].setEnabled(false);
+		}
+		for(; i<20; i++)
+		{
+			bAuction[i].setEnabled(true);
 		}
 	}
 	public void enableCard(boolean show)
@@ -660,17 +679,17 @@ public class GameWindow extends JFrame implements ActionListener
 		//Karty gracza na dole Hand table i Winning
 		for(int i=0; i<pb_h.length; i++)
 		{
-			pbCardHand[pb_h[i]].setLocation(25+i*70 +((10-pb_h.length)*35), 525);
+			pbCardHand[pb_h[i]].setLocation(325+i*70 +((10-pb_h.length)*35), 525);
 			pbCardHand[pb_h[i]].setVisible(true);
 		}
 		for(int i=0; i<pb_t.length; i++)
 		{
-			pbCardTable[pb_t[i]].setLocation(320, 350);
+			pbCardTable[pb_t[i]].setLocation(620, 350);
 			pbCardTable[pb_t[i]].setVisible(true);
 		}
 		for(int i=0; i<pb_w.length; i++)
 		{
-			pbCardWinning[pb_w[i]].setLocation(10+i*28, 630);
+			pbCardWinning[pb_w[i]].setLocation(310+i*28, 630);
 			pbCardWinning[pb_w[i]].setVisible(true);
 		}
 		
@@ -680,12 +699,12 @@ public class GameWindow extends JFrame implements ActionListener
 		{
 			if(showCard == true)
 			{
-				plCardHand[pl_h[i]].setLocation(25, 70+i*45 +((10-pl_h.length)*22));
+				plCardHand[pl_h[i]].setLocation(325, 70+i*45 +((10-pl_h.length)*22));
 				plCardHand[pl_h[i]].setVisible(true);
 			}
 			else
 			{
-				plCardHandB[pl_h[i]].setLocation(25, 70+i*45 +((10-pl_h.length)*22));
+				plCardHandB[pl_h[i]].setLocation(325, 70+i*45 +((10-pl_h.length)*22));
 				plCardHandB[pl_h[i]].setVisible(true);
 			}
 		}
@@ -700,12 +719,12 @@ public class GameWindow extends JFrame implements ActionListener
 		{
 			if(showCard == true)
 			{
-				prCardHand[pr_h[i]].setLocation(605, 70+i*45 +((10-pr_h.length)*22));
+				prCardHand[pr_h[i]].setLocation(905, 70+i*45 +((10-pr_h.length)*22));
 				prCardHand[pr_h[i]].setVisible(true);
 			}
 			else
 			{
-				prCardHandB[pr_h[i]].setLocation(605, 70+i*45 +((10-pr_h.length)*22));
+				prCardHandB[pr_h[i]].setLocation(905, 70+i*45 +((10-pr_h.length)*22));
 				prCardHandB[pr_h[i]].setVisible(true);
 			}
 		}
@@ -721,12 +740,12 @@ public class GameWindow extends JFrame implements ActionListener
 		{
 			if(showCard == true)
 			{
-				ptCardHand[pt_h[i]].setLocation(125+i*45 +((10-pt_h.length)*22), 25);
+				ptCardHand[pt_h[i]].setLocation(425+i*45 +((10-pt_h.length)*22), 25);
 				ptCardHand[pt_h[i]].setVisible(true);
 			}
 			else
 			{
-				ptCardHandB[pt_h[i]].setLocation(125+i*45 +((10-pt_h.length)*22), 25);
+				ptCardHandB[pt_h[i]].setLocation(425+i*45 +((10-pt_h.length)*22), 25);
 				ptCardHandB[pt_h[i]].setVisible(true);
 			}
 		}
@@ -753,6 +772,7 @@ public class GameWindow extends JFrame implements ActionListener
 				try 
 				{
 					GaD.sql.setStackCard(i, 's');
+					GaD.nextPlayer();
 				} 
 				catch (TysiacException e1) 
 				{
@@ -771,6 +791,8 @@ public class GameWindow extends JFrame implements ActionListener
 				{
 					GaD.sql.setAuctionValue(100+(i+1)*10);
 					GaD.sql.setAuctionPlayer(GaD.getPlace());
+					GaD.sql.setStatus(GaD.sql.getStatus()+".");
+					GaD.nextPlayer();
 				} 
 				catch (TysiacException e1) 
 				{
@@ -783,12 +805,22 @@ public class GameWindow extends JFrame implements ActionListener
 		if(source == lPass)
 		{
 			GaD.setAuctionSurrender(true);
+			try 
+			{
+				GaD.nextPlayer();
+			} 
+			catch (TysiacException e1) 
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		if(source == Bomba)
 		{
 			try 
 			{
 				GaD.sql.setBomb(GaD.getPlace(), 1);
+				GaD.nextPlayer();
 			} 
 			catch (TysiacException e1) 
 			{
@@ -800,16 +832,6 @@ public class GameWindow extends JFrame implements ActionListener
 			else if(GaD.getPlace() == 3) GaD.getPlayer3().setBomb(1);
 			else if(GaD.getPlace() == 4) GaD.getPlayer4().setBomb(1);
 			remove(Bomba);
-		}
-		
-		try 
-		{
-			GaD.nextPlayer();
-		} 
-		catch (TysiacException e1) 
-		{
-			JOptionPane.showMessageDialog(null,e1.getErrorMessage());
-			e1.printStackTrace();
 		}
 	}
 	
@@ -940,6 +962,23 @@ public class GameWindow extends JFrame implements ActionListener
 	public void closeWindow()
 	{
 		dispose();
+	}
+
+	public JTextField getAccessCode() {
+		return accessCode;
+	}
+
+	public void displayAccessCode(String ac) 
+	{
+		accessCode = new JTextField(ac);
+		accessCode.setFont(f100);
+		accessCode.setBounds(100, 300, 500, 100);
+		accessCode.setVisible(true);
+		add(accessCode);
+	}
+	public void removeAccessCode()
+	{
+		remove(accessCode);
 	}
 
 }

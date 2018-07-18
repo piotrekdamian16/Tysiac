@@ -9,8 +9,6 @@ public class User
 	private StackCard scTable;
 	private StackCard scWinnings;
 	private int bomb=0;
-
-	private int reportC, reportZ, reportD, reportW;
 	
 	public User (int it, int iu, String un, int p)
 	{
@@ -57,38 +55,33 @@ public class User
 	}
 
 
-
-	public void setReports(char color, int who)  //ustawia kto ma jaki meldunek w reku
+	public boolean checkReport(char color)
 	{
-		if(color == 'C')
+		int counter=0;
+		for(int i=0; i<scHand.getCards().length; i++)
 		{
-			this.reportC = who;
+			if(color == 'C' && (scHand.getCard(i)==2 || scHand.getCard(i)==3))
+			{
+				counter++;
+			}
+			else if(color == 'Z' && (scHand.getCard(i)==8 || scHand.getCard(i)==9))
+			{
+				counter++;
+			}
+			else if(color == 'D' && (scHand.getCard(i)==14 || scHand.getCard(i)==15))
+			{
+				counter++;
+			}
+			else if(color == 'W' && (scHand.getCard(i)==20 || scHand.getCard(i)==21))
+			{
+				counter++;
+			}
 		}
-		else if(color == 'Z')
-		{
-			this.reportZ = who;
-		}
-		else if(color == 'D')
-		{
-			this.reportD = who;
-		}
-		else if(color == 'W')
-		{
-			this.reportW = who;
-		}
+		if(counter == 2) return true;
+		
+		return false;
 	}
 	
-	public int [] getReports() // zwraca tablice z wartościami ktory gracz ma dany meldunek 
-	{																			// [0] - czerwo
-		int [] tabReports = new int[4];											// [1] - zoladz
-																				// [2] - dzwonek
-		tabReports[0] = reportC;												// [3] - wino
-		tabReports[1] = reportZ;
-		tabReports[2] = reportD;
-		tabReports[3] = reportW;	
-		
-		return tabReports;																		
-	}	
 	
 	public void updateStacks(int [] sch, int [] sct, int [] scw) throws TysiacException
 	{

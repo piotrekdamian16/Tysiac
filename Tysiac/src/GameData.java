@@ -24,6 +24,7 @@ public class GameData
 	protected int movement; // kto wykonuje ruch
 	protected int started; // kto wykonuje ruch
 	protected int trio; // kto ma 3 karty (jeżeli stół na 3 osoby to gracz 4)
+	protected int counterMoves;
 
 	protected int auction; // wartość licytacji
 	protected int auctionPlayer; // kto się licytuje i wygrywa (potem kto wygrał jak reszta spasuje)
@@ -35,7 +36,7 @@ public class GameData
 	protected Card[] cards = new Card[25];
 	protected SQL sql = null;
 
-	private boolean BOTShowGameWindow;
+	private boolean BOTShowGameWindow = false;
 	
 
 	LoginWindow LogW;
@@ -54,8 +55,6 @@ public class GameData
 	protected int [] cp2 = new int[7]; //= {11, 21, 4, 12, 0, 16, 23};
 	protected int [] cp3 = new int[7]; //= {20, 5, 2, 13, 19, 3, 22};
 	protected int [] cp4 = new int[3]; //= {14, 6, 1};
-	
-	protected int Round = 0,tmpRound = 0;
 	
 	//int checkL;
 	
@@ -233,6 +232,10 @@ public class GameData
 	{
 		return trio;
 	}
+	protected int getCounterMoves() 
+	{
+		return counterMoves;
+	}
 	protected int getAuction() 
 	{
 		return auction;
@@ -329,6 +332,10 @@ public class GameData
 	protected void setTrio() throws TysiacException 
 	{
 		this.trio = sql.getTrio();
+	}
+	protected void setCounterMoves(int counterMoves) 
+	{
+		this.counterMoves = counterMoves;
 	}
 	protected void setAuction() throws TysiacException 
 	{
@@ -432,7 +439,7 @@ public class GameData
 			
 			if(this.getPlayClick2() == 1)
 			{
-				sql.createTable(typeTable, idUser, 1, 2, 4);
+				sql.createTable(typeTable, idUser, 1, 1, 4);
 				tmp = this.getIdTable();
 				while(this.getAccessCode() == null);
 				if(tmp <=0 )
@@ -671,48 +678,35 @@ public class GameData
 	
 	
 	
-	protected void checkReports()  // przypisuje meldunkowi numer gracza jesli ma
+	protected boolean checkReport(int player, char color)  // przypisuje meldunkowi numer gracza jesli ma
 	{	
-		int [][] cardP = new int [4][8];
-		cardP = getCardsPlayers();
-		
-		for(int i=0; i<player1.getScHand().getCount();i++)
+		if(player == 1)
 		{
-			if(cardP[0][i] == 2 && cardP[0][i] == 3) player.setReports('C',1);		//meldunek 100 czerwo gracz1
-			if(cardP[0][i] == 8 && cardP[0][i] == 9) player.setReports('Z',1);		//meldunek 40 żołądź gracz1
-			if(cardP[0][i] == 14 && cardP[0][i] == 15) player.setReports('D',1);	//meldunek 80 dzwonek gracz1
-			if(cardP[0][i] == 20 && cardP[0][i] == 21) player.setReports('W',1);	//meldunek 60  gracz1
-			
-			if(cardP[1][i] == 2 && cardP[1][i] == 3) player.setReports('C',2);		//meldunek 100 czerwo gracz2
-			if(cardP[1][i] == 8 && cardP[1][i] == 9) player.setReports('Z',2);		//meldunek 40 żołądź gracz2
-			if(cardP[1][i] == 14 && cardP[1][i] == 15) player.setReports('D',2);	//meldunek 80 dzwonek gracz2
-			if(cardP[2][i] == 20 && cardP[2][i] == 21) player.setReports('W',2);	//meldunek 60 WINO gracz2
-			
-			if(cardP[2][i] == 2 && cardP[2][i] == 3) player.setReports('C',3);		//meldunek 100 czerwo gracz3			
-			if(cardP[2][i] == 8 && cardP[2][i] == 9) player.setReports('Z',3);		//meldunek 40 żołądź gracz3			
-			if(cardP[2][i] == 14 && cardP[2][i] == 15) player.setReports('D',3);	//meldunek 80 dzwonek gracz3			
-			if(cardP[2][i] == 20 && cardP[2][i] == 21) player.setReports('W',3);	//meldunek 60 WINO gracz3
-						
-			if(cardP[3][i] == 2 && cardP[3][i] == 3) player.setReports('C',4);		//meldunek 100 czerwo gracz4			
-			if(cardP[3][i] == 8 && cardP[3][i] == 9) player.setReports('Z',4);		//meldunek 40 żołądź gracz4			
-			if(cardP[3][i] == 14 && cardP[3][i] == 15) player.setReports('D',4);	//meldunek 80 dzwonek gracz4			
-			if(cardP[3][i] == 20 && cardP[3][i] == 21) player.setReports('W',4);		//meldunek 60 WINO gracz4				
-		}		
-	}
-	
-	protected int[][] getCardsPlayers()  //pobiera karty graczy
-	{
-		int [][] cardP = new int [4][8];
-
-		for(int i=0; i<player1.getScHand().getCount(); i++)
+			return player1.checkReport(color);
+		}
+		else if(player == 2)
 		{
-			cardP[0][i] = player1.getScHand().getCard(i);
-			cardP[1][i] = player2.getScHand().getCard(i); 
-			cardP[2][i] = player3.getScHand().getCard(i); 
-			cardP[3][i] = player4.getScHand().getCard(i); 
+			return player2.checkReport(color);
+		}
+		else if(player == 3)
+		{
+			return player3.checkReport(color);
+		}
+		else if(player == 4)
+		{
+			return player4.checkReport(color);
 		}
 		
-		return cardP;
+		return false;
+	}
+	protected boolean checkReports(int player)
+	{
+		if(this.checkReport(player, 'C') == true) return true;
+		else if(this.checkReport(player, 'Z') == true) return true;
+		else if(this.checkReport(player, 'D') == true) return true;
+		else if(this.checkReport(player, 'W') == true) return true;
+		
+		return false;
 	}
 	
 	protected int checkCards(int c1, int c2, int c3,int c4) throws TysiacException // sprawdza karty do kogo po tym jak sie wyrzuci z po meldunku  
@@ -809,7 +803,7 @@ public class GameData
 	{
 		int [][] cardsP = new int[4][8];
 		int [][] cards = new int[4][8];
-		cards = getCardsPlayers();
+		//cards = getCardsPlayers();
 		
 		char color = getColorC(c1);
 
@@ -859,60 +853,74 @@ public class GameData
 		return flagAddP;
 	}
 	
-	protected int setRound() // ktora runda
-	{
-		tmpRound();
-		return Round++;
-	}
 	
-	protected void tmpRound()
+	protected void newRound() throws TysiacException // kto jest na 100 i kto na musku
 	{
-		int tmp = 0;
-		tmp++;
+
 		
-		if(tmp > 4)
+		if(typeTable == 3 && must == 1)
 		{
-			tmp = 0;
+			trio = 4;
+			must = 2;
+			movement = 3;
+			started = 3;
 		}
-		
-		tmpRound = tmp;
-	}
-	
-	protected void whose100() throws TysiacException // kto jest na 100 i kto na musku
-	{
-		if(tmpRound == 1)
+		else if(typeTable == 3 && must == 2)
 		{
 			trio = 4;
 			must = 3;
 			movement = 1;
-			started = 3;
-		}
-		else if(tmpRound ==2)
-		{
-			trio = 3;
-			must = 1;
-			movement = 2;
-			started = 3;
-		}
-		else if(tmpRound ==3)
-		{
-			trio = 1;
-			must = 2;
-			movement = 4;
-			started = 2;
-		}
-		else if(tmpRound ==4)
-		{
-			trio = 2;
-			must = 4;
-			movement = 3;
 			started = 1;
 		}
+		else if(typeTable == 3 && must == 3)
+		{
+			trio = 4;
+			must = 1;
+			movement = 2;
+			started = 2;
+		}
+		else if(typeTable == 4 && must == 1)
+		{
+			trio = 4;
+			must = 2;
+			movement = 3;
+			started = 3;
+		}
+		else if(typeTable == 4 && must == 2)
+		{
+			trio = 3;
+			must = 4;
+			movement = 1;
+			started = 1;
+		}
+		else if(typeTable == 4 && must == 3)
+		{
+			trio = 1;
+			must = 3;
+			movement = 2;
+			started = 2;
+		}
+		else if(typeTable == 4 && must == 4)
+		{
+			trio = 2;
+			must = 1;
+			movement = 4;
+			started = 4;
+		}
+		counterMoves=0;
 		
 		sql.setTrio(trio);
 		sql.setMust(must);
 		sql.setMovement(movement);
 		sql.setStarted(started);
+		
+		sql.setAuctionPlayer(must);
+		sql.setAuctionValue(100);
+
+		sql.setSurrender(1, 0);
+		sql.setSurrender(2, 0);
+		sql.setSurrender(3, 0);
+		sql.setSurrender(4, 0);
 	}
 	
 	/*protected int setStartMovementRound() // kto zaczyna dana runde (ten co wylicytował najwiecej)

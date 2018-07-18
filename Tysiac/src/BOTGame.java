@@ -11,47 +11,97 @@ public class BOTGame extends GameData
 	
 	public static void main(String[] args)
 	{		
-		BOTGame BOT = null;
+		BOTGame game = null;
 		try 
 		{
-			BOT = new BOTGame();
+			game = new BOTGame();
 			
-			BOT.BOTSitToTable();
-			while(BOT.sql.getStatus() == "Tworzenie stołu");
-			
-			if(BOT.getBOTShowGameWindow())BOT.displayGameWindow();
-			
-			BOT.setStatus();
-			BOT.GameW.setStatus(BOT.getStatus());
-			while(BOT.sql.getStatus() == "Czekanie na graczy");
+			game.BOTSitToTable();
+			game.displayGameWindow();
 			
 			
-			BOT.setPlayerInfo();
-			
-			BOT.setMovement();
-			BOT.setMust();
-			BOT.setTrio();
-			BOT.setStarted();
-			
-			
-			BOT.setStatus();
-			BOT.GameW.setStatus(BOT.getStatus());
-			while(BOT.sql.getStatus() == "Rozdawanie Kart");
+			do
+			{
+				game.setStatus();
+				game.GameW.setStatus(game.getStatus());
+				
+				if(game.getStatus().equals("Czekanie na graczy"))
+				{
+					//Czekam na graczy
+				}
+				else if(game.getStatus().equals("Komplet graczy"))
+				{
+					//Pobieranie Danych o graczach i o stole
+					game.setPlayerInfo();
+					
+					game.setMovement();
+					game.setMust();
+					game.setTrio();
+					game.setStarted();
+				}
+				else if(game.getStatus().equals("Rozdawanie Kart"))
+				{
+					//Czekam na rozdanie kart
+				}
+				else if(game.getStatus().equals("Licytacja"))
+				{
+					game.updateStacks(); //przypisuje karty z bazy do graczy
 
-			BOT.updateStacks(); //przypisuje karty z bazy do graczy
+					if(game.getBOTShowGameWindow() == true) 
+					{
+						game.GameW.displayCard(false);
+					}
+					game.GameW.displayMovementArrow();
+					
+					do
+					{
+						game.GameW.displayMovementArrow();
+						game.setAuctionPlayer();
+						game.setAuction();
+						game.setStarted();
+						game.setMovement();
+						
+						if(game.getAuctionSurrender() == true)
+						{
+							game.nextPlayer();
+						}
+						
+						if(game.getMovement() == game.getPlace())
+						{
+							game.GameW.displayAuction(true);
+							game.GameW.enableAuctionOver(game.getAuction());
+							game.GameW.enableAuctionMore120(game.checkReports(game.getPlace()));
+						}
+						else
+						{
+							game.GameW.displayAuction(false);
+						}
+					}
+					while(game.getStatus().equals("Pokaz 3 kart"));
+				}
+				else if(game.getStatus().equals("Pokaz 3 kart"))
+				{
+					//Czekam na rozdanie kart
+				}
+				else if(game.getStatus().equals("Gra"))
+				{
+					//Czekam na rozdanie kart
+				}
+				else if(game.getStatus().equals("Koniec"))
+				{
+					game.finished = true;
+				}
+					
+				
+				
+				while(game.sql.getStatus().equals(game.getStatus()));
+			}
+			while(game.finished == false);
+			
 
 
 			
-			BOT.setStatus();
-			BOT.GameW.setStatus(BOT.getStatus());
 			
-			
-			BOT.GameW.displayCard(true);
-			BOT.GameW.displayMovementArrow();
-			
-			
-			BOT.GameW.enableAuctionMore120(false);
-			while(BOT.sql.getStatus() == "TEST");
 			
 		} 
 		catch (TysiacException e) 

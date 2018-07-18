@@ -181,10 +181,10 @@ public class SQL
 			try 
 			{
 				stmt.executeUpdate("INSERT INTO `Stoly`(`kod_dostepu`, `typ_stolu`, `id_gracz_1`, `id_gracz_2`, `id_gracz_3`, `id_gracz_4`, `ruch`, `musek`, `trojka`, "
-							     + "`suma_pkt_1`, `suma_pkt_2`, `suma_pkt_3`, `suma_pkt_4`, `runda_pkt_1`, `runda_pkt_2`, `runda_pkt_3`, `runda_pkt_4`, `bomba_gracz_1`, `bomba_gracz_2`, `bomba_gracz_3`, `bomba_gracz_4`, `licytacja_ile`, `licytacja_gracz`, `kolor`, `status`, `zaczal`) "
+							     + "`suma_pkt_1`, `suma_pkt_2`, `suma_pkt_3`, `suma_pkt_4`, `runda_pkt_1`, `runda_pkt_2`, `runda_pkt_3`, `runda_pkt_4`, `bomba_gracz_1`, `bomba_gracz_2`, `bomba_gracz_3`, `bomba_gracz_4`, `licytacja_ile`, `licytacja_gracz`, `kolor`, `status`, `zaczal`, `pas_gracz_1`, `pas_gracz_2`, `pas_gracz_3`, `pas_gracz_4`) "
 								 + "VALUES "
 								 + "('"+GaD.getAccessCode()+"', "+typeTable+", "+idPlayer1+",NULL,NULL,NULL,"+movement+", "+must+", "+trio+", "
-								 + "0,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL,'Tworzenie stołu', 1) ", Statement.RETURN_GENERATED_KEYS);
+								 + "0,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL,'Czekanie na graczy', 1,0,0,0,0) ", Statement.RETURN_GENERATED_KEYS);
 
 				ResultSet rs = stmt.getGeneratedKeys();
 				
@@ -348,17 +348,18 @@ public class SQL
 			ResultSet rs;
 			try 
 			{
-				rs = stmt.executeQuery("SELECT id_stolu "
-											 + "FROM Stoly "
-											 + "WHERE kod_dostepu = '"+ac+"' ");
-				
+				rs=stmt.executeQuery("SELECT id_stolu, typ_stolu "
+						 + "FROM Stoly "
+						 + "WHERE kod_dostepu = '"+ac+"' "); 
 
 				if(rs.next())
 				{
 					int it = rs.getInt(1);
+					int tt = rs.getInt(2);
 					
 					GaD.setAccessCode(ac);
 					GaD.setIdTable(it);
+					GaD.setTypeTable(tt);
 				}
 			} 
 			catch (SQLException e) 
@@ -456,16 +457,18 @@ public class SQL
 			ResultSet rs;
 			try 
 			{
-				rs=stmt.executeQuery("SELECT id_stolu "
+				rs=stmt.executeQuery("SELECT id_stolu, typ_stolu "
 										 + "FROM Stoly "
 										 + "WHERE kod_dostepu = '"+ac+"' "); 
 
 				if(rs.next())
 				{
 					int it = rs.getInt(1);
+					int tt = rs.getInt(2);
 					
 					GaD.setAccessCode(ac);
 					GaD.setIdTable(it);
+					GaD.setTypeTable(tt);
 				}
 			} 
 			catch (SQLException e) 
@@ -864,8 +867,8 @@ public class SQL
 		ResultSet rs;
 		try 
 		{
-			rs = stmt.executeQuery("SELECT ruch "
-										 + "FROM Stoly "
+			rs = stmt.executeQuery("SELECT `ruch` "
+										 + "FROM `Stoly` "
 										 + "where id_stolu =" + GaD.getIdTable());
 
 			if(rs.next())
@@ -1300,7 +1303,7 @@ public class SQL
 		if(stmt == null) throw new TysiacException(5, "setBomb()");
 		
 		if(player <= 0 || player >4) throw new TysiacException(112, "setBomb()");
-		if(value != 0 || value != 1) throw new TysiacException(118, "setBomb()");
+		if(value != 0 && value != 1) throw new TysiacException(118, "setBomb()");
 		
 		
 		try 
@@ -1312,6 +1315,57 @@ public class SQL
 		catch (SQLException e) 
 		{
 			throw new TysiacException(20, "setBomb()");
+		}
+	}	
+	public int getSurrender(int player) throws TysiacException
+	{
+		if(con == null) throw new TysiacException(4, "getSurrender()");
+		if(stmt == null) throw new TysiacException(5, "getSurrender()");
+		
+		if(player <= 0 || player >4) throw new TysiacException(113, "getSurrender()");
+
+		
+		int iu = 0;
+		
+		ResultSet rs;
+		try 
+		{
+			rs = stmt.executeQuery("SELECT  pas_gracz_"+player+" "
+										 + "FROM Stoly "
+										 + "where id_stolu =" + GaD.getIdTable());
+
+			if(rs.next())
+			{
+				iu = rs.getInt(1);
+			}
+		} 
+		catch (SQLException e) 
+		{
+			throw new TysiacException(16, "getSurrender()");
+		} 
+		
+		
+		return iu;
+	}
+	
+	public void setSurrender(int player, int value) throws TysiacException
+	{
+		if(con == null) throw new TysiacException(4, "setSurrender()");
+		if(stmt == null) throw new TysiacException(5, "setSurrender()");
+		
+		if(player <= 0 || player >4) throw new TysiacException(112, "setSurrender()");
+		if(value != 0 && value != 1) throw new TysiacException(118, "setSurrender()");
+		
+		
+		try 
+		{
+			stmt.executeUpdate("UPDATE `Stoly` "
+							 + "SET `pas_gracz_"+player+"`= "+ value +"  "
+							 + "WHERE `id_stolu`="+GaD.getIdTable(), Statement.NO_GENERATED_KEYS);
+		} 
+		catch (SQLException e) 
+		{
+			throw new TysiacException(20, "setSurrender()");
 		}
 	}	
 	
@@ -1351,7 +1405,7 @@ public class SQL
 		if(con == null) throw new TysiacException(4, "setAuctionValue()");
 		if(stmt == null) throw new TysiacException(5, "setAuctionValue()");
 		
-		if(value != 110 || value != 300) throw new TysiacException(119, "setAuctionValue()");
+		if(value < 100 || value > 300) throw new TysiacException(119, "setAuctionValue()");
 		
 		
 		try 
